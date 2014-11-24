@@ -20,20 +20,25 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PictureCallback;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Display;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.view.ViewManager;
 import android.widget.Button;
 import android.widget.Toast;
 
 
-public class CameraActivity extends Activity{
+public class CameraActivity extends Activity implements ViewManager{
 
 	// Intent request codes
     public static final int REQUEST_LOGIN = 4;
@@ -57,6 +62,18 @@ public class CameraActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		Log.d(TAG,"onCreate");
 		setContentView(R.layout.spot_camera);
+		
+
+	}
+
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		if(Const.D) Log.e(TAG, "++ ON START ++");
+		//Check if user is logged in, if not: go to LogIn Screen
+		SessionManager.requestLogin(this);
+		
 		getActionBar().setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
 		getActionBar().setDisplayShowTitleEnabled(false);
 		getActionBar().setDisplayShowTitleEnabled(true);
@@ -83,19 +100,11 @@ public class CameraActivity extends Activity{
 		buttonTakeSpot.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				camera.takePicture(null, null, mPicture);
-
+				
 			}
 		});
 
-
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		if(Const.D) Log.e(TAG, "++ ON START ++");
-		//Check if user is logged in, if not: go to LogIn Screen
-		SessionManager.requestLogin(this);
+		
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -141,6 +150,7 @@ public class CameraActivity extends Activity{
 			Intent uploadSpotIntent = new Intent(CameraActivity.this, UploadSpotActivity.class);
 			uploadSpotIntent.putExtra("SpotMedia",pictureFile.getAbsolutePath());
 			startActivity(uploadSpotIntent);
+			finish();
 		}
 	};
 
@@ -182,6 +192,7 @@ public class CameraActivity extends Activity{
 
 		return mediaFile;
 	}
+	
 	@Override
 	public void onResume() {
 		Log.d(TAG,"onResume");
@@ -208,19 +219,9 @@ public class CameraActivity extends Activity{
 	private Camera.Size getBestPreviewSize(int width, int height,
 			Camera.Parameters parameters) {
 		Camera.Size result=null;
-		camera.setDisplayOrientation(90);
-		/*
-	    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-        {   
-	    	parameters.set("orientation", "portrait");
-	    	parameters.set("rotation",90);
-        }
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-        {                               
-        	parameters.set("orientation", "landscape");          
-        	parameters.set("rotation", 90);
-        }
-		 */
+		//camera.setDisplayOrientation(90);
+		
+		
 		for (Camera.Size size : parameters.getSupportedPreviewSizes()) {
 			if (size.width<=width && size.height<=height) {
 				if (result==null) {
@@ -241,6 +242,7 @@ public class CameraActivity extends Activity{
 	}
 
 	private void initPreview(int width, int height) {
+		
 		if (camera!=null && previewHolder.getSurface()!=null) {
 			try {
 				camera.setPreviewDisplay(previewHolder);
@@ -282,13 +284,87 @@ public class CameraActivity extends Activity{
 		public void surfaceChanged(SurfaceHolder holder,
 				int format, int width,
 				int height) {
-			initPreview(width, height);
-			startPreview();
+			Log.d(TAG,"1");
+			if (inPreview)
+	        {
+				Log.d(TAG,"2");
+				camera.stopPreview();
+	        }
+			Log.d(TAG,"3");
+	        Parameters parameters = camera.getParameters();
+	        Log.d(TAG,"4");
+	        Display display = getWindowManager().getDefaultDisplay();
+	        Log.d(TAG,"5");
+	        if(display.getRotation() == Surface.ROTATION_0)
+	        {
+	        	Log.d(TAG,"6");
+	            parameters.setPreviewSize(height, width);                           
+	            camera.setDisplayOrientation(90);
+	        }
+
+	        if(display.getRotation() == Surface.ROTATION_90)
+	        {
+	        	Log.d(TAG,"7");
+	            parameters.setPreviewSize(width, height);                           
+	        }
+
+	        if(display.getRotation() == Surface.ROTATION_180)
+	        {
+	        	Log.d(TAG,"8");
+	            parameters.setPreviewSize(height, width);               
+	        }
+
+	        if(display.getRotation() == Surface.ROTATION_270)
+	        {
+	        	Log.d(TAG,"9");
+	            parameters.setPreviewSize(width, height);
+	            camera.setDisplayOrientation(180);
+	        }
+
+	        Log.d(TAG,"10");
+	        camera.setParameters(parameters);
+	        //startPreview();
+	        initPreview(width, height);
+	        previewCamera();   
+			
 		}
 
 		public void surfaceDestroyed(SurfaceHolder holder) {
 			// no-op
 		}
 	};
+	
+	public void previewCamera()
+	{        
+	    try 
+	    {           
+	        camera.setPreviewDisplay(previewHolder);          
+	        camera.startPreview();
+	        inPreview = true;
+	    }
+	    catch(Exception e)
+	    {
+	        Log.d(TAG, "Cannot start preview", e);    
+	    }
+	}
+	@Override
+	public void addView(View view, LayoutParams params) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void updateViewLayout(View view, LayoutParams params) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void removeView(View view) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
