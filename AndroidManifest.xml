@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.androidhive"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk android:minSdkVersion="14" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<supports-screens android:largeScreens="false"
+	                    android:normalScreens="true"
+	                    android:smallScreens="false" />
+	
+	<uses-feature android:name="android.hardware.camera" />
+	<uses-permission android:name="android.permission.CAMERA" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> 
+	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Holo.Light" >
+        
+       	<activity android:name="com.spotz.SearchableActivity" >
+			<intent-filter>
+		    	<action android:name="android.intent.action.SEARCH" />
+			</intent-filter>
+			<meta-data 
+			    android:name="android.app.searchable"
+				android:resource="@xml/searchable"/>
+		</activity>
+
+	    <activity
+            android:name="com.spotz.LoginActivity"
+            android:screenOrientation="portrait"
+            android:noHistory="true"
+            android:configChanges="orientation|keyboardHidden" >
+        </activity>
+        
+        <activity
+            android:name="com.spotz.RegisterActivity"
+            android:screenOrientation="portrait"
+            android:noHistory="true"
+            android:configChanges="orientation|keyboardHidden" >
+        </activity>
+       	
+        <activity
+            android:configChanges="keyboardHidden|orientation"
+            android:name="com.spotz.MainActivity"
+            android:label="@string/app_name" >
+            <!-- enable the search dialog to send searches to SearchableActivity -->
+        	<meta-data 
+        	    android:name="android.app.default_searchable"
+                android:value="com.example.androidhive.SearchableActivity" />
+        </activity>
+		
+        <!-- Inbox Activity -->
+        <activity 
+            android:name="com.spotz.CameraActivity" 
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Outbox Activity -->
+        <activity 
+            android:name="com.spotz.NewsActivity">
+			<!-- enable the search dialog to send searches to SearchableActivity -->
+        	<meta-data 
+        	    android:name="android.app.default_searchable"
+                android:value="com.example.androidhive.SearchableActivity" />
+		</activity>
+
+        <!-- Profile Activity -->
+        <activity 
+            android:name="com.spotz.ProfileActivity"> 
+            <!-- enable the search dialog to send searches to SearchableActivity -->
+        	<meta-data 
+        	    android:name="android.app.default_searchable"
+                android:value="com.example.androidhive.SearchableActivity" />
+		</activity>
+        
+        
+        <!-- Spot Activity -->
+        <activity 
+            android:name="com.spotz.SpotActivity"> 
+            <!-- enable the search dialog to send searches to SearchableActivity -->
+        	<meta-data 
+        	    android:name="android.app.default_searchable"
+                android:value="com.example.androidhive.SpotActivity" />
+        	<meta-data
+		        android:name="android.support.PARENT_ACTIVITY"
+		        android:value="com.spotz.MainActivity" />
+		</activity>
+		
+        <activity android:name="com.spotz.LoadingActivity" />
+        <activity android:name="com.spotz.UploadSpotActivity" >
+        	<meta-data
+		        android:name="android.support.PARENT_ACTIVITY"
+		        android:value="com.spotz.CameraActivity" />
+        </activity>
+        
+        <service android:name="com.spotz.services.UploadMediaService" />
+        <service android:name="com.spotz.services.UploadProfilePicService" />
+        <meta-data
+		   android:name="com.google.android.maps.v2.API_KEY"
+		   android:value="AIzaSyA9RzTH-oHSXG77UZ_FkNBRZloipMOGmxg" />
+         <meta-data
+	    android:name="com.google.android.gms.version"
+	    android:value="5077000" />
+         
+    </application>
+
+    
+	
+	
+	
+</manifest>
