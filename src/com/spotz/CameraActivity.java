@@ -59,11 +59,19 @@ public class CameraActivity extends Activity implements ViewManager{
 	Intent mainIntent;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		Log.d(TAG,"onCreate");
 		setContentView(R.layout.spot_camera);
 		
-
+		if(Const.height == 0){
+			Const.height = getWindowManager().getDefaultDisplay().getHeight();
+		}
+		
+		if(Const.width == 0){
+			Const.width = getWindowManager().getDefaultDisplay().getWidth();
+		}
+		
 	}
 
 	

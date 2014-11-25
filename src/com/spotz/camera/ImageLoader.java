@@ -1,6 +1,7 @@
 package com.spotz.camera;
 
 import com.example.androidhive.R;
+import com.spotz.utils.Const;
 import com.spotz.utils.Utils;
 
 import java.io.File;
@@ -23,6 +24,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
  
 public class ImageLoader {
  
@@ -41,17 +43,22 @@ public class ImageLoader {
  
     final int stub_id = R.drawable.solidred;
  
-    public void DisplayImage(String url, ImageView imageView) {
+    public Bitmap DisplayImage(String url, ImageView imageView) {
         imageViews.put(imageView, url);
         Bitmap bitmap = memoryCache.get(url);
-        if (bitmap != null)
+        
+        if (bitmap != null){
             imageView.setImageBitmap(bitmap);
+        }
         else {
             queuePhoto(url, imageView);
             imageView.setImageResource(stub_id);
         }
+        
+        return getBitmap(url);
     }
- 
+    
+    
     private void queuePhoto(String url, ImageView imageView) {
         PhotoToLoad p = new PhotoToLoad(url, imageView);
         executorService.submit(new PhotosLoader(p));

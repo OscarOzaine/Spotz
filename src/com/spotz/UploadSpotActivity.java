@@ -21,6 +21,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.spotz.location.LocationUtils;
 import com.spotz.services.UploadMediaService;
 import com.spotz.users.User;
+import com.spotz.utils.Utils;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -32,6 +33,7 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -45,6 +47,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -117,8 +122,32 @@ public class UploadSpotActivity extends Activity implements
 		
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inSampleSize=8;      // 1/8 of original image
-		Bitmap b = BitmapFactory.decodeFile(imagePath,options);
-		spotMedia.setImageBitmap(b);
+		Bitmap bitmap = BitmapFactory.decodeFile(imagePath,options);
+		
+		Matrix mat = new Matrix();
+        mat.postRotate(90);
+        Bitmap bMapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
+        
+		
+
+        // Get scaling factor to fit the max possible width of the ImageView
+        float scalingFactor = getBitmapScalingFactor(bMapRotate);
+
+        // Create a new bitmap with the scaling factor
+        Bitmap newBitmap = Utils.ScaleBitmap(bMapRotate, scalingFactor);
+
+        // Set the bitmap as the ImageView source
+        //spotMedia.setImageBitmap(newBitmap);
+		
+        spotMedia.setImageBitmap(newBitmap);
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		spinnerSpotType = (Spinner) findViewById(R.id.spinner_spottypes);
@@ -162,10 +191,26 @@ public class UploadSpotActivity extends Activity implements
          * handle callbacks.
          */
         mLocationClient = new LocationClient(this, this, this);
-     
+        
 	    
 	}
 	
+	private float getBitmapScalingFactor(Bitmap bm) {
+        // Get display width from device
+        int displayWidth = getWindowManager().getDefaultDisplay().getWidth();
+
+        // Get margin to use it for calculating to max width of the ImageView
+        LinearLayout.LayoutParams layoutParams = 
+                (LinearLayout.LayoutParams)this.spotMedia.getLayoutParams();
+        int leftMargin = layoutParams.leftMargin;
+        int rightMargin = layoutParams.rightMargin;
+
+        // Calculate the max width of the imageView
+        int imageViewWidth = displayWidth - (leftMargin + rightMargin);
+
+        // Calculate scaling factor and return it
+        return ( (float) imageViewWidth / (float) bm.getWidth() );
+    }
 	   /*
      * Called when the Activity is no longer visible at all.
      * Stop updates and disconnect.

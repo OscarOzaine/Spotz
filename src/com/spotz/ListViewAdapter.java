@@ -2,12 +2,17 @@ package com.spotz;
 
 import com.example.androidhive.R;
 import com.spotz.camera.ImageLoader;
+import com.spotz.utils.Const;
+import com.spotz.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +20,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class ListViewAdapter extends BaseAdapter {
@@ -101,7 +107,13 @@ public class ListViewAdapter extends BaseAdapter {
 
 		// Capture position and set results to the ImageView
 		// Passes flag images URL into ImageLoader.class
-		imageLoader.DisplayImage(resultp.get(NewsActivity.TAG_IMAGE), imgSpot);
+		
+		
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inSampleSize=8;      // 1/8 of original image
+		Bitmap bitmap = imageLoader.DisplayImage(resultp.get(NewsActivity.TAG_IMAGE), imgSpot);
+		
+		
 		// Capture ListView item click
 		itemView.setOnClickListener(new OnClickListener() {
 
@@ -128,4 +140,21 @@ public class ListViewAdapter extends BaseAdapter {
 
 		return itemView;
 	}
+	
+	private float getBitmapScalingFactor(Bitmap bm) {
+        // Get display width from device
+        int displayWidth = Const.width;
+
+        // Get margin to use it for calculating to max width of the ImageView
+        LinearLayout.LayoutParams layoutParams = 
+                (LinearLayout.LayoutParams)imgSpot.getLayoutParams();
+        int leftMargin = layoutParams.leftMargin;
+        int rightMargin = layoutParams.rightMargin;
+
+        // Calculate the max width of the imageView
+        int imageViewWidth = displayWidth - (leftMargin + rightMargin);
+        Log.d(TAG,"");
+        // Calculate scaling factor and return it
+        return ( (float) imageViewWidth / (float) bm.getWidth() );
+    }
 }

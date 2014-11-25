@@ -24,9 +24,14 @@ import com.spotz.LoginActivity;
 import com.spotz.MainActivity;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
+import android.widget.LinearLayout;
 
 public class Utils {
 	
@@ -64,5 +69,14 @@ public class Utils {
 	    }
 	    return true;
 	}
+    
+    public static Bitmap ScaleBitmap(Bitmap bm, float scalingFactor) {
+        int scaleHeight = (int) (bm.getHeight() * scalingFactor);
+        int scaleWidth = (int) (bm.getWidth() * scalingFactor);
+		
+        return Bitmap.createScaledBitmap(bm, scaleWidth, scaleHeight, true);
+    }
+    
+    
     
 }

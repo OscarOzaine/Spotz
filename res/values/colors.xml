@@ -1,0 +1,9 @@
+<resources>
+    <drawable name="focused">#ff5500</drawable>
+    <drawable name="selected">#FF00FF</drawable>
+    <color name="listbackground">#f7f7f7</color>
+    <color name="white">#FFF</color>
+    <color name="black">#000</color>
+    <color name="grey">#f7f7f7</color>
+    
+</resources>

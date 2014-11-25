@@ -46,6 +46,7 @@ public class NewsActivity extends ListActivity {
 
 	ArrayList<HashMap<String, String>> outboxList;
 	ListViewAdapter adapter;
+	ListView listView;
 	// products JSONArray
 	JSONArray outbox = null;
 
@@ -74,6 +75,10 @@ public class NewsActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.outbox_list);
+		
+		ListView lv= (ListView) findViewById(android.R.id.list);
+		lv.setSelector(R.drawable.listselector);
+		
 		OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots";
 		// Hashmap for ListView
         //outboxList = new ArrayList<HashMap<String, String>>();
@@ -99,18 +104,13 @@ public class NewsActivity extends ListActivity {
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id){
-        /*
-        position variable holds the position of item you clicked...
-        do your stuff here. If you want to send to another page, say another activity
-        that shows your stuff, you can always use an intent
-        example:
-        */
     	TextView tv = (TextView) v.findViewById(R.id.spotId);
     	String spotIdHidden = tv.getText().toString();
     	//Log.d(TAG,"SpotId = "+spotIdHidden);
     	Intent spotIntent = new Intent(this, SpotActivity.class);
     	spotIntent.putExtra("SpotID",spotIdHidden);
         startActivity(spotIntent);
+        
         //Intent tmpIntent = new Intent(this, YourActivityForShowingItem.class);
        // tmpIntent.putExtra(SHOWITEMINTENT_EXTRA_FETCHROWID, position);
         //startActivityForResult(tmpIntent, ACTIVITY_SHOWITEM);

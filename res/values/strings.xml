@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
+    
+    
     <string name = "hello">Hello World!</string>
     <string name = "app_name">Spotz</string>
 	<string name = "search_hint">Cities, Users...</string>
@@ -74,9 +76,9 @@
         <item>Change Profile Picture</item>
     </string-array>
     
-	
+
     <string-array name="spottype_array">
-        <item>Tipos de Spots</item>
+        <item>Spot Types</item>
         <item>Social</item>
         <item>Cultural</item>
         <item>Musical</item>
