@@ -45,7 +45,7 @@ public class NewsActivity extends ListActivity {
 	JSONParser jsonParser = new JSONParser();
 
 	ArrayList<HashMap<String, String>> outboxList;
-	ListViewAdapter adapter;
+	NewsViewAdapter adapter;
 	ListView listView;
 	// products JSONArray
 	JSONArray outbox = null;
@@ -233,7 +233,7 @@ public class NewsActivity extends ListActivity {
 								new int[] { R.id.spotId, R.id.spotTitle, R.id.spotCreatedat ,
 											R.id.spotImage, R.id.spotCity, R.id.spotUser, R.id.spotDescription });
 						*/
-						adapter = new ListViewAdapter(NewsActivity.this, outboxList);
+						adapter = new NewsViewAdapter(NewsActivity.this, outboxList);
 						// updating listview
 						setListAdapter(adapter);
 						

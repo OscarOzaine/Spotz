@@ -23,7 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class ListViewAdapter extends BaseAdapter {
+public class NewsViewAdapter extends BaseAdapter {
 
 	// Declare Variables
 	Context context;
@@ -45,7 +45,7 @@ public class ListViewAdapter extends BaseAdapter {
 	TextView txtlikes;
 	TextView txtdislikes;
 
-	public ListViewAdapter(Context context,
+	public NewsViewAdapter(Context context,
 			ArrayList<HashMap<String, String>> arraylist) {
 		this.context = context;
 		data = arraylist;

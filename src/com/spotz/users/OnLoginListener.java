@@ -1,4 +1,4 @@
-package com.spotz;
+package com.spotz.users;
 
 public interface OnLoginListener {
 

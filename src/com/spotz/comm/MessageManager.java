@@ -7,10 +7,10 @@ import org.json.*;
 
 import com.example.androidhive.R;
 import com.spotz.MainActivity;
-import com.spotz.OnLoginListener;
-import com.spotz.OnRegisterListener;
 import com.spotz.RegisterActivity;
 import com.spotz.UploadSpotActivity;
+import com.spotz.users.OnLoginListener;
+import com.spotz.users.OnRegisterListener;
 import com.spotz.users.User;
 import com.spotz.utils.Const;
 import com.spotz.utils.Settings;

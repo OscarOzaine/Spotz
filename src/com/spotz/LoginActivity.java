@@ -15,6 +15,7 @@ import com.example.androidhive.R;
 import com.facebook.widget.FacebookDialog;
 import com.facebook.widget.LoginButton;
 import com.spotz.comm.MessageManager;
+import com.spotz.users.OnLoginListener;
 import com.spotz.users.User;
 import com.spotz.utils.Const;
 
@@ -184,8 +185,10 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
             	if(user != null){
             		fbLogin(user);
             	}else{
+            		/*
             		Toast.makeText(getApplicationContext(), "Error in Facebook login", 
                             Toast.LENGTH_SHORT).show();
+            		*/
             	}
             }
         });
