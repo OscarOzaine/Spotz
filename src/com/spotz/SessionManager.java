@@ -22,7 +22,7 @@ public class SessionManager {
     	if(Const.D) Log.e(TAG, "++ ON START ++ - USER IS NOT LOGGED IN");
     	Intent intent = new Intent(activity, LoginActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		activity.startActivityForResult(intent,Const.REQUEST_LOGIN);
+		//activity.startActivityForResult(intent,Const.REQUEST_LOGIN);
 		return false;
 	}
 	

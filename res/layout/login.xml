@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical|center_horizontal"
@@ -68,6 +70,15 @@
         android:layout_marginTop="2dp"
         android:layout_gravity="center"
         android:text="@string/register" />
+    
+    <com.facebook.widget.LoginButton
+       		android:id="@+id/fb_login_button"
+			android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+			android:layout_marginTop="5dp"
+			facebook:confirm_logout="false"
+			facebook:fetch_user_info="true"
+        />
     
     <ProgressBar
         android:id="@+id/login_progressbar"

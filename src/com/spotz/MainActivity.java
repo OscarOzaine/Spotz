@@ -1,6 +1,7 @@
 package com.spotz;
 
 import com.example.androidhive.R;
+import com.facebook.Session;
 import com.spotz.NewsActivity.LoadOutbox;
 import com.spotz.utils.Const;
 
@@ -141,7 +142,15 @@ public class MainActivity extends TabActivity {
         	
         	SessionManager.Logout();
     		SessionManager.requestLogin(this);
-        	
+    		if (Session.getActiveSession() != null) {
+    		    Session.getActiveSession().closeAndClearTokenInformation();
+    		}
+
+    		Session.setActiveSession(null);
+    		Intent cameraIntent= new Intent(this, LoginActivity.class);
+        	//openMainActivity.setFlags(Intent.);
+            startActivity(cameraIntent); 
+    		finish();  
         	break;
         case R.id.action_refresh:
         	//NewsActivity.LoadOutbox().execute();

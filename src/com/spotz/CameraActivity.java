@@ -5,10 +5,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import com.example.androidhive.R;
+import com.facebook.AppEventsLogger;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
 import com.spotz.utils.Const;
 import com.spotz.utils.Settings;
 
@@ -26,6 +31,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
@@ -38,7 +44,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 
-public class CameraActivity extends Activity implements ViewManager{
+public class CameraActivity extends FragmentActivity implements ViewManager{
 
 	// Intent request codes
     public static final int REQUEST_LOGIN = 4;
@@ -57,6 +63,8 @@ public class CameraActivity extends Activity implements ViewManager{
 	static String TAG = "CameraActivity";
 
 	Intent mainIntent;
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
@@ -80,7 +88,7 @@ public class CameraActivity extends Activity implements ViewManager{
 		super.onStart();
 		if(Const.D) Log.e(TAG, "++ ON START ++");
 		//Check if user is logged in, if not: go to LogIn Screen
-		SessionManager.requestLogin(this);
+		
 		
 		getActionBar().setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
 		getActionBar().setDisplayShowTitleEnabled(false);
@@ -115,6 +123,17 @@ public class CameraActivity extends Activity implements ViewManager{
 		
 	}
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        Const.v(TAG, "-- ON STOP --");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Const.v(TAG, "--- ON DESTROY ---");
+    }
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(Const.D) Log.d(TAG, "onActivityResult reqCode= "+requestCode+ " res = " + resultCode);
         switch (requestCode) {
@@ -129,6 +148,7 @@ public class CameraActivity extends Activity implements ViewManager{
         	} 
         	break;
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
 	private PictureCallback mPicture = new PictureCallback() {
@@ -184,7 +204,7 @@ public class CameraActivity extends Activity implements ViewManager{
 				return null;
 			}
 		}
-
+		
 		// Create a media file name
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 		File mediaFile;
@@ -203,25 +223,22 @@ public class CameraActivity extends Activity implements ViewManager{
 	
 	@Override
 	public void onResume() {
-		Log.d(TAG,"onResume");
 		super.onResume();
-		
 		camera=Camera.open();
 		startPreview();
+		AppEventsLogger.activateApp(this);
 	}
 
 	@Override
 	public void onPause() {
-		//Log.d(TAG,"onPause");
 		if (inPreview) {
 			camera.stopPreview();
 		}
-
 		camera.release();
 		camera=null;
 		inPreview=false;
-
 		super.onPause();
+		AppEventsLogger.deactivateApp(this);
 	}
 
 	private Camera.Size getBestPreviewSize(int width, int height,
@@ -292,44 +309,29 @@ public class CameraActivity extends Activity implements ViewManager{
 		public void surfaceChanged(SurfaceHolder holder,
 				int format, int width,
 				int height) {
-			Log.d(TAG,"1");
-			if (inPreview)
-	        {
-				Log.d(TAG,"2");
+			if (inPreview){
 				camera.stopPreview();
 	        }
-			Log.d(TAG,"3");
 	        Parameters parameters = camera.getParameters();
-	        Log.d(TAG,"4");
 	        Display display = getWindowManager().getDefaultDisplay();
-	        Log.d(TAG,"5");
-	        if(display.getRotation() == Surface.ROTATION_0)
-	        {
-	        	Log.d(TAG,"6");
+	        if(display.getRotation() == Surface.ROTATION_0){
 	            parameters.setPreviewSize(height, width);                           
 	            camera.setDisplayOrientation(90);
 	        }
 
-	        if(display.getRotation() == Surface.ROTATION_90)
-	        {
-	        	Log.d(TAG,"7");
+	        if(display.getRotation() == Surface.ROTATION_90){
 	            parameters.setPreviewSize(width, height);                           
 	        }
 
-	        if(display.getRotation() == Surface.ROTATION_180)
-	        {
-	        	Log.d(TAG,"8");
+	        if(display.getRotation() == Surface.ROTATION_180){
 	            parameters.setPreviewSize(height, width);               
 	        }
 
-	        if(display.getRotation() == Surface.ROTATION_270)
-	        {
-	        	Log.d(TAG,"9");
+	        if(display.getRotation() == Surface.ROTATION_270){
 	            parameters.setPreviewSize(width, height);
 	            camera.setDisplayOrientation(180);
 	        }
 
-	        Log.d(TAG,"10");
 	        camera.setParameters(parameters);
 	        //startPreview();
 	        initPreview(width, height);
@@ -367,12 +369,15 @@ public class CameraActivity extends Activity implements ViewManager{
 		// TODO Auto-generated method stub
 		
 	}
-
-
+	
 	@Override
 	public void removeView(View view) {
 		// TODO Auto-generated method stub
-		
 	}
-
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedState) {
+		super.onSaveInstanceState(savedState);
+	}
+	
 }

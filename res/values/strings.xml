@@ -2,6 +2,7 @@
 <resources>
     
     
+    <string name = "facebook_app_id">843086735711329</string>
     
     <string name = "hello">Hello World!</string>
     <string name = "app_name">Spotz</string>

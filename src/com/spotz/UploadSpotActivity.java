@@ -211,7 +211,8 @@ public class UploadSpotActivity extends Activity implements
         // Calculate scaling factor and return it
         return ( (float) imageViewWidth / (float) bm.getWidth() );
     }
-	   /*
+	
+	/*
      * Called when the Activity is no longer visible at all.
      * Stop updates and disconnect.
      */

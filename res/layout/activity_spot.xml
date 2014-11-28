@@ -1,34 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/loadingPanel"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background = "@color/white"
+    >
 
     <LinearLayout
         android:id="@+id/linearLayout1"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginRight="6dp"
+        android:elevation="25dp"
+         >
 
         <TextView
             android:id="@+id/spot_name"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="SpotName"
             android:textColor="#040404"
             android:textSize="15dip"
             android:textStyle="bold"
-            android:typeface="sans" />
+            android:typeface="sans"
+            android:paddingLeft="2dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_world" 
+            android:adjustViewBounds="true" />
 
         <ImageView
             android:id="@+id/spot_image"
-            android:layout_width="fill_parent"
-            android:layout_height="180dip"
+            android:layout_width="match_parent"
+            android:layout_height="282dp"
             android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:paddingLeft="2dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
             android:src="@drawable/ic_world" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -36,7 +61,11 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/linearLayout1"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:elevation="6dp"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -57,7 +86,6 @@
                 android:text="L4"
                 android:textColor="#040404"
                 android:textSize="15dip"
-                android:textStyle="bold"
                 android:typeface="sans" />
 
         </LinearLayout>
@@ -66,7 +94,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            >
 
             <TextView
                 android:id="@+id/spotCreatedat"
@@ -81,7 +110,6 @@
                 android:text="D2"
                 android:textColor="#040404"
                 android:textSize="15dip"
-                android:textStyle="bold"
                 android:typeface="sans" />
         </LinearLayout>
     </LinearLayout>
@@ -92,7 +120,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/linearLayout4"
-        android:orientation="horizontal" >
+        android:orientation="horizontal" 
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:elevation="6dp"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -111,8 +143,8 @@
                     android:layout_height="wrap_content"
                     android:text="Spot Type:"
                     android:textColor="#040404"
+                    android:layout_marginBottom="15dp"
                     android:textSize="15dip"
-                    android:textStyle="bold"
                     android:typeface="sans" />
 
                 <TextView
@@ -120,9 +152,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="City:"
+                    android:layout_marginBottom="15dp"
                     android:textColor="#040404"
                     android:textSize="15dip"
-                    android:textStyle="bold"
                     android:typeface="sans" />
             </LinearLayout>
 
@@ -138,7 +170,6 @@
                     android:text="aca"
                     android:textColor="#040404"
                     android:textSize="15dip"
-                    android:textStyle="bold"
                     android:typeface="sans" />
 
                 <TextView
@@ -148,7 +179,6 @@
                     android:text="cityacaa"
                     android:textColor="#040404"
                     android:textSize="15dip"
-                    android:textStyle="bold"
                     android:typeface="sans" />
             </LinearLayout>
 
@@ -170,9 +200,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="User:"
+                    android:layout_marginBottom="15dp"
                     android:textColor="#040404"
                     android:textSize="15dip"
-                    android:textStyle="bold"
                     android:typeface="sans" />
 
                 <TextView
@@ -180,9 +210,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Followers:"
+                    android:layout_marginBottom="15dp"
                     android:textColor="#040404"
                     android:textSize="15dip"
-                    android:textStyle="bold"
                     android:typeface="sans" />
 
             </LinearLayout>
@@ -199,7 +229,6 @@
                     android:text="oz"
                     android:textColor="#040404"
                     android:textSize="15dip"
-                    android:textStyle="bold"
                     android:typeface="sans" />
 
                 <TextView
@@ -209,7 +238,6 @@
                     android:text="12"
                     android:textColor="#040404"
                     android:textSize="15dip"
-                    android:textStyle="bold"
                     android:typeface="sans" />
 
             </LinearLayout>
@@ -223,8 +251,22 @@
         android:layout_alignParentLeft="true"
         android:layout_alignWithParentIfMissing="true"
         android:layout_below="@+id/LinearLayout01"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="6dp"
+        android:elevation="6dp"
+         >
 
+        <TextView
+            android:id="@+id/spotDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Description:"
+            android:textColor="#040404"
+            android:textSize="15dip"
+            android:typeface="sans" />
+        
         <TextView
             android:id="@+id/spot_description"
             android:layout_width="match_parent"
@@ -232,7 +274,6 @@
             android:text="Descripcion"
             android:textColor="#040404"
             android:textSize="15dip"
-            android:textStyle="bold"
             android:typeface="sans" />
     </LinearLayout>
     

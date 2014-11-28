@@ -34,7 +34,7 @@ public class MessageManager {
 	public static class Events{
 		public static final String  SHOT="shot", KILL="kill", 
 				LOGIN="login", RECOVER="recover", UPDATE="update",
-				GETINFO="get_my_info", REGISTER = "register";
+				FACEBOOK_LOGIN="facebook_login", REGISTER = "register";
 	}
 	
 
@@ -71,7 +71,10 @@ public class MessageManager {
 					if( mRegisterListener != null)
 						mRegisterListener.onRegisterSuccess(response);
 				}
-				
+				else if(action.equals(Events.FACEBOOK_LOGIN)){
+					if( mLoginListener != null)
+						mLoginListener.onLoginSuccess(response);
+				}
 				else if(action.equals(Events.UPDATE)){
 					
 				}
@@ -125,7 +128,7 @@ public class MessageManager {
 	
 	
 	public static boolean mInternetSend(final String query, final String event, final String[][] optionparams) {
-		Log.d(TAG,"ACA" + query);
+		Log.d(TAG,"ACA" );
 		if( !ServerConn.isNetworkAvailable() )
 			return false;
 		new Thread(new Runnable() {
@@ -207,6 +210,50 @@ public class MessageManager {
 		return mInternetSend(query, (died?Events.KILL:Events.SHOT));
 	}	
 	*/
+	
+	
+	public static boolean sendFBLogin(JSONObject userInfo, String accessToken){
+		String query = String.format(Locale.US,"fblogin/");
+		
+		String email = null, gender = null, first_name = null, last_name = null;
+		String birthday = null, id = null, link = null, token = null;
+		JSONArray arr;
+		try {
+			arr = userInfo.getJSONArray("info");
+		
+			for (int i = 0; i < arr.length(); i++){
+				email = arr.getJSONObject(i).getString("email");
+				gender = arr.getJSONObject(i).getString("gender");
+				first_name = arr.getJSONObject(i).getString("first_name");
+				last_name = arr.getJSONObject(i).getString("last_name");
+				birthday = arr.getJSONObject(i).getString("birthday");
+				id = arr.getJSONObject(i).getString("id");
+				link = arr.getJSONObject(i).getString("link");
+				token = accessToken;
+				
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String[][] optionparams = 
+			{
+		        { "email", email},
+		        { "gender", gender},
+		        { "first_name", first_name},
+		        { "last_name", last_name},
+		        { "birthday", birthday},
+		        { "id", id},
+		        { "link", link},
+		        { "token", token}
+		    };
+		
+		boolean ret = mInternetSend(query, Events.FACEBOOK_LOGIN,optionparams);
+		if( !ret && mLoginListener != null)
+			mLoginListener.onLoginError(MainActivity.instance.getString(R.string.not_connected));
+		
+		return ret;
+	}
 	/**Login into RealGaming server to fetch players data 
 	 * @param usu to login
 	 * @param pas for specified username

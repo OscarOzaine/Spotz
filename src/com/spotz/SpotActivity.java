@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import com.example.androidhive.R;
 import com.spotz.camera.ImageLoader;
 import com.spotz.utils.JSONParser;
+import com.spotz.utils.Utils;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -17,6 +18,9 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +28,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.SearchView.OnQueryTextListener;
@@ -100,10 +105,18 @@ public class SpotActivity extends Activity {
 		spotEmail = intent.getStringExtra("email");
 		spotImage = intent.getStringExtra("image");
 		
+		
 		ImageLoader imageLoader = new ImageLoader(getBaseContext());
         // Capture position and set results to the ImageView
         // Passes flag images URL into ImageLoader.class
-        imageLoader.DisplayImage(spotImage, imgSpot);
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inSampleSize=8;      // 1/8 of original image
+		Bitmap bitmap = imageLoader.DisplayImage(spotImage, imgSpot);
+		
+		float scalingFactor = getBitmapScalingFactor(bitmap);
+        Bitmap newBitmap = Utils.ScaleBitmap(bitmap, scalingFactor);
+        imgSpot.setImageBitmap(newBitmap);
+		
         
 		txtName.setText(spotName);
 		txtLikes.setText(spotLikes);
@@ -127,6 +140,22 @@ public class SpotActivity extends Activity {
         //new LoadSpot().execute();
 	}
 
+	private float getBitmapScalingFactor(Bitmap bm) {
+        // Get display width from device
+        int displayWidth = getWindowManager().getDefaultDisplay().getWidth();
+
+        // Get margin to use it for calculating to max width of the ImageView
+        LinearLayout.LayoutParams layoutParams = 
+                (LinearLayout.LayoutParams)this.imgSpot.getLayoutParams();
+        int leftMargin = layoutParams.leftMargin;
+        int rightMargin = layoutParams.rightMargin;
+
+        // Calculate the max width of the imageView
+        int imageViewWidth = displayWidth - (leftMargin + rightMargin);
+
+        // Calculate scaling factor and return it
+        return ( (float) imageViewWidth / (float) bm.getWidth() );
+    }
 	
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
