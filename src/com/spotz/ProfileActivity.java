@@ -8,14 +8,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.androidhive.R;
-import com.spotz.NewsActivity.LoadOutbox;
 import com.spotz.camera.ImageLoader;
-import com.spotz.services.UploadMediaService;
 import com.spotz.services.UploadProfilePicService;
 import com.spotz.users.User;
 import com.spotz.utils.JSONParser;
-import com.spotz.utils.Utils;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -28,7 +24,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -87,8 +82,6 @@ public class ProfileActivity extends Activity  {
 	private static final String TAG_CURRENTLAT = "currentlat";
 	private static final String TAG_CURRENTLNG = "currentlng";
 	private static final String TAG_FOLLOWERS = "followers";
-
-	private String user;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -284,7 +277,6 @@ public class ProfileActivity extends Activity  {
 
 	@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		user = "";
 		if(requestCode == PICK_IMAGE && intent != null && intent.getData() != null) {
 	        Uri _uri = intent.getData();
 
@@ -292,7 +284,6 @@ public class ProfileActivity extends Activity  {
 	        Cursor cursor = getContentResolver().query(_uri, new String[] { android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
 	        cursor.moveToFirst();
 
-	        user = intent.getStringExtra("userid");
 	        //Link to the image
 	        final String imageFilePath = cursor.getString(0);
 	        Log.d(TAG,imageFilePath);

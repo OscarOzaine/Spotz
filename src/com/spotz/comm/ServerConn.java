@@ -83,9 +83,7 @@ public class ServerConn{
 				return true;
 		return false;
 	}
-
-
-
+	
 	/** create a new connection
 	 * @params int mMethod:	0 for no query, 1 for metod GET, 2 for metod POST
 	 * @params string mUrl:	string containing the url
@@ -150,13 +148,11 @@ public class ServerConn{
 	}
 	
 
-	private static String getQuery(List<NameValuePair> params) throws UnsupportedEncodingException
-	{
+	private static String getQuery(List<NameValuePair> params) throws UnsupportedEncodingException{
 	    StringBuilder result = new StringBuilder();
 	    boolean first = true;
 
-	    for (NameValuePair pair : params)
-	    {
+	    for (NameValuePair pair : params){
 	        if (first)
 	            first = false;
 	        else
@@ -235,73 +231,73 @@ public class ServerConn{
 	}
 
 
-/**
- * This method is for practice and test only, it has no real funcitonaliti
- * @param methodType
- * @param Info
- * @return
- */
+	/**
+	 * This method is for practice and test only, it has no real funcitonaliti
+	 * @param methodType
+	 * @param Info
+	 * @return
+	 */
 	@SuppressWarnings("unused")
 	private static String ApacheREST(int methodType, String Info){
 
 		HttpClient httpClient = new DefaultHttpClient();
 
 		switch(methodType){
-		case 0:
-			HttpPost post = new HttpPost("http://10.0.2.2:2731/Api/Clientes/Cliente");
-			post.setHeader("content-type", "application/json");
-			try{
-				JSONObject dato = new JSONObject();//build request JSON
-				dato.put("info", Info);
-				StringEntity entity = new StringEntity(dato.toString());
-				post.setEntity(entity);// we add it to the post request
-				HttpResponse resp = httpClient.execute(post);//get server response
-				String respStr = EntityUtils.toString(resp.getEntity());
-				return respStr;
-			}
-			catch(Exception ex){Log.e("ServicioRest","Error!", ex);	}
-			break;
-		case 1:
-			HttpPut put = new HttpPut("http://10.0.2.2:2731/Api/Clientes/Cliente");
-			put.setHeader("content-type", "application/json");
-			try{
-				//Construimos el objeto cliente en formato JSON
-				JSONObject dato = new JSONObject();
-
-				dato.put("Info", Info);
-				StringEntity entity = new StringEntity(dato.toString());
-				put.setEntity(entity);
-
-				HttpResponse resp = httpClient.execute(put);
-				String respStr = EntityUtils.toString(resp.getEntity());
-				return respStr;
-			}
-			catch(Exception ex){Log.e("ServicioRest","Error!", ex);	}
-			break;
-		case 2:
-			 
-			HttpDelete del = new HttpDelete("http://10.0.2.2:2731/Api/Clientes/Cliente/12");
-			del.setHeader("content-type", "application/json");
-			try{
-			   HttpResponse resp = httpClient.execute(del);
-			   String respStr = EntityUtils.toString(resp.getEntity());
-			   return respStr;
-			}
-			catch(Exception ex){Log.e("ServicioRest","Error!", ex);	}
-			break;
-			
-		case 3:
-			HttpGet get = new HttpGet("http://10.0.2.2:2731/Api/Clientes/Cliente/15");
-		 	get.setHeader("content-type", "application/json");		 
-		 	try{
-		        HttpResponse resp = httpClient.execute(get);
-		        String respStr = EntityUtils.toString(resp.getEntity());		 
-		        JSONObject respJSON = new JSONObject(respStr);
-		        int idCli = respJSON.getInt("Id");
-		        String nombCli = respJSON.getString("Nombre");
-		        int telefCli = respJSON.getInt("Telefono");
-		 	}
-			catch(Exception ex){   Log.e("ServicioRest","Error!", ex);	}
+			case 0:
+				HttpPost post = new HttpPost("http://10.0.2.2:2731/Api/Clientes/Cliente");
+				post.setHeader("content-type", "application/json");
+				try{
+					JSONObject dato = new JSONObject();//build request JSON
+					dato.put("info", Info);
+					StringEntity entity = new StringEntity(dato.toString());
+					post.setEntity(entity);// we add it to the post request
+					HttpResponse resp = httpClient.execute(post);//get server response
+					String respStr = EntityUtils.toString(resp.getEntity());
+					return respStr;
+				}
+				catch(Exception ex){Log.e("ServicioRest","Error!", ex);	}
+				break;
+			case 1:
+				HttpPut put = new HttpPut("http://10.0.2.2:2731/Api/Clientes/Cliente");
+				put.setHeader("content-type", "application/json");
+				try{
+					//Construimos el objeto cliente en formato JSON
+					JSONObject dato = new JSONObject();
+	
+					dato.put("Info", Info);
+					StringEntity entity = new StringEntity(dato.toString());
+					put.setEntity(entity);
+	
+					HttpResponse resp = httpClient.execute(put);
+					String respStr = EntityUtils.toString(resp.getEntity());
+					return respStr;
+				}
+				catch(Exception ex){Log.e("ServicioRest","Error!", ex);	}
+				break;
+			case 2:
+				 
+				HttpDelete del = new HttpDelete("http://10.0.2.2:2731/Api/Clientes/Cliente/12");
+				del.setHeader("content-type", "application/json");
+				try{
+				   HttpResponse resp = httpClient.execute(del);
+				   String respStr = EntityUtils.toString(resp.getEntity());
+				   return respStr;
+				}
+				catch(Exception ex){Log.e("ServicioRest","Error!", ex);	}
+				break;
+				
+			case 3:
+				HttpGet get = new HttpGet("http://10.0.2.2:2731/Api/Clientes/Cliente/15");
+			 	get.setHeader("content-type", "application/json");		 
+			 	try{
+			        HttpResponse resp = httpClient.execute(get);
+			        String respStr = EntityUtils.toString(resp.getEntity());		 
+			        JSONObject respJSON = new JSONObject(respStr);
+			        int idCli = respJSON.getInt("Id");
+			        String nombCli = respJSON.getString("Nombre");
+			        int telefCli = respJSON.getInt("Telefono");
+			 	}
+				catch(Exception ex){   Log.e("ServicioRest","Error!", ex);	}
 			break;
 		}
 		return null;

@@ -3,16 +3,13 @@ package com.spotz;
 import com.example.androidhive.R;
 import com.spotz.camera.ImageLoader;
 import com.spotz.utils.Const;
-import com.spotz.utils.Utils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,7 +64,7 @@ public class NewsViewAdapter extends BaseAdapter {
 		return 0;
 	}
 
-	public View getView(final int position, View convertView, ViewGroup parent) {
+	@SuppressLint("ViewHolder") public View getView(final int position, View convertView, ViewGroup parent) {
 
 
 
@@ -140,21 +137,4 @@ public class NewsViewAdapter extends BaseAdapter {
 
 		return itemView;
 	}
-	
-	private float getBitmapScalingFactor(Bitmap bm) {
-        // Get display width from device
-        int displayWidth = Const.width;
-
-        // Get margin to use it for calculating to max width of the ImageView
-        LinearLayout.LayoutParams layoutParams = 
-                (LinearLayout.LayoutParams)imgSpot.getLayoutParams();
-        int leftMargin = layoutParams.leftMargin;
-        int rightMargin = layoutParams.rightMargin;
-
-        // Calculate the max width of the imageView
-        int imageViewWidth = displayWidth - (leftMargin + rightMargin);
-        Log.d(TAG,"");
-        // Calculate scaling factor and return it
-        return ( (float) imageViewWidth / (float) bm.getWidth() );
-    }
 }

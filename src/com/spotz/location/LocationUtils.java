@@ -18,9 +18,6 @@ package com.spotz.location;
 
 import android.content.Context;
 import android.location.Location;
-import android.util.Log;
-
-import com.example.androidhive.R;
 
 /**
  * Defines app-wide constants and utilities

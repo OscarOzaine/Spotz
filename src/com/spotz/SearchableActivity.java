@@ -3,12 +3,10 @@ package com.spotz;
 import com.example.androidhive.R;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 public class SearchableActivity extends Activity {
 	

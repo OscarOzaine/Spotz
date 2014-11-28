@@ -1,18 +1,12 @@
 package com.spotz.users;
 
 import java.util.ArrayList;
-import java.util.Date;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.spotz.MainActivity;
-import com.spotz.comm.MessageManager;
 import com.spotz.frags.InfoUpdateListener;
 import com.spotz.utils.Const;
 import com.spotz.utils.Settings;
-
 import android.util.Log;
 
 public class User {
@@ -22,12 +16,8 @@ public class User {
 	
 	//User properties
 	protected 	int		uID, uFollowers, uPlusReputation, uMinusReputation, uSharedlocation,uConfirmed;
-
 	protected	double	uLatitude, uLongitude;
 	protected 	String	uSuspended,uUsername, uEmail, uFirstname, uLastname, uLink, uImage,uCreated_at;
-	
-	// gun properties
-	private 	int		gunDamage = 15, gunMagazine = 160;
 	
 	//JSON proccessing constants IDs
 	private final static String 
@@ -59,7 +49,6 @@ public class User {
 				currentU = new User( 1, "defaultusername", "default@default.com","de","fault");
 			else
 				currentU = new User(playerJson);
-			
 		}
 		Log.d(Const.TAG,"currentuser "+currentU.getID());
 		return  currentU;
@@ -73,7 +62,6 @@ public class User {
 	private User(int id, String username, String email, String firstname,String lastname){
 		infoListeners = new ArrayList<InfoUpdateListener>();
 		initPlayer(id, username, email, firstname, lastname);
-		//(int id, String username, String email, String firstname,String lastname)
 	}
 	
 	/**Once the player has logged in, we initialize the 
@@ -89,8 +77,6 @@ public class User {
 		uLastname	= lastname;
 		notifyListener();
 	}
-	
-	
 	
 	/** Once the player has logged in, we initialize the 
 	 * player's  basic parameters.
@@ -113,15 +99,11 @@ public class User {
 		initPlayer(playerJSON);
 	}
 	
-		
 	/** we initialize the player's  basic parameters from a json.
 	 * @param res the servers response with current player profile*/
 	public void initPlayer(JSONArray res){
 		Log.v(Const.TAG, "PlayerInit");
-		
-		
 		try {
-
 			// extract jsonObejct from JsonArray
 			JSONObject infoJson = res.getJSONObject(0); 
 			Settings.getIns(null).getPref().edit().putString(Settings.USER_JSON, res.toString()).commit();
@@ -143,16 +125,13 @@ public class User {
 			uLatitude		= Double.parseDouble(infoJson.getString(CURRENT_LAT));
 			uLongitude		= Double.parseDouble(infoJson.getString(CURRENT_LNG));
 			uCreated_at		= infoJson.getString(CREATED_AT);
-			
 		} catch (Exception e) {	if(Const.D)e.printStackTrace(); }
 		if(Const.D){
 			Log.v(Const.TAG, "PlayerInitComplete");
 		}
 		Log.d(Const.TAG,"userjson = "+Settings.getIns(null).getPref().getString(Settings.USER_JSON, null));
-		
 		notifyListener();
 	}	
-	
 	
 	/***************************** Members getters  *************************/
 	/** @return the pID */
@@ -191,7 +170,6 @@ public class User {
 	public double getLongitude() {
 		return uLongitude;
 	}
-
 	/** @return the username */
 	public String getUsername() {
 		return uUsername;
@@ -247,6 +225,7 @@ public class User {
 			infoListeners.get(i).refreshUI_newThread();
 		}
 	}
+	
 	/** remove a listener, if it's known that it won't be used any more */
 	public void removeOnInfoUpdateListener(InfoUpdateListener iul){
 		if(Const.D)
@@ -254,31 +233,6 @@ public class User {
 		infoListeners.remove(iul);
 	}
 
-	
-	/***************************** Player actions ******************************************/
-
-	/** Add a Death, if the life is lower or equals to 0	 
-	 * @param p2ID the player who shot current player*/
-	/*
-	public void addDeath(String p2ID){
-		pDeaths++;
-		MessageManager.getIns().sendGotShot(p2ID, true);
-		if(Const.D)
-			Log.i(TAG, pName+" got killed by: "+p2ID);
-		notifyListener();
-	}
-	*/
-	/** - FOR TEST ONLY - Add a Kill	 */
-	/*
-	public void addKill(String p2){
-		pKills++;
-		pScore +=  25;
-		MessageManager.getIns().sendIShot(p2, true);
-		if(Const.D)
-			Log.i(TAG, pName+" got killed by: "+p2);
-		notifyListener();
-	}
-	*/
 	/** Recover Life and Ammo	 */
 	/*
 	public void recover(){

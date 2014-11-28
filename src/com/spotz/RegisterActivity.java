@@ -11,7 +11,6 @@ import com.spotz.utils.Const;
 import com.spotz.utils.Utils;
 
 import android.accounts.Account;
-import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -21,17 +20,11 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
-
-/**
- * This is the main Activity that displays the current chat session.
- */
-
 
 public class RegisterActivity extends Activity implements OnRegisterListener{
 	
@@ -227,7 +220,7 @@ public class RegisterActivity extends Activity implements OnRegisterListener{
 	}
 
 
-	@Override
+	@SuppressLint("DefaultLocale") @Override
 	public void onRegisterError(String error) {
 		
 		if(error.toLowerCase().contains("failed to connect")){

@@ -2,8 +2,6 @@ package com.spotz;
 
 import com.example.androidhive.R;
 import com.facebook.Session;
-import com.spotz.NewsActivity.LoadOutbox;
-import com.spotz.utils.Const;
 
 import android.app.ActionBar;
 import android.app.SearchManager;
@@ -113,7 +111,6 @@ public class MainActivity extends TabActivity {
         getMenuInflater().inflate(R.menu.home, menu);
         
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-        	 
             SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
             SearchView search = (SearchView) menu.findItem(R.id.action_settings).getActionView();
             search.setSearchableInfo(manager.getSearchableInfo(getComponentName()));

@@ -1,48 +1,31 @@
 package com.spotz;
 
+import com.example.androidhive.R;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.http.NameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.example.androidhive.R;
 import com.spotz.camera.ImageLoader;
 import com.spotz.utils.JSONParser;
 import com.spotz.utils.Utils;
-
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.SearchView.OnQueryTextListener;
 
 public class SpotActivity extends Activity {
 	// All xml labels
-	TextView txtName;
-	TextView txtLikes;
-	TextView txtDislikes;
-	TextView txtType;
-	TextView txtCity;
-	TextView txtDescription;
-	TextView txtCreatedat;
-	TextView txtEmail;
+	TextView txtName, txtLikes, txtDislikes, txtType, txtCity;
+	TextView txtDescription, txtCreatedat, txtEmail;
 	ImageView imgSpot;
 	String TAG = "SpotActivity";
 	// Progress Dialog
@@ -67,15 +50,9 @@ public class SpotActivity extends Activity {
 	
 	String spotId = "";
 
-	String spotName = "";
-	String spotLikes = "";
-	String spotDislikes = "";
-	String spotType = "";
-	String spotCity = "";
-	String spotDescription = "";
-	String spotCreatedat = "";
-	String spotEmail = "";
-	String spotImage = "";
+	String spotName = "", spotLikes = "", spotDislikes = "";
+	String spotType = "", spotCity = "", spotDescription = "";
+	String spotCreatedat = "", spotEmail = "", spotImage = "";
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

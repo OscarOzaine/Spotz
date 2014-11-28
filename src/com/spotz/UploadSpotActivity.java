@@ -1,6 +1,6 @@
 package com.spotz;
 
-
+import com.example.androidhive.R;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -9,11 +9,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import com.example.androidhive.R;
-
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.ErrorDialogFragment;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
@@ -22,7 +18,6 @@ import com.spotz.location.LocationUtils;
 import com.spotz.services.UploadMediaService;
 import com.spotz.users.User;
 import com.spotz.utils.Utils;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -44,12 +39,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,26 +60,21 @@ public class UploadSpotActivity extends Activity implements
 
 	
 	// All xml labels
-	TextView txtName;
-	TextView txtType;
-	TextView txtDescription;
-	EditText editSpotName;
-	Spinner SpinnerSpotType;
-	EditText editSpotDescription;
-	
-	String currentLat = "";
-	String currentLng = "";
-	
+	TextView txtName, txtType, txtDescription;
+	EditText editSpotName, editSpotDescription;
+	Spinner SpinnerSpotType, spinnerSpotType;
 	ImageView spotMedia;
-	Spinner spinnerSpotType;
+	
+	String currentLat = "", currentLng = "";
+	
+	
+	
 	static String TAG = "UploadSpotActivity";
 	// Progress Dialog
 	private ProgressDialog pDialog;
 	String upLoadServerUri = "http://api.myhotspotz.net/app/uploadSpot";
 	String imagePath;
 	int serverResponseCode = 0;
-	
-	
 	
 	// Handle to SharedPreferences for this app
     SharedPreferences mPrefs;
@@ -99,11 +86,11 @@ public class UploadSpotActivity extends Activity implements
      *
      */
     boolean mUpdatesRequested = false;
-
-	
+    
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.d(TAG,"onCreate");
 		setContentView(R.layout.activity_upload_spot);
 		
 		getActionBar().setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
@@ -113,12 +100,9 @@ public class UploadSpotActivity extends Activity implements
 		editSpotDescription = (EditText) findViewById(R.id.editSpotDescription);
 		SpinnerSpotType = (Spinner) findViewById(R.id.spinner_spottypes);
 		
-		
 		Intent intent = getIntent();
 
 		imagePath = intent.getStringExtra("SpotMedia");
-		
-		
 		
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inSampleSize=8;      // 1/8 of original image
@@ -128,8 +112,6 @@ public class UploadSpotActivity extends Activity implements
         mat.postRotate(90);
         Bitmap bMapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
         
-		
-
         // Get scaling factor to fit the max possible width of the ImageView
         float scalingFactor = getBitmapScalingFactor(bMapRotate);
 
@@ -141,15 +123,6 @@ public class UploadSpotActivity extends Activity implements
 		
         spotMedia.setImageBitmap(newBitmap);
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		spinnerSpotType = (Spinner) findViewById(R.id.spinner_spottypes);
 		// Create an ArrayAdapter using the string array and a default spinner layout
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -160,8 +133,6 @@ public class UploadSpotActivity extends Activity implements
 		spinnerSpotType.setAdapter(adapter);
 		
 		
-		
-		Log.d(TAG,"onCreate");
 		
 		// Create a new global location parameters object
         mLocationRequest = LocationRequest.create();
@@ -192,7 +163,6 @@ public class UploadSpotActivity extends Activity implements
          */
         mLocationClient = new LocationClient(this, this, this);
         
-	    
 	}
 	
 	private float getBitmapScalingFactor(Bitmap bm) {

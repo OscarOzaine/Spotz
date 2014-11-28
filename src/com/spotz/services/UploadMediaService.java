@@ -8,26 +8,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import com.example.androidhive.R;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.spotz.UploadSpotActivity;
-import com.spotz.location.LocationUtils;
-import com.spotz.users.User;
 import com.spotz.utils.Const;
-
 import android.app.IntentService;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.location.Location;
-import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 public class UploadMediaService extends IntentService  {
 	
-	String imagePath,spotName,spotDescription,spotTypeId, userId,latitude,longitude;
+	String imagePath, spotName, spotDescription, spotTypeId, userId, latitude, longitude;
 	String upLoadServerUri = "http://api.myhotspotz.net/app/uploadSpot";
 	int serverResponseCode = 0;
 	
@@ -55,7 +43,6 @@ public class UploadMediaService extends IntentService  {
 	      // For our sample, we just sleep for 5 seconds.
 		if(uploadSpot(imagePath, spotName, spotDescription, 
 				spotTypeId, userId,latitude, longitude) == 1){
-			
 		}		
         else{
         	//Toast.makeText(UploadSpotActivity.this, "Error al subir spot", 
@@ -178,7 +165,5 @@ public class UploadMediaService extends IntentService  {
             
             return Integer.parseInt(serverResponse.toString()); 
         } // End else block 
-    }
-
-	
+    }	
 }

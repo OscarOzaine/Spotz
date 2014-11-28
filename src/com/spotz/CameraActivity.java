@@ -134,6 +134,7 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
         super.onDestroy();
         Const.v(TAG, "--- ON DESTROY ---");
     }
+    
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(Const.D) Log.d(TAG, "onActivityResult reqCode= "+requestCode+ " res = " + resultCode);
         switch (requestCode) {
@@ -181,11 +182,6 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 			finish();
 		}
 	};
-
-	/** Create a file Uri for saving an image or video */
-	private static Uri getOutputMediaFileUri(int type){
-		return Uri.fromFile(getOutputMediaFile(type));
-	}
 
 	/** Create a File for saving an image or video */
 	private static File getOutputMediaFile(int type){

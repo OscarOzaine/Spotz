@@ -57,7 +57,6 @@ public class UploadProfilePicService extends IntentService  {
 
 	  
 	public int uploadProfilePic(String sourceFileUri,String userid, String userName, String created_at) {
-
 		
         String fileName = sourceFileUri;
 
@@ -78,13 +77,9 @@ public class UploadProfilePicService extends IntentService  {
         	Log.e(Const.TAG, "Source File not exist :" +imagePath);
             return 0;
         }
-        else
-        {
-        	
+        else{
             try { 
-            	
-
-                // open a URL connection to the Servlet
+            	// open a URL connection to the Servlet
                 FileInputStream fileInputStream = new FileInputStream(sourceFile);
                 URL url = new URL(upLoadServerUri);
 
@@ -149,7 +144,6 @@ public class UploadProfilePicService extends IntentService  {
                 if(serverResponseCode == 200){
                 	Log.d(Const.TAG,"File Upload Complete.");
                 }
-                
                 //close the streams //
                 fileInputStream.close();
                 dos.flush();
@@ -170,6 +164,4 @@ public class UploadProfilePicService extends IntentService  {
             return Integer.parseInt(serverResponse.toString()); 
         } // End else block 
     }
-
-	
 }

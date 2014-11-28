@@ -1,35 +1,24 @@
 package com.spotz;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.example.androidhive.R;
 
-
+import java.util.Arrays;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import com.facebook.widget.FacebookDialog;
 import com.facebook.widget.LoginButton;
 import com.spotz.comm.MessageManager;
 import com.spotz.users.OnLoginListener;
 import com.spotz.users.User;
 import com.spotz.utils.Const;
-
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.Signature;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -41,11 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
 import com.facebook.*;
-import com.facebook.android.FacebookError;
-import com.facebook.model.GraphObject;
-import com.facebook.model.GraphPlace;
 import com.facebook.model.GraphUser;
-import com.facebook.widget.*;
 
 /**
  * This is the main Activity that displays the current chat session.
