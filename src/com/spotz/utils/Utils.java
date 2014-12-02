@@ -5,7 +5,13 @@ import java.io.OutputStream;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.example.androidhive.R;
+
 import android.graphics.Bitmap;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 
 public class Utils {
 	
@@ -47,4 +53,6 @@ public class Utils {
         return Bitmap.createScaledBitmap(bm, scaleWidth, scaleHeight, true);
     }
     
+    
+
 }

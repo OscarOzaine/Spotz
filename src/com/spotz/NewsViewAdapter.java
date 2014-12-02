@@ -71,7 +71,7 @@ public class NewsViewAdapter extends BaseAdapter {
 		inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		View itemView = inflater.inflate(R.layout.outbox_list_item, parent, false);
+		View itemView = inflater.inflate(R.layout.news_list_item, parent, false);
 		// Get the position
 
 		resultp = data.get(position);

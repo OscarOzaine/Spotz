@@ -9,14 +9,18 @@ import org.json.JSONObject;
 import com.spotz.camera.ImageLoader;
 import com.spotz.utils.JSONParser;
 import com.spotz.utils.Utils;
+
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -58,7 +62,11 @@ public class SpotActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_spot);
 		
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(R.string.app_name);
+        actionBar.setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
 		
 		txtName			= (TextView) findViewById(R.id.spot_name);
 		txtLikes		= (TextView) findViewById(R.id.spot_likes);
@@ -132,6 +140,33 @@ public class SpotActivity extends Activity {
 
         // Calculate scaling factor and return it
         return ( (float) imageViewWidth / (float) bm.getWidth() );
+    }
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	
+        getMenuInflater().inflate(R.menu.spotmenu, menu);
+        /*
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+            SearchView search = (SearchView) menu.findItem(R.id.action_settings).getActionView();
+            search.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
+            search.setOnQueryTextListener(new OnQueryTextListener() { 
+                @Override 
+                public boolean onQueryTextChange(String query) {
+                	//Log.d(TAG,"LoadData");
+                    //loadData(query);
+                    return true; 
+                }
+				@Override
+				public boolean onQueryTextSubmit(String query) {
+					// TODO Auto-generated method stub
+					return false;
+				} 
+            });
+        }
+        */
+	    return super.onCreateOptionsMenu(menu);
     }
 	
 	@Override

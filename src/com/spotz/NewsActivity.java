@@ -41,9 +41,6 @@ public class NewsActivity extends ListActivity {
 	private static String OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots";
 	
 	// ALL JSON node names
-	
-	
-
 	static final String TAG_SPOTS = "spots";
 	static final String TAG_ID = "id";
 	static final String TAG_NAME = "name";
@@ -61,7 +58,7 @@ public class NewsActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.outbox_list);
+		setContentView(R.layout.news_list);
 		
 		ListView lv= (ListView) findViewById(android.R.id.list);
 		lv.setSelector(R.drawable.listselector);

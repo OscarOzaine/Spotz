@@ -6,9 +6,12 @@ import java.util.Locale;
 import org.json.*;
 
 import com.example.androidhive.R;
+import com.facebook.LoginActivity;
 import com.spotz.MainActivity;
+import com.spotz.ProfileActivity;
 import com.spotz.RegisterActivity;
 import com.spotz.UploadSpotActivity;
+import com.spotz.services.UploadProfilePicService;
 import com.spotz.users.OnLoginListener;
 import com.spotz.users.OnRegisterListener;
 import com.spotz.users.User;
@@ -17,6 +20,7 @@ import com.spotz.utils.Settings;
 import com.spotz.utils.Utils;
 
 
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -205,6 +209,7 @@ public class MessageManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		String[][] optionparams = 
 			{
 		        { "email", email},

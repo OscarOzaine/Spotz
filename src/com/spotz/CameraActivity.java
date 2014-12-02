@@ -14,10 +14,12 @@ import com.facebook.AppEventsLogger;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
+import com.spotz.camera.VideoActivity;
 import com.spotz.utils.Const;
 import com.spotz.utils.Settings;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -27,6 +29,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PictureCallback;
+import android.media.CamcorderProfile;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -41,29 +45,41 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 
 public class CameraActivity extends FragmentActivity implements ViewManager{
 
+	
 	// Intent request codes
     public static final int REQUEST_LOGIN = 4;
 	static final int REQUEST_IMAGE_CAPTURE = 1;
 	static final int REQUEST_TAKE_PHOTO = 1;
+	
 	public static final int MEDIA_TYPE_IMAGE = 1;
 	public static final int MEDIA_TYPE_VIDEO = 2;
-	private SurfaceView preview=null;
-	private SurfaceHolder previewHolder=null;
-	private Camera camera=null;
-	private Button buttonNextScreen;
-	private Button buttonTakeSpot;
+	private SurfaceView preview = null;
+	private SurfaceHolder previewHolder = null;
+	private Camera camera = null;
+	private ImageButton buttonNextScreen;
+	private ImageButton buttonTakeSpot;
+	private ImageButton buttonChangeMedia;
+	private ImageButton buttonChangeCamera;
+	
+	//1-Image 2-Video
+	private int mediaSelect = 1;
+	
 	private boolean inPreview=false;
 	private boolean cameraConfigured=false;
 	String mCurrentPhotoPath;
 	static String TAG = "CameraActivity";
 
 	Intent mainIntent;
+	final static int MEDIA_VIDEO = 2;
+	final static int MEDIA_IMAGE = 1;
 	
+	static int currentCameraId = 0;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -79,7 +95,7 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		if(Const.width == 0){
 			Const.width = getWindowManager().getDefaultDisplay().getWidth();
 		}
-		
+		mediaSelect = MEDIA_IMAGE;
 	}
 
 	
@@ -89,7 +105,7 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		if(Const.D) Log.e(TAG, "++ ON START ++");
 		//Check if user is logged in, if not: go to LogIn Screen
 		
-		
+		currentCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
 		getActionBar().setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
 		getActionBar().setDisplayShowTitleEnabled(false);
 		getActionBar().setDisplayShowTitleEnabled(true);
@@ -99,9 +115,11 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		previewHolder.addCallback(surfaceCallback);
 		previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
-		buttonNextScreen = (Button) findViewById(R.id.button_nextscreen);
-		buttonTakeSpot = (Button) findViewById(R.id.button_takespot);
-
+		buttonNextScreen 	= (ImageButton) findViewById(R.id.button_nextscreen);
+		buttonTakeSpot 		= (ImageButton) findViewById(R.id.button_takespot);
+		buttonChangeMedia	= (ImageButton) findViewById(R.id.changeMedia);
+		buttonChangeCamera	= (ImageButton) findViewById(R.id.changeCamera);
+		
 
 		buttonNextScreen.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -114,14 +132,86 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 
 
 		buttonTakeSpot.setOnClickListener(new View.OnClickListener() {
+			@SuppressWarnings("deprecation")
 			public void onClick(View v) {
-				camera.takePicture(null, null, mPicture);
-				
+				if(mediaSelect == MEDIA_IMAGE){
+					camera.takePicture(null, null, mPicture);
+				}
+				else if(mediaSelect == MEDIA_VIDEO){
+					
+				}
 			}
 		});
 
 		
+		
+		
+		buttonChangeMedia.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent uploadSpotIntent = new Intent(CameraActivity.this, VideoActivity.class);
+				startActivity(uploadSpotIntent);
+				finish();
+			}
+		});
+		
+		buttonChangeCamera.setOnClickListener(new View.OnClickListener() {
+			@SuppressWarnings("deprecation")
+			public void onClick(View v) {
+				if (inPreview) {
+				    camera.stopPreview();
+				}
+				//NB: if you don't release the current camera before switching, you app will crash
+				camera.release();
+
+				//swap the id of the camera to be used
+				if(currentCameraId == Camera.CameraInfo.CAMERA_FACING_BACK){
+				    currentCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
+				}
+				else {
+				    currentCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
+				}
+				camera = Camera.open(currentCameraId);
+
+				setCameraDisplayOrientation(CameraActivity.this, currentCameraId, camera);
+				try {
+
+				    camera.setPreviewDisplay(previewHolder);
+				} catch (IOException e) {
+				    e.printStackTrace();
+				}
+				camera.startPreview();
+			}
+		});
+		
 	}
+
+	
+	
+
+	public static void setCameraDisplayOrientation(Activity activity,
+	         int cameraId, android.hardware.Camera camera) {
+	     android.hardware.Camera.CameraInfo info =
+	             new android.hardware.Camera.CameraInfo();
+	     android.hardware.Camera.getCameraInfo(cameraId, info);
+	     int rotation = activity.getWindowManager().getDefaultDisplay()
+	             .getRotation();
+	     int degrees = 0;
+	     switch (rotation) {
+	         case Surface.ROTATION_0: degrees = 0; break;
+	         case Surface.ROTATION_90: degrees = 90; break;
+	         case Surface.ROTATION_180: degrees = 180; break;
+	         case Surface.ROTATION_270: degrees = 270; break;
+	     }
+
+	     int result;
+	     if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+	         result = (info.orientation + degrees) % 360;
+	         result = (360 - result) % 360;  // compensate the mirror
+	     } else {  // back-facing
+	         result = (info.orientation - degrees + 360) % 360;
+	     }
+	     camera.setDisplayOrientation(result);
+	 }
 
     @Override
     public void onStop() {

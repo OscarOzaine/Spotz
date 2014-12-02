@@ -10,6 +10,8 @@ import org.json.JSONObject;
 import com.facebook.widget.FacebookDialog;
 import com.facebook.widget.LoginButton;
 import com.spotz.comm.MessageManager;
+import com.spotz.services.LoginService;
+import com.spotz.services.UploadProfilePicService;
 import com.spotz.users.OnLoginListener;
 import com.spotz.users.User;
 import com.spotz.utils.Const;
@@ -23,8 +25,11 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,7 +66,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
-        	Log.d(TAG, "call");
+        	Log.d(TAG, "StatusCallback");
             onSessionStateChange(session, state, exception);
         }
         
@@ -97,6 +102,14 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
         } else if (state == SessionState.OPENED_TOKEN_UPDATED) {
             handlePendingAction();
         }
+        /*
+        if(Session.getActiveSession() != null){
+        	Intent cameraIntent= new Intent(LoginActivity.this, LoadingActivity.class);
+        	cameraIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        	//openMainActivity.setFlags(Intent.);
+            startActivity(cameraIntent);
+        }
+        */
         //updateUI();
     }
 
@@ -201,9 +214,20 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
 			Log.d(TAG,"Gender = "+user.getInnerJSONObject().getString("gender"));
 			Log.d(TAG,"accesstoken = "+session.getAccessToken());
 			*/
+			
+			Intent intentUploadProfilePic = new Intent(LoginActivity.this, LoginService.class);
+	        intentUploadProfilePic.putExtra("json", ""+outerObject);
+	        intentUploadProfilePic.putExtra("accesstoken", session.getAccessToken());
+    		startService(intentUploadProfilePic);
+    		
+    		Intent cameraIntent= new Intent(LoginActivity.this, LoadingActivity.class);
+            startActivity(cameraIntent);
+            finish();
+    		/*
 			if(outerArray != null){
 				MessageManager.sendFBLogin(outerObject, session.getAccessToken());
 			}
+			*/
 	    	
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -211,6 +235,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
 		}
     	
     }
+	
 	private void buttonVisibility(final boolean visible){
 		LoginActivity.this.runOnUiThread(new Runnable() {
 			public void run() {
@@ -323,9 +348,6 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
 			e.printStackTrace();
 		}
 		
-	
-		
-		Log.d(TAG,"ACAAAAA");
 		
 		/////
 		/*
@@ -338,11 +360,10 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
     	cameraIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
     	//openMainActivity.setFlags(Intent.);
         startActivity(cameraIntent); 
-		  
+        finish();
 		
 	}
-
-
+	
 	@Override
 	public void onLoginError(String error) {
 		if(error.equals("02")){
@@ -380,5 +401,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
         Log.d(TAG,"activityResult");
         uiHelper.onActivityResult(requestCode, resultCode, data, dialogCallback);
     }
+	
+
 
 }

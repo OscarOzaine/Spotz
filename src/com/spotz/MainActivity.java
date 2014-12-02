@@ -108,8 +108,9 @@ public class MainActivity extends TabActivity {
         
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+    	
         getMenuInflater().inflate(R.menu.home, menu);
-        
+        /*
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
             SearchView search = (SearchView) menu.findItem(R.id.action_settings).getActionView();
@@ -128,6 +129,7 @@ public class MainActivity extends TabActivity {
 				} 
             });
         }
+        */
 	    return super.onCreateOptionsMenu(menu);
     }
     

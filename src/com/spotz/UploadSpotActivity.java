@@ -73,7 +73,7 @@ public class UploadSpotActivity extends Activity implements
 	// Progress Dialog
 	private ProgressDialog pDialog;
 	String upLoadServerUri = "http://api.myhotspotz.net/app/uploadSpot";
-	String imagePath;
+	String mediaPath;
 	int serverResponseCode = 0;
 	
 	// Handle to SharedPreferences for this app
@@ -102,26 +102,36 @@ public class UploadSpotActivity extends Activity implements
 		
 		Intent intent = getIntent();
 
-		imagePath = intent.getStringExtra("SpotMedia");
+		mediaPath = intent.getStringExtra("SpotMedia");
+		Log.d(TAG,"imagepath = "+mediaPath);
 		
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inSampleSize=8;      // 1/8 of original image
-		Bitmap bitmap = BitmapFactory.decodeFile(imagePath,options);
-		
-		Matrix mat = new Matrix();
-        mat.postRotate(90);
-        Bitmap bMapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
-        
-        // Get scaling factor to fit the max possible width of the ImageView
-        float scalingFactor = getBitmapScalingFactor(bMapRotate);
+		String[] mediaStrs = mediaPath.split("\\.(?=[^\\.]+$)");
+		Log.d(TAG,"MediaACA="+mediaStrs[1]);
+		if(mediaStrs[1].equals("mp4") || mediaStrs[1].equals("3gp")){
+			
+		}
+		else{
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inSampleSize=8;      // 1/8 of original image
+			Bitmap bitmap = BitmapFactory.decodeFile(mediaPath,options);
+			
+			Matrix mat = new Matrix();
+	        mat.postRotate(90);
+	        Bitmap bMapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
+	        
+	        // Get scaling factor to fit the max possible width of the ImageView
+	        float scalingFactor = getBitmapScalingFactor(bMapRotate);
 
-        // Create a new bitmap with the scaling factor
-        Bitmap newBitmap = Utils.ScaleBitmap(bMapRotate, scalingFactor);
+	        // Create a new bitmap with the scaling factor
+	        Bitmap newBitmap = Utils.ScaleBitmap(bMapRotate, scalingFactor);
 
-        // Set the bitmap as the ImageView source
-        //spotMedia.setImageBitmap(newBitmap);
+	        // Set the bitmap as the ImageView source
+	        //spotMedia.setImageBitmap(newBitmap);
+			
+	        spotMedia.setImageBitmap(newBitmap);
+			
+		}
 		
-        spotMedia.setImageBitmap(newBitmap);
 		
 		spinnerSpotType = (Spinner) findViewById(R.id.spinner_spottypes);
 		// Create an ArrayAdapter using the string array and a default spinner layout
@@ -188,15 +198,12 @@ public class UploadSpotActivity extends Activity implements
      */
     @Override
     public void onStop() {
-
         // If the client is connected
         if (mLocationClient.isConnected()) {
             stopPeriodicUpdates();
         }
-
         // After disconnect() is called, the client is considered "dead".
         mLocationClient.disconnect();
-
         super.onStop();
     }
 	
@@ -421,7 +428,7 @@ public class UploadSpotActivity extends Activity implements
 	        		Log.d(TAG, "Uploaddd");
 	        		
 	        		Intent intentUploadService = new Intent(UploadSpotActivity.this, UploadMediaService.class);
-	        		intentUploadService.putExtra("imagepath", imagePath);
+	        		intentUploadService.putExtra("imagepath", mediaPath);
 	        		intentUploadService.putExtra("spotname", spotName);
 	        		intentUploadService.putExtra("spotdescription", spotDescription);
 	        		intentUploadService.putExtra("spottypeId", ""+spotTypeId);
@@ -472,7 +479,7 @@ public class UploadSpotActivity extends Activity implements
         Log.e(TAG,sourceFileUri);
         if (!sourceFile.isFile()) {
         	pDialog.dismiss(); 
-            Log.e(TAG, "Source File not exist :" +imagePath);
+            Log.e(TAG, "Source File not exist :" +mediaPath);
             return 0;
         }
         else

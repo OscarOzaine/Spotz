@@ -5,7 +5,7 @@
     
     <item 
         android:id="@+id/action_uploadspot"
-        android:icon="@android:drawable/ic_media_play"
+        android:icon="@android:drawable/ic_menu_send"
         android:title="Upload"
         android:showAsAction="ifRoom"/>
     
