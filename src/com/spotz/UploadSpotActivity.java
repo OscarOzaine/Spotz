@@ -43,6 +43,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.AbsoluteLayout;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -121,10 +122,49 @@ public class UploadSpotActivity extends Activity implements
 		Log.d(TAG,"MediaACA="+ACA[1]+"  ---- "+file.getAbsolutePath());
 		if(mediaStrs[1].equals("mp4") || mediaStrs[1].equals("3gp")){
 			spotImage.setVisibility(View.GONE);
+			
 			spotVideo.setVisibility(View.VISIBLE);
+			
+			
 			MediaController mediaController= new MediaController(this);
-		    mediaController.setAnchorView(spotVideo);        
-		   
+		    mediaController.setAnchorView(spotVideo);
+	/*	    
+		    DisplayMetrics displaymetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            int videoheight = displaymetrics.heightPixels;
+            int videowidth = displaymetrics.widthPixels;
+            int left = spotVideo.getLeft();
+            int top = spotVideo.getTop();
+            int right = left + (videowidth);
+            int bottom = top + (videoheight);
+            
+            
+		    AbsoluteLayout.LayoutParams params = (AbsoluteLayout.LayoutParams) spotVideo.getLayoutParams();
+		    params.width = videowidth;
+		    params.height = videoheight;
+		    params.x = left;
+		    params.y = top;
+
+		    spotVideo.requestLayout();
+*/
+		    spotVideo.setVisibility(View.VISIBLE);
+		    spotVideo.setFocusable(true);
+		    spotVideo.setFocusableInTouchMode(true);
+		    spotVideo.requestFocus();
+
+		   /*
+		    DisplayMetrics displaymetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            int videoheight = displaymetrics.heightPixels;
+            int videowidth = displaymetrics.widthPixels;
+            int left = spotVideo.getLeft();
+            int top = spotVideo.getTop();
+            int right = left + (videowidth);
+            int bottom = top + (videoheight);
+            
+            spotVideo.layout(left, top, right, bottom);
+            */
+            
 		    Uri uri=Uri.parse(mediaPath);        
 		    spotVideo.setMediaController(mediaController);
 		    spotVideo.setVideoURI(uri);        
@@ -459,6 +499,7 @@ public class UploadSpotActivity extends Activity implements
 	        		intentUploadService.putExtra("latitude", currentLat);
 	        		intentUploadService.putExtra("longitude", currentLng);
 	        		startService(intentUploadService);
+	        		
 	        		Intent intent = new Intent(UploadSpotActivity.this, MainActivity.class);
 					startActivity(intent);      
 					finish();

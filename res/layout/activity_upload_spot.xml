@@ -14,7 +14,7 @@
 
         <LinearLayout
             android:id="@+id/uploadLinear1"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
@@ -30,10 +30,11 @@
 
             <VideoView
                 android:id="@+id/spotVideoUpload"
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="240dp"
                 android:layout_marginBottom="10dp"
-                android:visibility="gone" />
+                android:visibility="visible"
+                android:layout_gravity="center" />
 
         </LinearLayout>
 

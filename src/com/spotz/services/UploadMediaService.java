@@ -9,6 +9,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import com.spotz.utils.Const;
+import com.spotz.utils.Utils;
+
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
@@ -163,7 +165,13 @@ public class UploadMediaService extends IntentService  {
             }
             Log.i(Const.TAG, "READ "+serverResponse);
             
-            return Integer.parseInt(serverResponse.toString()); 
+            if(Utils.isNumeric(serverResponse.toString())){
+            	return Integer.parseInt(serverResponse.toString());
+            }else{
+            	Log.d(Const.TAG,"Error: "+serverResponse.toString());
+            	return Integer.parseInt(serverResponse.toString()); 
+            }
+            
         } // End else block 
     }	
 }

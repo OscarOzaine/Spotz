@@ -112,6 +112,7 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 					//stopThread.start();
 					recording = false;
 					camera.stopPreview();
+					camera.unlock();
 					Intent uploadSpotIntent = new Intent(VideoActivity.this, UploadSpotActivity.class);
 					uploadSpotIntent.putExtra("SpotMedia",fileName);
 					startActivity(uploadSpotIntent);
@@ -161,14 +162,17 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
         
         fileName = getFilename();
         
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_LOW);
+        
+        mediaRecorder.setProfile(profile);
+        //mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         /*
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         mediaRecorder.setVideoSize(displaymetrics.widthPixels, displaymetrics.heightPixels);
         */
-        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-        mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.MPEG_4_SP);
+        //mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+        //mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.MPEG_4_SP);
         
         //mediaRecorder.setOutputFile("/sdcard/myvideo"+timeStamp+".mp4");
         mediaRecorder.setOutputFile(fileName);
