@@ -32,19 +32,26 @@ import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 public class UploadSpotActivity extends Activity implements
 			LocationListener,
@@ -63,8 +70,8 @@ public class UploadSpotActivity extends Activity implements
 	TextView txtName, txtType, txtDescription;
 	EditText editSpotName, editSpotDescription;
 	Spinner SpinnerSpotType, spinnerSpotType;
-	ImageView spotMedia;
-	
+	ImageView spotImage;
+	VideoView spotVideo;
 	String currentLat = "", currentLng = "";
 	
 	
@@ -86,7 +93,8 @@ public class UploadSpotActivity extends Activity implements
      *
      */
     boolean mUpdatesRequested = false;
-    
+    MediaController media_Controller;
+    DisplayMetrics dm;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -95,22 +103,37 @@ public class UploadSpotActivity extends Activity implements
 		
 		getActionBar().setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
 		//findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-		spotMedia = (ImageView) findViewById(R.id.spotMediaUpload);
+		spotImage = (ImageView) findViewById(R.id.spotImageUpload);
+		spotVideo = (VideoView) findViewById(R.id.spotVideoUpload);
 		editSpotName = (EditText) findViewById(R.id.editSpotName);
 		editSpotDescription = (EditText) findViewById(R.id.editSpotDescription);
 		SpinnerSpotType = (Spinner) findViewById(R.id.spinner_spottypes);
 		
 		Intent intent = getIntent();
-
+		
 		mediaPath = intent.getStringExtra("SpotMedia");
 		Log.d(TAG,"imagepath = "+mediaPath);
 		
 		String[] mediaStrs = mediaPath.split("\\.(?=[^\\.]+$)");
-		Log.d(TAG,"MediaACA="+mediaStrs[1]);
+		String[] ACA = mediaPath.split("/Spotz");
+		File file = new File(ACA[0]+"/Spotz", ACA[1]);
+		
+		Log.d(TAG,"MediaACA="+ACA[1]+"  ---- "+file.getAbsolutePath());
 		if(mediaStrs[1].equals("mp4") || mediaStrs[1].equals("3gp")){
-			
+			spotImage.setVisibility(View.GONE);
+			spotVideo.setVisibility(View.VISIBLE);
+			MediaController mediaController= new MediaController(this);
+		    mediaController.setAnchorView(spotVideo);        
+		   
+		    Uri uri=Uri.parse(mediaPath);        
+		    spotVideo.setMediaController(mediaController);
+		    spotVideo.setVideoURI(uri);        
+		    spotVideo.requestFocus();
+		    spotVideo.start();
 		}
 		else{
+			spotVideo.setVisibility(View.GONE);
+			spotImage.setVisibility(View.VISIBLE);
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inSampleSize=8;      // 1/8 of original image
 			Bitmap bitmap = BitmapFactory.decodeFile(mediaPath,options);
@@ -128,7 +151,7 @@ public class UploadSpotActivity extends Activity implements
 	        // Set the bitmap as the ImageView source
 	        //spotMedia.setImageBitmap(newBitmap);
 			
-	        spotMedia.setImageBitmap(newBitmap);
+	        spotImage.setImageBitmap(newBitmap);
 			
 		}
 		
@@ -181,7 +204,7 @@ public class UploadSpotActivity extends Activity implements
 
         // Get margin to use it for calculating to max width of the ImageView
         LinearLayout.LayoutParams layoutParams = 
-                (LinearLayout.LayoutParams)this.spotMedia.getLayoutParams();
+                (LinearLayout.LayoutParams)this.spotImage.getLayoutParams();
         int leftMargin = layoutParams.leftMargin;
         int rightMargin = layoutParams.rightMargin;
 

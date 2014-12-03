@@ -1,5 +1,6 @@
 package com.spotz.utils;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import org.json.JSONArray;
@@ -7,8 +8,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.androidhive.R;
+import com.spotz.CameraActivity;
 
 import android.graphics.Bitmap;
+import android.hardware.Camera;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
@@ -53,6 +56,4 @@ public class Utils {
         return Bitmap.createScaledBitmap(bm, scaleWidth, scaleHeight, true);
     }
     
-    
-
 }

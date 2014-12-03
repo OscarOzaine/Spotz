@@ -17,6 +17,7 @@ import com.facebook.UiLifecycleHelper;
 import com.spotz.camera.VideoActivity;
 import com.spotz.utils.Const;
 import com.spotz.utils.Settings;
+import com.spotz.utils.Utils;
 
 
 import android.annotation.SuppressLint;
@@ -27,6 +28,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.hardware.Camera;
+import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PictureCallback;
 import android.media.CamcorderProfile;
@@ -58,7 +60,6 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 	static final int REQUEST_TAKE_PHOTO = 1;
 	
 	public static final int MEDIA_TYPE_IMAGE = 1;
-	public static final int MEDIA_TYPE_VIDEO = 2;
 	private SurfaceView preview = null;
 	private SurfaceHolder previewHolder = null;
 	private Camera camera = null;
@@ -66,9 +67,6 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 	private ImageButton buttonTakeSpot;
 	private ImageButton buttonChangeMedia;
 	private ImageButton buttonChangeCamera;
-	
-	//1-Image 2-Video
-	private int mediaSelect = 1;
 	
 	private boolean inPreview=false;
 	private boolean cameraConfigured=false;
@@ -83,7 +81,6 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		
 		super.onCreate(savedInstanceState);
 		Log.d(TAG,"onCreate");
 		setContentView(R.layout.spot_camera);
@@ -95,7 +92,6 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		if(Const.width == 0){
 			Const.width = getWindowManager().getDefaultDisplay().getWidth();
 		}
-		mediaSelect = MEDIA_IMAGE;
 	}
 
 	
@@ -105,7 +101,8 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		if(Const.D) Log.e(TAG, "++ ON START ++");
 		//Check if user is logged in, if not: go to LogIn Screen
 		
-		currentCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
+		currentCameraId = getIntent().getIntExtra("orientation", Camera.CameraInfo.CAMERA_FACING_BACK);
+        
 		getActionBar().setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
 		getActionBar().setDisplayShowTitleEnabled(false);
 		getActionBar().setDisplayShowTitleEnabled(true);
@@ -114,19 +111,17 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		previewHolder=preview.getHolder();
 		previewHolder.addCallback(surfaceCallback);
 		previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-
+		
 		buttonNextScreen 	= (ImageButton) findViewById(R.id.button_nextscreen);
 		buttonTakeSpot 		= (ImageButton) findViewById(R.id.button_takespot);
 		buttonChangeMedia	= (ImageButton) findViewById(R.id.changeMedia);
 		buttonChangeCamera	= (ImageButton) findViewById(R.id.changeCamera);
-		
 
 		buttonNextScreen.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(CameraActivity.this, MainActivity.class);
 				startActivity(intent);      
 				finish();
-				
 			}
 		});
 
@@ -134,21 +129,15 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		buttonTakeSpot.setOnClickListener(new View.OnClickListener() {
 			@SuppressWarnings("deprecation")
 			public void onClick(View v) {
-				if(mediaSelect == MEDIA_IMAGE){
-					camera.takePicture(null, null, mPicture);
-				}
-				else if(mediaSelect == MEDIA_VIDEO){
-					
-				}
+				camera.takePicture(null, null, mPicture);
 			}
 		});
 
-		
-		
-		
 		buttonChangeMedia.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent uploadSpotIntent = new Intent(CameraActivity.this, VideoActivity.class);
+				Log.d(TAG,"Camera = "+currentCameraId);
+				uploadSpotIntent.putExtra("orientation",currentCameraId);
 				startActivity(uploadSpotIntent);
 				finish();
 			}
@@ -157,36 +146,11 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		buttonChangeCamera.setOnClickListener(new View.OnClickListener() {
 			@SuppressWarnings("deprecation")
 			public void onClick(View v) {
-				if (inPreview) {
-				    camera.stopPreview();
-				}
-				//NB: if you don't release the current camera before switching, you app will crash
-				camera.release();
-
-				//swap the id of the camera to be used
-				if(currentCameraId == Camera.CameraInfo.CAMERA_FACING_BACK){
-				    currentCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
-				}
-				else {
-				    currentCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
-				}
-				camera = Camera.open(currentCameraId);
-
-				setCameraDisplayOrientation(CameraActivity.this, currentCameraId, camera);
-				try {
-
-				    camera.setPreviewDisplay(previewHolder);
-				} catch (IOException e) {
-				    e.printStackTrace();
-				}
-				camera.startPreview();
+				changeCameraOrientation();
 			}
 		});
 		
 	}
-
-	
-	
 
 	public static void setCameraDisplayOrientation(Activity activity,
 	         int cameraId, android.hardware.Camera camera) {
@@ -297,9 +261,6 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		if (type == MEDIA_TYPE_IMAGE){
 			mediaFile = new File(mediaStorageDir.getPath() + File.separator +
 					"IMG_"+ timeStamp + ".jpg");
-		} else if(type == MEDIA_TYPE_VIDEO) {
-			mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-					"VID_"+ timeStamp + ".mp4");
 		} else {
 			return null;
 		}
@@ -310,7 +271,12 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 	@Override
 	public void onResume() {
 		super.onResume();
-		camera=Camera.open();
+		if(currentCameraId == 1){
+			Log.d(TAG,""+findFrontFacingCamera());
+			camera = Camera.open(findFrontFacingCamera());
+		}else{
+			camera=Camera.open();
+		}
 		startPreview();
 		AppEventsLogger.activateApp(this);
 	}
@@ -321,8 +287,8 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 			camera.stopPreview();
 		}
 		camera.release();
-		camera=null;
-		inPreview=false;
+		camera		= null;
+		inPreview	= false;
 		super.onPause();
 		AppEventsLogger.deactivateApp(this);
 	}
@@ -398,31 +364,34 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 			if (inPreview){
 				camera.stopPreview();
 	        }
-	        Parameters parameters = camera.getParameters();
+			Parameters parameters = camera.getParameters();
 	        Display display = getWindowManager().getDefaultDisplay();
-	        if(display.getRotation() == Surface.ROTATION_0){
-	            parameters.setPreviewSize(height, width);                           
-	            camera.setDisplayOrientation(90);
-	        }
+			if(currentCameraId == 1){
+		        if(display.getRotation() == Surface.ROTATION_0){                     
+		            //camera.setDisplayOrientation(90);
+		        }
+		        if(display.getRotation() == Surface.ROTATION_270){
+		            camera.setDisplayOrientation(180);
+		        }
+			}else{
+		        if(display.getRotation() == Surface.ROTATION_0){
+		            parameters.setPreviewSize(height, width);                           
+		            //camera.setDisplayOrientation(90);
+		        }
+		        if(display.getRotation() == Surface.ROTATION_90 || display.getRotation() == Surface.ROTATION_180){
+		            parameters.setPreviewSize(width, height);                           
+		        }
 
-	        if(display.getRotation() == Surface.ROTATION_90){
-	            parameters.setPreviewSize(width, height);                           
-	        }
-
-	        if(display.getRotation() == Surface.ROTATION_180){
-	            parameters.setPreviewSize(height, width);               
-	        }
-
-	        if(display.getRotation() == Surface.ROTATION_270){
-	            parameters.setPreviewSize(width, height);
-	            camera.setDisplayOrientation(180);
-	        }
-
-	        camera.setParameters(parameters);
+		        if(display.getRotation() == Surface.ROTATION_270){
+		            parameters.setPreviewSize(width, height);
+		            camera.setDisplayOrientation(180);
+		        }
+			}
+			camera.setParameters(parameters);
 	        //startPreview();
 	        initPreview(width, height);
 	        previewCamera();   
-			
+			Log.d(TAG,"surfaceChanged");
 		}
 
 		public void surfaceDestroyed(SurfaceHolder holder) {
@@ -430,10 +399,8 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		}
 	};
 	
-	public void previewCamera()
-	{        
-	    try 
-	    {           
+	public void previewCamera(){        
+	    try {           
 	        camera.setPreviewDisplay(previewHolder);          
 	        camera.startPreview();
 	        inPreview = true;
@@ -446,14 +413,11 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 	@Override
 	public void addView(View view, LayoutParams params) {
 		// TODO Auto-generated method stub
-		
 	}
-
-
+	
 	@Override
 	public void updateViewLayout(View view, LayoutParams params) {
 		// TODO Auto-generated method stub
-		
 	}
 	
 	@Override
@@ -466,4 +430,44 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		super.onSaveInstanceState(savedState);
 	}
 	
+	public void changeCameraOrientation(){
+		 if (inPreview) {
+		    camera.stopPreview();
+		}
+		//NB: if you don't release the current camera before switching, you app will crash
+		camera.release();
+
+		//swap the id of the camera to be used
+		if(currentCameraId == Camera.CameraInfo.CAMERA_FACING_BACK){
+		    currentCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
+		}
+		else {
+		    currentCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
+		}
+		camera = Camera.open(currentCameraId);
+
+		setCameraDisplayOrientation(CameraActivity.this, currentCameraId, camera);
+		try {
+		    camera.setPreviewDisplay(previewHolder);
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
+		camera.startPreview();
+	}
+	
+	private int findFrontFacingCamera() {
+	    int cameraId = -1;
+	    // Search for the front facing camera
+	    int numberOfCameras = Camera.getNumberOfCameras();
+	    for (int i = 0; i < numberOfCameras; i++) {
+	      CameraInfo info = new CameraInfo();
+	      Camera.getCameraInfo(i, info);
+	      if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
+	        Log.d(TAG, "Camera found"+i);
+	        cameraId = i;
+	        break;
+	      }
+	    }
+	    return cameraId;
+	  }
 }
