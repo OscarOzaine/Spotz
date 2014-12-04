@@ -107,6 +107,7 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		getActionBar().setDisplayShowTitleEnabled(false);
 		getActionBar().setDisplayShowTitleEnabled(true);
 		getActionBar().hide();
+		
 		preview=(SurfaceView)findViewById(R.id.camera_preview);
 		previewHolder=preview.getHolder();
 		previewHolder.addCallback(surfaceCallback);
@@ -210,25 +211,30 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
-
 			File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
 			if (pictureFile == null){
 				Log.d(TAG, "Error creating media file, check storage permissions: " );
 				return;
 			}
-
+			
 			try {
+				
+				Bitmap realImage = BitmapFactory.decodeByteArray(data, 0, data.length);
+	            android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
+	            android.hardware.Camera.getCameraInfo(currentCameraId, info);
+	            Bitmap bitmap = Utils.rotateImage(realImage, info.orientation);
+	            
+	            
 				FileOutputStream fos = new FileOutputStream(pictureFile);
+				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
 				fos.write(data);
 				fos.close();
-
-
 			} catch (FileNotFoundException e) {
 				Log.d(TAG, "File not found: " + e.getMessage());
 			} catch (IOException e) {
 				Log.d(TAG, "Error accessing file: " + e.getMessage());
 			}
-
+			
 			//Log.d(TAG,""+pictureFile.getAbsolutePath());
 			Intent uploadSpotIntent = new Intent(CameraActivity.this, UploadSpotActivity.class);
 			uploadSpotIntent.putExtra("SpotMedia",pictureFile.getAbsolutePath());
@@ -241,12 +247,10 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 	private static File getOutputMediaFile(int type){
 		// To be safe, you should check that the SDCard is mounted
 		// using Environment.getExternalStorageState() before doing this.
-
 		File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
 				Environment.DIRECTORY_PICTURES), "Spotz");
 		// This location works best if you want the created images to be shared
 		// between applications and persist after your app has been uninstalled.
-
 		// Create the storage directory if it does not exist
 		if (! mediaStorageDir.exists()){
 			if (! mediaStorageDir.mkdirs()){
@@ -254,7 +258,6 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 				return null;
 			}
 		}
-		
 		// Create a media file name
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 		File mediaFile;
@@ -296,8 +299,7 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 	private Camera.Size getBestPreviewSize(int width, int height,
 			Camera.Parameters parameters) {
 		Camera.Size result=null;
-		//camera.setDisplayOrientation(90);
-		
+		camera.setDisplayOrientation(90);
 		
 		for (Camera.Size size : parameters.getSupportedPreviewSizes()) {
 			if (size.width<=width && size.height<=height) {
@@ -307,7 +309,6 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 				else {
 					int resultArea=result.width*result.height;
 					int newArea=size.width*size.height;
-
 					if (newArea>resultArea) {
 						result=size;
 					}
@@ -361,6 +362,7 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		public void surfaceChanged(SurfaceHolder holder,
 				int format, int width,
 				int height) {
+			
 			if (inPreview){
 				camera.stopPreview();
 	        }
@@ -368,7 +370,7 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 	        Display display = getWindowManager().getDefaultDisplay();
 			if(currentCameraId == 1){
 		        if(display.getRotation() == Surface.ROTATION_0){                     
-		            //camera.setDisplayOrientation(90);
+		            camera.setDisplayOrientation(90);
 		        }
 		        if(display.getRotation() == Surface.ROTATION_270){
 		            camera.setDisplayOrientation(180);
@@ -376,7 +378,7 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 			}else{
 		        if(display.getRotation() == Surface.ROTATION_0){
 		            parameters.setPreviewSize(height, width);                           
-		            //camera.setDisplayOrientation(90);
+		            camera.setDisplayOrientation(90);
 		        }
 		        if(display.getRotation() == Surface.ROTATION_90 || display.getRotation() == Surface.ROTATION_180){
 		            parameters.setPreviewSize(width, height);                           

@@ -22,7 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true" >
-
         <TextView
             android:id="@+id/spotTitle"
             android:layout_width="match_parent"
@@ -32,12 +31,11 @@
             android:textSize="15sp"
             android:textStyle="bold"
             android:typeface="sans" />
-        
-
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/thumbnail"
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -48,9 +46,15 @@
         <ImageView
             android:id="@+id/spotImage"
             android:layout_width="match_parent"
-            android:layout_height="120dip"
+            android:layout_height="150dp"
             android:contentDescription="image" />
         
+        <VideoView
+            android:id="@+id/spotVideo"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+             />
+
     </LinearLayout>
 
     <LinearLayout

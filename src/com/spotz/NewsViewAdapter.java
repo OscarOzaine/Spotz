@@ -3,6 +3,9 @@ package com.spotz;
 import com.example.androidhive.R;
 import com.spotz.camera.ImageLoader;
 import com.spotz.utils.Const;
+import com.spotz.utils.Utils;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import android.annotation.SuppressLint;
@@ -10,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +22,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 public class NewsViewAdapter extends BaseAdapter {
 
@@ -29,13 +35,15 @@ public class NewsViewAdapter extends BaseAdapter {
 	ImageLoader imageLoader;
 	HashMap<String, String> resultp = new HashMap<String, String>();
 	String TAG = "ListViewAdapter";
-
+	String mediaPath = "";
+	
 	// Declare Variables
 	TextView txtid;
 	TextView txtname;
 	TextView txtcreated_at;
 	TextView txtcityname;
 	ImageView imgSpot;
+	VideoView vidSpot;
 	TextView txtemail;
 	TextView txtdescription;
 	TextView txtspottype;
@@ -64,7 +72,7 @@ public class NewsViewAdapter extends BaseAdapter {
 		return 0;
 	}
 
-	@SuppressLint("ViewHolder") public View getView(final int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 
 
 
@@ -90,6 +98,7 @@ public class NewsViewAdapter extends BaseAdapter {
 
 		// Locate the ImageView in listview_item.xml
 		imgSpot = (ImageView) itemView.findViewById(R.id.spotImage);
+		vidSpot = (VideoView) itemView.findViewById(R.id.spotVideo);
 
 		txtid.setText(resultp.get(NewsActivity.TAG_ID));
 		txtname.setText(resultp.get(NewsActivity.TAG_NAME));
@@ -100,15 +109,64 @@ public class NewsViewAdapter extends BaseAdapter {
 		txtspottype.setText(resultp.get(NewsActivity.TAG_SPOTTYPE));
 		txtlikes.setText(resultp.get(NewsActivity.TAG_LIKES));
 		txtdislikes.setText(resultp.get(NewsActivity.TAG_DISLIKES));
-
-
-		// Capture position and set results to the ImageView
-		// Passes flag images URL into ImageLoader.class
+		
+		mediaPath = resultp.get(NewsActivity.TAG_IMAGE);
+		Log.d(TAG,"MediaPath="+mediaPath);
+		if(Utils.isVideo(mediaPath)){
+			imgSpot.setVisibility(View.GONE);
+			vidSpot.setVisibility(View.VISIBLE);
+			
+			MediaController mediaController= new MediaController(NewsActivity.instance);
+		    mediaController.setAnchorView(vidSpot);
+		    vidSpot.setVisibility(View.VISIBLE);
+		    vidSpot.setFocusable(true);
+		    vidSpot.setFocusableInTouchMode(true);
+		    vidSpot.requestFocus();
+            //Log.d(TAG,"ACAA = "+mediaPath);
+		    Uri uri=Uri.parse(mediaPath);        
+		    vidSpot.setMediaController(mediaController);
+		    vidSpot.setVideoURI(uri);        
+		    //vidSpot.requestFocus();
+		    //vidSpot.start();
+		}
+		else{
+			imgSpot.setVisibility(View.VISIBLE);
+			vidSpot.setVisibility(View.GONE);
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inSampleSize=8;      // 1/8 of original image
+			Bitmap bitmap = imageLoader.DisplayImage(mediaPath, imgSpot);
+		}
 		
 		
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inSampleSize=8;      // 1/8 of original image
-		Bitmap bitmap = imageLoader.DisplayImage(resultp.get(NewsActivity.TAG_IMAGE), imgSpot);
+		//////////////////
+		/*
+		final String result = getItem(position);   
+		
+		final boolean big = position % 3 == 0;
+		final ViewHolder viewHolder;
+		// Check if an existing view is being reused, otherwise inflate the view
+		if (convertView == null) {
+			convertView = LayoutInflater.from(getContext()).inflate(res_id, parent, false);
+			
+			viewHolder = new ViewHolder();
+			viewHolder.img = (ImageView) convertView;
+			convertView.setTag(viewHolder);
+		} else {
+			//if it was already reused 
+			viewHolder = (ViewHolder) convertView.getTag();
+		}
+	    // We change to a loding image bitmap, so it doesn't look like repeated images
+	    viewHolder.img.setImageBitmap(BitmapLoader.getImage(ctx, 
+	    		big?R.drawable.loading_big:R.drawable.loading_small, true));
+	    viewHolder.position = position;
+	    
+	    // Populate the data into the template view using the data object       
+	    ImageDownloaderTask idt = new ImageDownloaderTask(ctx, viewHolder, position);
+	    idt.execute(result,big?"BIG":null);
+	       
+	    return convertView;
+		*/
+		////////////////////
 		
 		
 		// Capture ListView item click
@@ -137,4 +195,6 @@ public class NewsViewAdapter extends BaseAdapter {
 
 		return itemView;
 	}
+	
+	
 }

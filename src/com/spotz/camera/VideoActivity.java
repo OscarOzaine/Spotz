@@ -180,7 +180,7 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
         mediaRecorder.setMaxDuration(60000); // Set max duration 60 sec.
         mediaRecorder.setMaxFileSize(50000000); // Set max file size 50M
         mediaRecorder.setPreviewDisplay(surfaceHolder.getSurface()); 
-        mediaRecorder.setOrientationHint(270);
+        mediaRecorder.setOrientationHint(90);
 	}
 	
 	/*
@@ -247,15 +247,15 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 	        Display display = getWindowManager().getDefaultDisplay();
 			if(currentCameraId == 1){
 		        if(display.getRotation() == Surface.ROTATION_0){                     
-		            //camera.setDisplayOrientation(90);
+		            camera.setDisplayOrientation(90);
 		        }
 		        if(display.getRotation() == Surface.ROTATION_270){
-		            //camera.setDisplayOrientation(180);
+		            camera.setDisplayOrientation(180);
 		        }
 			}else{
 		        if(display.getRotation() == Surface.ROTATION_0){
 		            parameters.setPreviewSize(height, width);                           
-		            //camera.setDisplayOrientation(90);
+		            camera.setDisplayOrientation(90);
 		        }
 		        if(display.getRotation() == Surface.ROTATION_90 || display.getRotation() == Surface.ROTATION_180){
 		            parameters.setPreviewSize(width, height);                           
@@ -263,7 +263,7 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 
 		        if(display.getRotation() == Surface.ROTATION_270){
 		            parameters.setPreviewSize(width, height);
-		            //camera.setDisplayOrientation(180);
+		            camera.setDisplayOrientation(180);
 		        }
 			}
 			camera.setParameters(parameters);

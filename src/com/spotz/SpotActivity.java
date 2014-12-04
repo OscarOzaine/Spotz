@@ -17,20 +17,25 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 public class SpotActivity extends Activity {
 	// All xml labels
 	TextView txtName, txtLikes, txtDislikes, txtType, txtCity;
 	TextView txtDescription, txtCreatedat, txtEmail;
 	ImageView imgSpot;
+	VideoView vidSpot;
 	String TAG = "SpotActivity";
 	// Progress Dialog
 	private ProgressDialog pDialog;
@@ -56,7 +61,7 @@ public class SpotActivity extends Activity {
 
 	String spotName = "", spotLikes = "", spotDislikes = "";
 	String spotType = "", spotCity = "", spotDescription = "";
-	String spotCreatedat = "", spotEmail = "", spotImage = "";
+	String spotCreatedat = "", spotEmail = "", mediaPath = "";
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -77,7 +82,8 @@ public class SpotActivity extends Activity {
 		//txtCreatedat	= (TextView) findViewById(R.id.spot_created_at);
 		txtEmail		= (TextView) findViewById(R.id.spot_email);
 	    imgSpot			= (ImageView) findViewById(R.id.spot_image);
-	       
+	    vidSpot 		= (VideoView) findViewById(R.id.spot_video);
+	    
 		Intent intent = getIntent();
 		
 		spotName = intent.getStringExtra("name");
@@ -88,19 +94,41 @@ public class SpotActivity extends Activity {
 		spotDescription = intent.getStringExtra("description");
 		//spotCreatedat = intent.getStringExtra("created_at");
 		spotEmail = intent.getStringExtra("email");
-		spotImage = intent.getStringExtra("image");
+		mediaPath = intent.getStringExtra("image");
+		
+		Log.d(TAG,"imagepath = "+mediaPath);
+		if(Utils.isVideo(mediaPath)){
+			imgSpot.setVisibility(View.GONE);
+			vidSpot.setVisibility(View.VISIBLE);
+			
+			MediaController mediaController= new MediaController(NewsActivity.instance);
+		    mediaController.setAnchorView(vidSpot);
+		    vidSpot.setVisibility(View.VISIBLE);
+		    vidSpot.setFocusable(true);
+		    vidSpot.setFocusableInTouchMode(true);
+		    vidSpot.requestFocus();
+            Log.d(TAG,"Spotssss = "+mediaPath);
+		    Uri uri=Uri.parse(mediaPath);        
+		    vidSpot.setMediaController(mediaController);
+		    vidSpot.setVideoURI(uri);        
+		    vidSpot.requestFocus();
+		    vidSpot.start();
+		}else{
+			vidSpot.setVisibility(View.GONE);
+			imgSpot.setVisibility(View.VISIBLE);
+			ImageLoader imageLoader = new ImageLoader(getBaseContext());
+	        // Capture position and set results to the ImageView
+	        // Passes flag images URL into ImageLoader.class
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inSampleSize=8;      // 1/8 of original image
+			Bitmap bitmap = imageLoader.DisplayImage(mediaPath, imgSpot);
+			
+			float scalingFactor = getBitmapScalingFactor(bitmap);
+	        Bitmap newBitmap = Utils.ScaleBitmap(bitmap, scalingFactor);
+	        imgSpot.setImageBitmap(newBitmap);
+		}
 		
 		
-		ImageLoader imageLoader = new ImageLoader(getBaseContext());
-        // Capture position and set results to the ImageView
-        // Passes flag images URL into ImageLoader.class
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inSampleSize=8;      // 1/8 of original image
-		Bitmap bitmap = imageLoader.DisplayImage(spotImage, imgSpot);
-		
-		float scalingFactor = getBitmapScalingFactor(bitmap);
-        Bitmap newBitmap = Utils.ScaleBitmap(bitmap, scalingFactor);
-        imgSpot.setImageBitmap(newBitmap);
 		
         
 		txtName.setText(spotName);
@@ -208,14 +236,11 @@ public class SpotActivity extends Activity {
 		protected String doInBackground(String... args) {
 			// Building Parameters
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
-			
 			// getting JSON string from URL
 			JSONObject json = jsonParser.makeHttpRequest(PROFILE_URL, "GET",
 					params);
-
 			// Check your log cat for JSON reponse
 			Log.d("Profile JSON: ", json.toString());
-
 			try {
 				// profile json object
 				spot = json.getJSONObject(TAG_PROFILE);

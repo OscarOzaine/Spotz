@@ -49,8 +49,6 @@ public class ProfileActivity extends Activity  {
 	TextView popupText;
 
 	
-	
-	
 	String TAG = "ProfileActivity";
 	// Progress Dialog
 	private ProgressDialog pDialog;
@@ -86,6 +84,7 @@ public class ProfileActivity extends Activity  {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.d(TAG,"onCreate+++" );
 		setContentView(R.layout.profile);
 		
 		//txtUsername 	= (TextView) findViewById(R.id.profile_email);

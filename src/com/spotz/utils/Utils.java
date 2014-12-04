@@ -1,5 +1,6 @@
 package com.spotz.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -11,7 +12,10 @@ import com.example.androidhive.R;
 import com.spotz.CameraActivity;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.hardware.Camera;
+import android.media.ExifInterface;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
@@ -69,5 +73,24 @@ public class Utils {
       return true;  
     }
     
+    public static Bitmap rotateImage(Bitmap bitmap, int degree) {
+        int w = bitmap.getWidth();
+        int h = bitmap.getHeight();
+
+        Matrix mtx = new Matrix();
+        mtx.postRotate(degree);
+
+        return Bitmap.createBitmap(bitmap, 0, 0, w, h, mtx, true);
+    }
+    
+    public static boolean isVideo(String mediaName){
+    	String[] mediaStrs = mediaName.split("\\.(?=[^\\.]+$)");
+    	if(mediaStrs[1].equals("mp4") || mediaStrs[1].equals("3gp")){
+    		return true;
+    	}
+    	else{
+    		return false;
+    	}
+    }
     
 }

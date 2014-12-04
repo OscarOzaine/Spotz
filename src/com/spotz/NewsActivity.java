@@ -53,7 +53,7 @@ public class NewsActivity extends ListActivity {
 	static final String TAG_LIKES = "likes";
 	static final String TAG_DISLIKES = "dislikes";
 	
-	
+	static NewsActivity instance = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -69,6 +69,7 @@ public class NewsActivity extends ListActivity {
         
         // Loading OUTBOX in Background Thread
         //new LoadOutbox().execute();
+		instance = this;
 	}
 
 	@Override

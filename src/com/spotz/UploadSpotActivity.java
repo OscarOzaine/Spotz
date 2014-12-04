@@ -75,8 +75,6 @@ public class UploadSpotActivity extends Activity implements
 	VideoView spotVideo;
 	String currentLat = "", currentLng = "";
 	
-	
-	
 	static String TAG = "UploadSpotActivity";
 	// Progress Dialog
 	private ProgressDialog pDialog;
@@ -114,13 +112,7 @@ public class UploadSpotActivity extends Activity implements
 		
 		mediaPath = intent.getStringExtra("SpotMedia");
 		Log.d(TAG,"imagepath = "+mediaPath);
-		
-		String[] mediaStrs = mediaPath.split("\\.(?=[^\\.]+$)");
-		String[] ACA = mediaPath.split("/Spotz");
-		File file = new File(ACA[0]+"/Spotz", ACA[1]);
-		
-		Log.d(TAG,"MediaACA="+ACA[1]+"  ---- "+file.getAbsolutePath());
-		if(mediaStrs[1].equals("mp4") || mediaStrs[1].equals("3gp")){
+		if(Utils.isVideo(mediaPath)){
 			spotImage.setVisibility(View.GONE);
 			
 			spotVideo.setVisibility(View.VISIBLE);
@@ -177,22 +169,18 @@ public class UploadSpotActivity extends Activity implements
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inSampleSize=8;      // 1/8 of original image
 			Bitmap bitmap = BitmapFactory.decodeFile(mediaPath,options);
-			
+			/*
 			Matrix mat = new Matrix();
 	        mat.postRotate(90);
 	        Bitmap bMapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
-	        
 	        // Get scaling factor to fit the max possible width of the ImageView
 	        float scalingFactor = getBitmapScalingFactor(bMapRotate);
-
 	        // Create a new bitmap with the scaling factor
 	        Bitmap newBitmap = Utils.ScaleBitmap(bMapRotate, scalingFactor);
-
+	        */
 	        // Set the bitmap as the ImageView source
 	        //spotMedia.setImageBitmap(newBitmap);
-			
-	        spotImage.setImageBitmap(newBitmap);
-			
+	        spotImage.setImageBitmap(bitmap);
 		}
 		
 		
