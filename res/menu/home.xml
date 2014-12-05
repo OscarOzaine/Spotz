@@ -12,7 +12,8 @@
         android:id="@+id/action_settings"
         android:icon="@drawable/ic_menu_moreoverflow_normal_holo_dark"
         android:title="@string/settings"
-        android:showAsAction="ifRoom"/>
+        android:showAsAction="ifRoom"
+         />
     
     <!--
 <item

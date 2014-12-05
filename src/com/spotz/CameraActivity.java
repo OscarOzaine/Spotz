@@ -44,6 +44,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewManager;
 import android.widget.Button;
@@ -92,15 +93,12 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		if(Const.width == 0){
 			Const.width = getWindowManager().getDefaultDisplay().getWidth();
 		}
-	}
-
-	
-	@Override
-	public void onStart() {
-		super.onStart();
-		if(Const.D) Log.e(TAG, "++ ON START ++");
-		//Check if user is logged in, if not: go to LogIn Screen
 		
+		buttonNextScreen 	= (ImageButton) findViewById(R.id.button_nextscreen);
+		buttonTakeSpot 		= (ImageButton) findViewById(R.id.button_takespot);
+		buttonChangeMedia	= (ImageButton) findViewById(R.id.changeMedia);
+		buttonChangeCamera	= (ImageButton) findViewById(R.id.changeCamera);
+
 		currentCameraId = getIntent().getIntExtra("orientation", Camera.CameraInfo.CAMERA_FACING_BACK);
         
 		getActionBar().setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
@@ -113,15 +111,11 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		previewHolder.addCallback(surfaceCallback);
 		previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		
-		buttonNextScreen 	= (ImageButton) findViewById(R.id.button_nextscreen);
-		buttonTakeSpot 		= (ImageButton) findViewById(R.id.button_takespot);
-		buttonChangeMedia	= (ImageButton) findViewById(R.id.changeMedia);
-		buttonChangeCamera	= (ImageButton) findViewById(R.id.changeCamera);
-
 		buttonNextScreen.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(CameraActivity.this, MainActivity.class);
 				startActivity(intent);      
+				overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_left );
 				finish();
 			}
 		});
@@ -140,6 +134,7 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 				Log.d(TAG,"Camera = "+currentCameraId);
 				uploadSpotIntent.putExtra("orientation",currentCameraId);
 				startActivity(uploadSpotIntent);
+				overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
 				finish();
 			}
 		});
@@ -150,7 +145,15 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 				changeCameraOrientation();
 			}
 		});
+	}
+
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		if(Const.D) Log.e(TAG, "++ ON START ++");
 		
+		//Check if user is logged in, if not: go to LogIn Screen
 	}
 
 	public static void setCameraDisplayOrientation(Activity activity,
@@ -187,9 +190,11 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
     @Override
     public void onDestroy() {
         super.onDestroy();
+        
         Const.v(TAG, "--- ON DESTROY ---");
     }
     
+  
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(Const.D) Log.d(TAG, "onActivityResult reqCode= "+requestCode+ " res = " + resultCode);
         switch (requestCode) {
@@ -239,7 +244,8 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 			Intent uploadSpotIntent = new Intent(CameraActivity.this, UploadSpotActivity.class);
 			uploadSpotIntent.putExtra("SpotMedia",pictureFile.getAbsolutePath());
 			startActivity(uploadSpotIntent);
-			finish();
+			overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_left );
+			//finish();
 		}
 	};
 
@@ -274,11 +280,13 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 	@Override
 	public void onResume() {
 		super.onResume();
+		Log.d(TAG,"onResume");
+		
 		if(currentCameraId == 1){
 			Log.d(TAG,""+findFrontFacingCamera());
 			camera = Camera.open(findFrontFacingCamera());
 		}else{
-			camera=Camera.open();
+			camera=Camera.open(findFrontFacingCamera());
 		}
 		startPreview();
 		AppEventsLogger.activateApp(this);
@@ -433,7 +441,7 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 	}
 	
 	public void changeCameraOrientation(){
-		 if (inPreview) {
+		if (inPreview) {
 		    camera.stopPreview();
 		}
 		//NB: if you don't release the current camera before switching, you app will crash

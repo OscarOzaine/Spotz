@@ -2,6 +2,7 @@ package com.spotz;
 
 import com.example.androidhive.R;
 import com.facebook.Session;
+import com.spotz.users.UserSettingsActivity;
 
 import android.app.ActionBar;
 import android.app.SearchManager;
@@ -14,7 +15,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TabHost;
@@ -41,6 +45,10 @@ public class MainActivity extends TabActivity {
         //actionBar.setHomeButtonEnabled(true);
         
         instance = this;
+        
+        
+        
+        
         
         final TabHost tabHost = getTabHost();
         
@@ -70,7 +78,6 @@ public class MainActivity extends TabActivity {
         tabHost.addTab(profileSpec); // Adding Profile tab
         
         tabHost.setCurrentTab(1);
-        
         tabHost.setOnTabChangedListener(new OnTabChangeListener() {
 
             public void onTabChanged(String tabId) {
@@ -81,6 +88,7 @@ public class MainActivity extends TabActivity {
                 	//tabHost.getContext();
                 	Intent cameraIntent= new Intent(MainActivity.this, CameraActivity.class);
                 	cameraIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                	overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_left );
                 	//openMainActivity.setFlags(Intent.);
                     startActivity(cameraIntent);
                     //do what you want when tab 0 is selected
@@ -149,12 +157,21 @@ public class MainActivity extends TabActivity {
     		Intent cameraIntent= new Intent(this, LoginActivity.class);
         	//openMainActivity.setFlags(Intent.);
             startActivity(cameraIntent); 
+            overridePendingTransition( R.anim.slide_out_up, R.anim.slide_in_up );
     		finish();  
         	break;
         case R.id.action_refresh:
         	//NewsActivity.LoadOutbox().execute();
         	getTabHost().setCurrentTab(2);
         	getTabHost().setCurrentTab(1);
+        	break;
+        case R.id.action_settings:
+        	Intent userSettingsIntent = new Intent(this, UserSettingsActivity.class);
+        	//openMainActivity.setFlags(Intent.);
+            startActivity(userSettingsIntent); 
+            overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
+    		//finish(); 
+        	
         	break;
         }
         return true;
@@ -165,5 +182,11 @@ public class MainActivity extends TabActivity {
         return super.onSearchRequested();
     }
     
+    public void showPopup(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.popup_menu, popup.getMenu());
+        popup.show();
+    }
     
 }

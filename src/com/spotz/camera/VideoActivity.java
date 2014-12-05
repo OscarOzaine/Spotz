@@ -116,7 +116,8 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 					Intent uploadSpotIntent = new Intent(VideoActivity.this, UploadSpotActivity.class);
 					uploadSpotIntent.putExtra("SpotMedia",fileName);
 					startActivity(uploadSpotIntent);
-					finish();
+					overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_left );
+					//finish();
 				}else{
 					if(mediaRecorder == null){
 						mediaRecorder = new MediaRecorder();
@@ -145,6 +146,7 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 				Log.d(TAG,"Camera = "+currentCameraId);
 				uploadSpotIntent.putExtra("orientation",currentCameraId);
 				startActivity(uploadSpotIntent);
+				overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
 				finish();
 			}
 		});
@@ -180,7 +182,7 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
         mediaRecorder.setMaxDuration(60000); // Set max duration 60 sec.
         mediaRecorder.setMaxFileSize(50000000); // Set max file size 50M
         mediaRecorder.setPreviewDisplay(surfaceHolder.getSurface()); 
-        mediaRecorder.setOrientationHint(90);
+        mediaRecorder.setOrientationHint(270);
 	}
 	
 	/*
@@ -247,15 +249,15 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 	        Display display = getWindowManager().getDefaultDisplay();
 			if(currentCameraId == 1){
 		        if(display.getRotation() == Surface.ROTATION_0){                     
-		            camera.setDisplayOrientation(90);
+		            //camera.setDisplayOrientation(90);
 		        }
 		        if(display.getRotation() == Surface.ROTATION_270){
-		            camera.setDisplayOrientation(180);
+		            //camera.setDisplayOrientation(180);
 		        }
 			}else{
 		        if(display.getRotation() == Surface.ROTATION_0){
 		            parameters.setPreviewSize(height, width);                           
-		            camera.setDisplayOrientation(90);
+		            //camera.setDisplayOrientation(90);
 		        }
 		        if(display.getRotation() == Surface.ROTATION_90 || display.getRotation() == Surface.ROTATION_180){
 		            parameters.setPreviewSize(width, height);                           
@@ -263,7 +265,7 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 
 		        if(display.getRotation() == Surface.ROTATION_270){
 		            parameters.setPreviewSize(width, height);
-		            camera.setDisplayOrientation(180);
+		            //camera.setDisplayOrientation(180);
 		        }
 			}
 			camera.setParameters(parameters);

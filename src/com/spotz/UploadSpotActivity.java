@@ -18,6 +18,8 @@ import com.spotz.location.LocationUtils;
 import com.spotz.services.UploadMediaService;
 import com.spotz.users.User;
 import com.spotz.utils.Utils;
+
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -94,13 +96,19 @@ public class UploadSpotActivity extends Activity implements
     boolean mUpdatesRequested = false;
     MediaController media_Controller;
     DisplayMetrics dm;
+    Bitmap bitmap;
+    
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG,"onCreate");
 		setContentView(R.layout.activity_upload_spot);
 		
-		getActionBar().setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(R.string.app_name);
+        actionBar.setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
+		
 		//findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 		spotImage = (ImageView) findViewById(R.id.spotImageUpload);
 		spotVideo = (VideoView) findViewById(R.id.spotVideoUpload);
@@ -136,7 +144,6 @@ public class UploadSpotActivity extends Activity implements
 		    params.height = videoheight;
 		    params.x = left;
 		    params.y = top;
-
 		    spotVideo.requestLayout();
 */
 		    spotVideo.setVisibility(View.VISIBLE);
@@ -168,7 +175,7 @@ public class UploadSpotActivity extends Activity implements
 			spotImage.setVisibility(View.VISIBLE);
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inSampleSize=8;      // 1/8 of original image
-			Bitmap bitmap = BitmapFactory.decodeFile(mediaPath,options);
+			bitmap = BitmapFactory.decodeFile(mediaPath,options);
 			/*
 			Matrix mat = new Matrix();
 	        mat.postRotate(90);
@@ -226,22 +233,6 @@ public class UploadSpotActivity extends Activity implements
         
 	}
 	
-	private float getBitmapScalingFactor(Bitmap bm) {
-        // Get display width from device
-        int displayWidth = getWindowManager().getDefaultDisplay().getWidth();
-
-        // Get margin to use it for calculating to max width of the ImageView
-        LinearLayout.LayoutParams layoutParams = 
-                (LinearLayout.LayoutParams)this.spotImage.getLayoutParams();
-        int leftMargin = layoutParams.leftMargin;
-        int rightMargin = layoutParams.rightMargin;
-
-        // Calculate the max width of the imageView
-        int imageViewWidth = displayWidth - (leftMargin + rightMargin);
-
-        // Calculate scaling factor and return it
-        return ( (float) imageViewWidth / (float) bm.getWidth() );
-    }
 	
 	/*
      * Called when the Activity is no longer visible at all.
@@ -255,6 +246,7 @@ public class UploadSpotActivity extends Activity implements
         }
         // After disconnect() is called, the client is considered "dead".
         mLocationClient.disconnect();
+        bitmap.recycle();
         super.onStop();
     }
 	
@@ -264,11 +256,9 @@ public class UploadSpotActivity extends Activity implements
      */
     @Override
     public void onPause() {
-
         // Save the current setting for updates
         mEditor.putBoolean(LocationUtils.KEY_UPDATES_REQUESTED, mUpdatesRequested);
         mEditor.commit();
-
         super.onPause();
     }
 	
@@ -277,7 +267,6 @@ public class UploadSpotActivity extends Activity implements
      */
     @Override
     public void onStart() {
-
         super.onStart();
 
         /*
@@ -285,7 +274,6 @@ public class UploadSpotActivity extends Activity implements
          * instead, wait for onResume()
          */
         mLocationClient.connect();
-
     }
     
     /*
@@ -489,7 +477,8 @@ public class UploadSpotActivity extends Activity implements
 	        		startService(intentUploadService);
 	        		
 	        		Intent intent = new Intent(UploadSpotActivity.this, MainActivity.class);
-					startActivity(intent);      
+					startActivity(intent);   
+					overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
 					finish();
 					
 	        	}
@@ -772,10 +761,8 @@ public class UploadSpotActivity extends Activity implements
         	/*
             // Create a new DialogFragment in which to show the error dialog
             ErrorDialogFragment errorFragment = new ErrorDialogFragment();
-
             // Set the dialog in the DialogFragment
             errorFragment.setDialog(errorDialog);
-
             // Show the error dialog in the DialogFragment
             errorFragment.show(getFragmentManager(), TAG);
             */

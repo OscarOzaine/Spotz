@@ -171,6 +171,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
                 public void onClick(View v) {
 	            	Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
 	    			startActivity(registerIntent);
+	    			overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
                 }
             });
         
@@ -222,6 +223,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
     		
     		Intent cameraIntent= new Intent(LoginActivity.this, LoadingActivity.class);
             startActivity(cameraIntent);
+            overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
             finish();
     		/*
 			if(outerArray != null){

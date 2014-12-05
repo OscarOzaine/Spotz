@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+    <string name="usersettings">User Settings</string>
+    <string name="spottype">Spot Type:</string>
+    <string name="city">City:</string>
+    <string name="user">User:</string>
+    <string name="followers">Followers:</string>
+    <string name="first_name">First Name:</string>
+    <string name="last_name">Last Name:</string>
+    <string name="inputvalue">Input value:</string>
+    
+    <string name="dislikes">Likes:</string>
+    <string name="likes">Likes:</string>
+    <string name="like_example">Likes:</string>
     <string name="change_media_camera">Change video to image and viceversa</string>
     <string name="change_camera">Change camera</string>
     <string name="facebook_app_id">843086735711329</string>
@@ -74,6 +87,19 @@
         <item>Deportivo</item>
     </string-array>
 
+    
+    <string-array name="pais">
+      <item>España</item>
+      <item>Francia</item>
+      <item>Alemania</item>
+   </string-array>
+   <string-array name="codigopais">
+      <item>ESP</item>
+      <item>FRA</item>
+      <item>ALE</item>
+   </string-array>
+   
+   
     <string name="title_activity_android_video_capture">AndroidVideoCapture</string>
     <string name="hello_world">Hello world!</string>
 

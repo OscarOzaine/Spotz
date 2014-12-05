@@ -14,6 +14,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
@@ -62,9 +63,11 @@ public class SpotActivity extends Activity {
 	String spotName = "", spotLikes = "", spotDislikes = "";
 	String spotType = "", spotCity = "", spotDescription = "";
 	String spotCreatedat = "", spotEmail = "", mediaPath = "";
+	MediaController mediaController;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.activity_spot);
 		
 		
@@ -101,12 +104,12 @@ public class SpotActivity extends Activity {
 			imgSpot.setVisibility(View.GONE);
 			vidSpot.setVisibility(View.VISIBLE);
 			
-			MediaController mediaController= new MediaController(NewsActivity.instance);
+			mediaController = new MediaController(this);
 		    mediaController.setAnchorView(vidSpot);
 		    vidSpot.setVisibility(View.VISIBLE);
 		    vidSpot.setFocusable(true);
 		    vidSpot.setFocusableInTouchMode(true);
-		    vidSpot.requestFocus();
+		    
             Log.d(TAG,"Spotssss = "+mediaPath);
 		    Uri uri=Uri.parse(mediaPath);        
 		    vidSpot.setMediaController(mediaController);

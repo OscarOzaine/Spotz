@@ -128,6 +128,9 @@ public class NewsViewAdapter extends BaseAdapter {
 		    vidSpot.setVideoURI(uri);        
 		    //vidSpot.requestFocus();
 		    //vidSpot.start();
+		    
+		    
+		    
 		}
 		else{
 			imgSpot.setVisibility(View.VISIBLE);

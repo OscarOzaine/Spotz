@@ -35,7 +35,7 @@ public class SplashScreenActivity extends Activity {
             		Intent mainIntent = new Intent().setClass(
                             SplashScreenActivity.this, CameraActivity.class);
                     startActivity(mainIntent);
-     
+                    overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
                     // Close the activity so the user won't able to go back this
                     // activity pressing Back button
                     finish();
@@ -44,7 +44,7 @@ public class SplashScreenActivity extends Activity {
             		Intent mainIntent = new Intent().setClass(
                             SplashScreenActivity.this, LoginActivity.class);
                     startActivity(mainIntent);
-     
+                    overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
                     // Close the activity so the user won't able to go back this
                     // activity pressing Back button
                     finish();

@@ -95,11 +95,11 @@ public class NewsActivity extends ListActivity {
     	Intent spotIntent = new Intent(this, SpotActivity.class);
     	spotIntent.putExtra("SpotID",spotIdHidden);
         startActivity(spotIntent);
-        
+        overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
         //Intent tmpIntent = new Intent(this, YourActivityForShowingItem.class);
        // tmpIntent.putExtra(SHOWITEMINTENT_EXTRA_FETCHROWID, position);
         //startActivityForResult(tmpIntent, ACTIVITY_SHOWITEM);
-
+        
     }
     
     /**
