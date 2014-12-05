@@ -20,7 +20,7 @@ public class UploadMediaService extends IntentService  {
 	String imagePath, spotName, spotDescription, spotTypeId, userId, latitude, longitude;
 	String upLoadServerUri = "http://api.myhotspotz.net/app/uploadSpot";
 	int serverResponseCode = 0;
-	
+	public static final String NOTIFICATION = "com.spotz.MainActivity";
 	public UploadMediaService() {
 		super("UploadMediaService");
 	}
@@ -45,10 +45,10 @@ public class UploadMediaService extends IntentService  {
 	      // For our sample, we just sleep for 5 seconds.
 		if(uploadSpot(imagePath, spotName, spotDescription, 
 				spotTypeId, userId,latitude, longitude) == 1){
+			publishResults(1);
 		}		
         else{
-        	//Toast.makeText(UploadSpotActivity.this, "Error al subir spot", 
-            //        Toast.LENGTH_SHORT).show();
+        	publishResults(-1);
         }
 	      
 	}
@@ -163,7 +163,7 @@ public class UploadMediaService extends IntentService  {
             	Log.d(Const.TAG,"Got Exception : see logcat");
                 Log.e(Const.TAG, "Exception : "+ e.getMessage(), e); 
             }
-            Log.i(Const.TAG, "READ "+serverResponse);
+            Log.d(Const.TAG, "READ "+serverResponse);
             
             if(Utils.isNumeric(serverResponse.toString())){
             	return Integer.parseInt(serverResponse.toString());
@@ -174,4 +174,10 @@ public class UploadMediaService extends IntentService  {
             
         } // End else block 
     }	
+	
+	private void publishResults(int result) {
+	    Intent intent = new Intent(NOTIFICATION);
+	    intent.putExtra("result", result);
+	    sendBroadcast(intent);
+	  }
 }

@@ -286,7 +286,7 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 			Log.d(TAG,""+findFrontFacingCamera());
 			camera = Camera.open(findFrontFacingCamera());
 		}else{
-			camera=Camera.open(findFrontFacingCamera());
+			camera=Camera.open();
 		}
 		startPreview();
 		AppEventsLogger.activateApp(this);

@@ -24,6 +24,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -201,36 +202,14 @@ public class UploadSpotActivity extends Activity implements
 		spinnerSpotType.setAdapter(adapter);
 		
 		
-		
-		// Create a new global location parameters object
         mLocationRequest = LocationRequest.create();
-
-        /*
-         * Set the update interval
-         */
         mLocationRequest.setInterval(LocationUtils.UPDATE_INTERVAL_IN_MILLISECONDS);
-
-        // Use high accuracy
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-        // Set the interval ceiling to one minute
         mLocationRequest.setFastestInterval(LocationUtils.FAST_INTERVAL_CEILING_IN_MILLISECONDS);
-
-        // Note that location updates are off until the user turns them on
         mUpdatesRequested = false;
-
-        // Open Shared Preferences
         mPrefs = getSharedPreferences(LocationUtils.SHARED_PREFERENCES, Context.MODE_PRIVATE);
-
-        // Get an editor
         mEditor = mPrefs.edit();
-
-        /*
-         * Create a new location client, using the enclosing class to
-         * handle callbacks.
-         */
         mLocationClient = new LocationClient(this, this, this);
-        
 	}
 	
 	
@@ -246,7 +225,7 @@ public class UploadSpotActivity extends Activity implements
         }
         // After disconnect() is called, the client is considered "dead".
         mLocationClient.disconnect();
-        bitmap.recycle();
+        //bitmap.recycle();
         super.onStop();
     }
 	
@@ -477,6 +456,7 @@ public class UploadSpotActivity extends Activity implements
 	        		startService(intentUploadService);
 	        		
 	        		Intent intent = new Intent(UploadSpotActivity.this, MainActivity.class);
+	        		intent.putExtra("loading",1);
 					startActivity(intent);   
 					overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
 					finish();
@@ -803,4 +783,5 @@ public class UploadSpotActivity extends Activity implements
         }
     }
 	
+    
 }

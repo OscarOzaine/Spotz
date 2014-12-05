@@ -2,13 +2,16 @@ package com.spotz;
 
 import com.example.androidhive.R;
 import com.facebook.Session;
+import com.spotz.services.UploadMediaService;
 import com.spotz.users.UserSettingsActivity;
 
 import android.app.ActionBar;
 import android.app.SearchManager;
 import android.app.TabActivity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -18,12 +21,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
+import android.widget.Toast;
 
 public class MainActivity extends TabActivity {
 	// TabSpec Names
@@ -34,9 +39,31 @@ public class MainActivity extends TabActivity {
 	//this activity Instance
 	public static MainActivity instance;
 	private AsyncTask<String, String, String> execute;
+	
+	private int loading = 0;
+	
+	private BroadcastReceiver receiver = new BroadcastReceiver() {
+	    @Override
+	    public void onReceive(Context context, Intent intent) {
+	      Bundle bundle = intent.getExtras();
+	      if (bundle != null) {
+	        int resultCode = bundle.getInt("result");
+	        if (resultCode == 1) {
+	        	setProgressBarIndeterminateVisibility(false);
+	        	Toast.makeText(MainActivity.this, "Successfully uploaded spot",Toast.LENGTH_LONG).show();
+	        } else {
+	        	setProgressBarIndeterminateVisibility(false);
+	        	Toast.makeText(MainActivity.this, "Failed to upload spot", Toast.LENGTH_LONG).show();
+	        }
+	      }
+	    }
+	};
+	
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.main);
         ActionBar actionBar = getActionBar();
         actionBar.setTitle(R.string.app_name);
@@ -44,12 +71,14 @@ public class MainActivity extends TabActivity {
         //actionBar.setDisplayHomeAsUpEnabled(true);
         //actionBar.setHomeButtonEnabled(true);
         
+        // And when you want to turn it off
+        
         instance = this;
         
-        
-        
-        
-        
+        loading = getIntent().getIntExtra("loading",-1);
+        if(loading == 1){
+        	setProgressBarIndeterminateVisibility(true);
+        }
         final TabHost tabHost = getTabHost();
         
         // Inbox Tab
@@ -110,10 +139,18 @@ public class MainActivity extends TabActivity {
         
     }
     
-    public void onResume(Bundle savedInstanceState) {
-    	//Log.d(TAG,"onResume");
+    @Override
+    protected void onResume() {
+      super.onResume();
+      registerReceiver(receiver, new IntentFilter(UploadMediaService.NOTIFICATION));
     }
-        
+    
+    @Override
+    protected void onPause() {
+      super.onPause();
+      unregisterReceiver(receiver);
+    }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	
