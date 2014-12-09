@@ -2,9 +2,14 @@ package com.spotz;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
 import org.apache.http.NameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.facebook.UiLifecycleHelper;
+import com.facebook.widget.FacebookDialog;
 import com.spotz.camera.ImageLoader;
 import com.spotz.gen.R;
 import com.spotz.utils.JSONParser;
@@ -63,7 +68,12 @@ public class SpotActivity extends Activity {
 	String spotName = "", spotLikes = "", spotDislikes = "";
 	String spotType = "", spotCity = "", spotDescription = "";
 	String spotCreatedat = "", spotEmail = "", mediaPath = "";
+	String longitude = "", latitude = "";
 	MediaController mediaController;
+	
+	
+	private UiLifecycleHelper uiHelper;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -89,17 +99,20 @@ public class SpotActivity extends Activity {
 	    
 		Intent intent = getIntent();
 		
-		spotName = intent.getStringExtra("name");
-		spotLikes = intent.getStringExtra("likes");
-		spotDislikes = intent.getStringExtra("dislikes");
-		spotType = intent.getStringExtra("spottype");
-		spotCity = intent.getStringExtra("cityname");
+		spotId			= intent.getStringExtra("id");
+		spotName 		= intent.getStringExtra("name");
+		spotLikes 		= intent.getStringExtra("likes");
+		spotDislikes 	= intent.getStringExtra("dislikes");
+		spotType 		= intent.getStringExtra("spottype");
+		spotCity 		= intent.getStringExtra("cityname");
 		spotDescription = intent.getStringExtra("description");
 		//spotCreatedat = intent.getStringExtra("created_at");
-		spotEmail = intent.getStringExtra("email");
-		mediaPath = intent.getStringExtra("image");
+		spotEmail 		= intent.getStringExtra("email");
+		mediaPath 		= intent.getStringExtra("image");
+		longitude 		= intent.getStringExtra("longitude");
+		latitude 		= intent.getStringExtra("latitude");
 		
-		Log.d(TAG,"imagepath = "+mediaPath);
+		//Log.d(TAG,"imagepath = "+mediaPath);
 		if(Utils.isVideo(mediaPath)){
 			imgSpot.setVisibility(View.GONE);
 			vidSpot.setVisibility(View.VISIBLE);
@@ -146,16 +159,57 @@ public class SpotActivity extends Activity {
 		
 		//PROFILE_URL = PROFILE_URL + "/"+spotId;
 		//Log.d(TAG,spotId);
-		/*
-		txtEmail = (TextView) findViewById(R.id.profile_followers);
-		txtMobile = (TextView) findViewById(R.id.profile_repplus);
-		txtAddress = (TextView) findViewById(R.id.profile_repminus);
-		txtShareLocation = (TextView) findViewById(R.id.profile_sharelocation);
-		*/
+		
         // Loading Profile in Background Thread
         //new LoadSpot().execute();
+		
+		uiHelper = new UiLifecycleHelper(this, null);
+	    uiHelper.onCreate(savedInstanceState);
 	}
 
+	
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    super.onActivityResult(requestCode, resultCode, data);
+
+	    uiHelper.onActivityResult(requestCode, resultCode, data, new FacebookDialog.Callback() {
+	        @Override
+	        public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
+	            Log.e("Activity", String.format("Error: %s", error.toString()));
+	        }
+
+	        @Override
+	        public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
+	            Log.i("Activity", "Success!");
+	        }
+	    });
+	}
+	
+	@Override
+	protected void onResume() {
+	    super.onResume();
+	    uiHelper.onResume();
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+	    super.onSaveInstanceState(outState);
+	    uiHelper.onSaveInstanceState(outState);
+	}
+
+	@Override
+	public void onPause() {
+	    super.onPause();
+	    uiHelper.onPause();
+	}
+
+	@Override
+	public void onDestroy() {
+	    super.onDestroy();
+	    uiHelper.onDestroy();
+	}
+	
 	private float getBitmapScalingFactor(Bitmap bm) {
         // Get display width from device
         int displayWidth = getWindowManager().getDefaultDisplay().getWidth();
@@ -175,28 +229,7 @@ public class SpotActivity extends Activity {
 	
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
-    	
         getMenuInflater().inflate(R.menu.spotmenu, menu);
-        /*
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-            SearchView search = (SearchView) menu.findItem(R.id.action_settings).getActionView();
-            search.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
-            search.setOnQueryTextListener(new OnQueryTextListener() { 
-                @Override 
-                public boolean onQueryTextChange(String query) {
-                	//Log.d(TAG,"LoadData");
-                    //loadData(query);
-                    return true; 
-                }
-				@Override
-				public boolean onQueryTextSubmit(String query) {
-					// TODO Auto-generated method stub
-					return false;
-				} 
-            });
-        }
-        */
 	    return super.onCreateOptionsMenu(menu);
     }
 	
@@ -206,13 +239,28 @@ public class SpotActivity extends Activity {
         switch (item.getItemId()) {
         
         case R.id.action_sharespot:
-        	Log.d(TAG,"share = "+item.getItemId());
+        	Log.d(TAG,"link = "+Utils.createSpotLink(spotCity, spotName, spotId));
+        	Log.d(TAG,"name = "+spotName);
+        	Log.d(TAG,"Description = "+spotDescription);
+        	Log.d(TAG,"picture = "+mediaPath);
+        	
+        	FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this)
+	            .setLink(Utils.createSpotLink(spotCity, spotName, spotId))
+	            .setName(spotName)
+	            .setDescription(spotDescription)
+	            .setPicture(mediaPath)
+	            .setApplicationName(getString(R.string.app_name))
+	            .build();
+        	uiHelper.trackPendingDialogCall(shareDialog.present());
         	//onBackPressed();
             //NavUtils.navigateUpFromSameTask(this);
         return true;
         
         case R.id.action_mapspot:
-        	Log.d(TAG,"map = "+item.getItemId());
+        	Log.d(TAG,"map = "+latitude+" long = "+longitude);
+        	String uri = String.format(Locale.ENGLISH, "geo:%f,%f?q=%f,%f(%s)", Float.parseFloat(latitude), Float.parseFloat(longitude),Float.parseFloat(latitude), Float.parseFloat(longitude),spotName);
+        	Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        	this.startActivity(intent);
         	//onBackPressed();
             //NavUtils.navigateUpFromSameTask(this);
         return true;

@@ -192,6 +192,9 @@ public class NewsViewAdapter extends BaseAdapter {
 				intent.putExtra("spottype", resultp.get(NewsActivity.TAG_SPOTTYPE));
 				intent.putExtra("likes", resultp.get(NewsActivity.TAG_LIKES));
 				intent.putExtra("dislikes", resultp.get(NewsActivity.TAG_DISLIKES));
+				intent.putExtra("longitude", resultp.get(NewsActivity.TAG_LONGITUDE));
+				intent.putExtra("latitude", resultp.get(NewsActivity.TAG_LATITUDE));
+				
 				context.startActivity(intent);
 			}
 		});

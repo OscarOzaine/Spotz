@@ -93,4 +93,10 @@ public class Utils {
     	}
     }
     
+    
+    public static String createSpotLink(String cityName, String spotName, String spotId){
+    	return "http://myhotspotz.net/spots/"+cityName+"_"+spotName.replace(" ", "-")+"-"+Integer.toHexString(Integer.parseInt(spotId));
+    }
+    
+    
 }

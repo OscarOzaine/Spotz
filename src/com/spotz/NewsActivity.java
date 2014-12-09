@@ -52,6 +52,8 @@ public class NewsActivity extends ListActivity {
 	static final String TAG_SPOTTYPE = "spottype";
 	static final String TAG_LIKES = "likes";
 	static final String TAG_DISLIKES = "dislikes";
+	static final String TAG_LATITUDE = "latitude";
+	static final String TAG_LONGITUDE = "longitude";
 	
 	static NewsActivity instance = null;
 
@@ -154,6 +156,8 @@ public class NewsActivity extends ListActivity {
 					String spottype = c.getString(TAG_SPOTTYPE);
 					String likes = c.getString(TAG_LIKES);
 					String dislikes = c.getString(TAG_DISLIKES);
+					String latitude = c.getString(TAG_LATITUDE);
+					String longitude = c.getString(TAG_LONGITUDE);
 					
 					
 					// subject taking only first 23 chars
@@ -181,6 +185,9 @@ public class NewsActivity extends ListActivity {
 					map.put(TAG_SPOTTYPE, spottype);
 					map.put(TAG_LIKES, likes);
 					map.put(TAG_DISLIKES, dislikes);
+					
+					map.put(TAG_LATITUDE, latitude);
+					map.put(TAG_LONGITUDE, longitude);
 					// adding HashList to ArrayList
 					outboxList.add(map);
 				}
