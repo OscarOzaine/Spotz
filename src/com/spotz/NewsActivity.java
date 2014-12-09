@@ -9,7 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.androidhive.R;
+import com.spotz.gen.R;
 import com.spotz.utils.Const;
 import com.spotz.utils.JSONParser;
 import android.app.ListActivity;

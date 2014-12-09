@@ -7,8 +7,8 @@ import org.apache.http.NameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.androidhive.R;
 import com.spotz.camera.ImageLoader;
+import com.spotz.gen.R;
 import com.spotz.services.UploadProfilePicService;
 import com.spotz.users.User;
 import com.spotz.utils.JSONParser;

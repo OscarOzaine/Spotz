@@ -9,12 +9,12 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import com.example.androidhive.R;
 import com.facebook.AppEventsLogger;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.spotz.camera.VideoActivity;
+import com.spotz.gen.R;
 import com.spotz.utils.Const;
 import com.spotz.utils.Settings;
 import com.spotz.utils.Utils;

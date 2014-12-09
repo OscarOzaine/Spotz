@@ -18,11 +18,11 @@ package com.spotz.location;
 
 
 import com.google.android.gms.common.ConnectionResult;
+import com.spotz.gen.R;
 
 import android.content.Context;
 import android.content.res.Resources;
 
-import com.example.androidhive.R;
 
 /**
  * Map error codes to error messages.

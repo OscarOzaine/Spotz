@@ -5,12 +5,12 @@ import java.util.Locale;
 
 import org.json.*;
 
-import com.example.androidhive.R;
 import com.facebook.LoginActivity;
 import com.spotz.MainActivity;
 import com.spotz.ProfileActivity;
 import com.spotz.RegisterActivity;
 import com.spotz.UploadSpotActivity;
+import com.spotz.gen.R;
 import com.spotz.services.UploadProfilePicService;
 import com.spotz.users.OnLoginListener;
 import com.spotz.users.OnRegisterListener;

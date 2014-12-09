@@ -1,6 +1,6 @@
 package com.spotz.users;
 
-import com.example.androidhive.R;
+import com.spotz.gen.R;
 
 import android.app.ActionBar;
 import android.graphics.drawable.ColorDrawable;

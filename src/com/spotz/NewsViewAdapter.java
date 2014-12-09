@@ -1,7 +1,7 @@
 package com.spotz;
 
-import com.example.androidhive.R;
 import com.spotz.camera.ImageLoader;
+import com.spotz.gen.R;
 import com.spotz.utils.Const;
 import com.spotz.utils.Utils;
 

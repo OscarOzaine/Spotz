@@ -1,7 +1,7 @@
 package com.spotz;
 
-import com.example.androidhive.R;
 import com.facebook.Session;
+import com.spotz.gen.R;
 import com.spotz.services.UploadMediaService;
 import com.spotz.users.UserSettingsActivity;
 
@@ -12,6 +12,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -28,6 +29,8 @@ import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
+import android.widget.TabWidget;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends TabActivity {
@@ -65,9 +68,12 @@ public class MainActivity extends TabActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.main);
+        
         ActionBar actionBar = getActionBar();
         actionBar.setTitle(R.string.app_name);
-        actionBar.setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
+        //actionBar.setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
+        
+        
         //actionBar.setDisplayHomeAsUpEnabled(true);
         //actionBar.setHomeButtonEnabled(true);
         
@@ -106,6 +112,11 @@ public class MainActivity extends TabActivity {
         tabHost.addTab(outboxSpec); // Adding Outbox tab
         tabHost.addTab(profileSpec); // Adding Profile tab
         
+        
+        
+        
+        
+        
         tabHost.setCurrentTab(1);
         tabHost.setOnTabChangedListener(new OnTabChangeListener() {
 
@@ -142,6 +153,20 @@ public class MainActivity extends TabActivity {
     @Override
     protected void onResume() {
       super.onResume();
+      TabHost tabhost = getTabHost();
+      TabWidget widget = tabhost.getTabWidget();
+      for(int i=0;i<tabhost.getTabWidget().getChildCount();i++) 
+      {
+    	  View v = widget.getChildAt(i);
+    	  v.setBackgroundResource(R.drawable.custom_tab_selector);
+    	  //tabhost.getTabWidget().getChildAt(i).findViewById(android.R.id.`)
+          TextView tv = (TextView) tabhost.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
+          tv.setTextColor(Color.parseColor("#1f8b1f"));
+          
+      } 
+      
+      
+      
       registerReceiver(receiver, new IntentFilter(UploadMediaService.NOTIFICATION));
     }
     

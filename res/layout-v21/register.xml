@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical|center_horizontal"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/register_image"
+        android:layout_width="178dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/spotz" />
+    
+	<LinearLayout 
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_vertical|center_horizontal"
+		android:gravity="center"
+		android:layout_marginTop="15dp"
+		android:orientation="vertical" >
+
+		<EditText
+		    android:id="@+id/register_edtusername"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:ems="10"
+		    android:gravity="center_vertical|center_horizontal"
+		    android:hint="@string/username"
+		    android:imeOptions="actionNext|flagNoExtractUi"
+		    android:inputType="text"
+		    android:singleLine="true" >
+	       	<requestFocus />
+	  	</EditText>
+	
+		<EditText
+		    android:id="@+id/register_edtemail"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:ems="10"
+		    android:gravity="center_vertical|center_horizontal"
+		    android:hint="@string/email"
+		    android:imeOptions="actionNext|flagNoExtractUi"
+		    android:inputType="text"
+		    android:singleLine="true" >
+	  	</EditText>
+	  	
+	    <EditText
+	        android:id="@+id/register_edtpassword"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:ems="10"
+	        android:gravity="center_vertical|center_horizontal"
+	        android:hint="@string/password"
+	        android:imeOptions="actionNext|flagNoExtractUi"
+	        android:inputType="textPassword"
+	        android:singleLine="true">
+	    </EditText>
+	    
+	    <EditText
+	        android:id="@+id/register_edtrepeatpassword"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:ems="10"
+	        android:gravity="center_vertical|center_horizontal"
+	        android:hint="@string/repeatpassword"
+	        android:imeOptions="actionSend|flagNoExtractUi"
+	        android:inputType="textPassword"
+	        android:singleLine="true">
+	    </EditText>
+	    
+	</LinearLayout>
+
+    <Button
+        android:id="@+id/register_btn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="2dp"
+        android:layout_gravity="center"
+        android:text="@string/register" />
+    
+    <TextView android:id="@+id/reg_infomessage" 
+            android:text="aca"
+            android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:layout_marginTop="2dp"
+	        android:gravity="center"
+            />
+    
+    <ProgressBar
+        android:id="@+id/register_progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_weight="1"
+        android:visibility="gone" />
+
+</LinearLayout>

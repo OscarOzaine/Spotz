@@ -1,6 +1,5 @@
 package com.spotz;
 
-import com.example.androidhive.R;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -14,6 +13,7 @@ import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationRequest;
+import com.spotz.gen.R;
 import com.spotz.location.LocationUtils;
 import com.spotz.services.UploadMediaService;
 import com.spotz.users.User;

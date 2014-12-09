@@ -1,7 +1,6 @@
 package com.spotz;
 
 
-import com.example.androidhive.R;
 
 import java.util.Arrays;
 import org.json.JSONArray;
@@ -10,6 +9,7 @@ import org.json.JSONObject;
 import com.facebook.widget.FacebookDialog;
 import com.facebook.widget.LoginButton;
 import com.spotz.comm.MessageManager;
+import com.spotz.gen.R;
 import com.spotz.services.LoginService;
 import com.spotz.services.UploadProfilePicService;
 import com.spotz.users.OnLoginListener;

@@ -4,9 +4,15 @@
     xmlns:yourapp="http://schemas.android.com/apk/res-auto" >
     
     <item 
-        android:id="@+id/action_uploadspot"
+        android:id="@+id/action_sharespot"
         android:icon="@android:drawable/ic_menu_share"
-        android:title="Upload"
+        android:title="Share"
+        android:showAsAction="ifRoom"/>
+    
+    <item 
+        android:id="@+id/action_mapspot"
+        android:icon="@android:drawable/ic_menu_mylocation"
+        android:title="Map"
         android:showAsAction="ifRoom"/>
     
 </menu>

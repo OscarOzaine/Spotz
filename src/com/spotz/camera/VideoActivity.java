@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.example.androidhive.R;
 import com.facebook.AppEventsLogger;
 import com.spotz.CameraActivity;
 import com.spotz.MainActivity;
 import com.spotz.UploadSpotActivity;
+import com.spotz.gen.R;
 import com.spotz.utils.Const;
 
 import android.app.Activity;

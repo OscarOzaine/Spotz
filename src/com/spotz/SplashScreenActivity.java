@@ -3,7 +3,7 @@ package com.spotz;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.example.androidhive.R;
+import com.spotz.gen.R;
  
 import android.app.Activity;
 import android.content.Intent;

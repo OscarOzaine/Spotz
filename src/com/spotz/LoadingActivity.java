@@ -1,6 +1,7 @@
 package com.spotz;
 
-import com.example.androidhive.R;
+import com.spotz.gen.R;
+
 import android.app.Activity;
 import android.os.Bundle;
 

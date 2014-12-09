@@ -1,12 +1,12 @@
 package com.spotz;
 
-import com.example.androidhive.R;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.http.NameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.spotz.camera.ImageLoader;
+import com.spotz.gen.R;
 import com.spotz.utils.JSONParser;
 import com.spotz.utils.Utils;
 
@@ -205,15 +205,23 @@ public class SpotActivity extends Activity {
 		
         switch (item.getItemId()) {
         
-        case android.R.id.home:
-        	Log.d(TAG,"Home = "+item.getItemId());
-        	onBackPressed();
+        case R.id.action_sharespot:
+        	Log.d(TAG,"share = "+item.getItemId());
+        	//onBackPressed();
             //NavUtils.navigateUpFromSameTask(this);
-            return true;
+        return true;
+        
+        case R.id.action_mapspot:
+        	Log.d(TAG,"map = "+item.getItemId());
+        	//onBackPressed();
+            //NavUtils.navigateUpFromSameTask(this);
+        return true;
         default:
         	Log.d(TAG,"Default = "+item.getItemId());
             return super.onOptionsItemSelected(item);
+         
         }
+        
     }
 	/**
 	 * Background Async Task to Load profile by making HTTP Request

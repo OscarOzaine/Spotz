@@ -1,6 +1,6 @@
 package com.spotz.utils;
 
-import com.example.androidhive.R;
+import com.spotz.gen.R;
 import com.spotz.utils.Const;
 import com.spotz.MainActivity;
 

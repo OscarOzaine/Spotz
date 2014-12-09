@@ -5,5 +5,10 @@
     <color name="white">#FFF</color>
     <color name="black">#000</color>
     <color name="grey">#f7f7f7</color>
-    
+    <color name="photo_tint">#7f101010</color>
+    <color name="my_action_bar_color">#1f8b1f</color>
+    <color name="background_window">#1f8b1f</color>
+    <color name="green">#30DD15</color>
+    <color name="greenDark">#30DD15</color>
+    <color name="yellow">#FFFF00</color>
 </resources>

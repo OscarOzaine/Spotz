@@ -3,8 +3,8 @@ package com.spotz;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.androidhive.R;
 import com.spotz.comm.MessageManager;
+import com.spotz.gen.R;
 import com.spotz.users.OnRegisterListener;
 import com.spotz.users.User;
 import com.spotz.utils.Const;

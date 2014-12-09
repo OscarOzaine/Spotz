@@ -8,8 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.androidhive.R;
 import com.spotz.CameraActivity;
+import com.spotz.gen.R;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
