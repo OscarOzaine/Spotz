@@ -80,7 +80,6 @@ public class SpotActivity extends Activity {
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.activity_spot);
 		
-		
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.app_name);
@@ -129,6 +128,7 @@ public class SpotActivity extends Activity {
 		    vidSpot.setVideoURI(uri);        
 		    vidSpot.requestFocus();
 		    vidSpot.start();
+		    
 		}else{
 			vidSpot.setVisibility(View.GONE);
 			imgSpot.setVisibility(View.VISIBLE);
@@ -230,6 +230,7 @@ public class SpotActivity extends Activity {
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.spotmenu, menu);
+        
 	    return super.onCreateOptionsMenu(menu);
     }
 	
@@ -237,25 +238,19 @@ public class SpotActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
 		
         switch (item.getItemId()) {
-        
         case R.id.action_sharespot:
-        	Log.d(TAG,"link = "+Utils.createSpotLink(spotCity, spotName, spotId));
-        	Log.d(TAG,"name = "+spotName);
-        	Log.d(TAG,"Description = "+spotDescription);
-        	Log.d(TAG,"picture = "+mediaPath);
-        	
+        	return true;
+        case R.id.action_share_facebook:
         	FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this)
-	            .setLink(Utils.createSpotLink(spotCity, spotName, spotId))
-	            .setName(spotName)
-	            .setDescription(spotDescription)
-	            .setPicture(mediaPath)
-	            .setApplicationName(getString(R.string.app_name))
-	            .build();
-        	uiHelper.trackPendingDialogCall(shareDialog.present());
-        	//onBackPressed();
-            //NavUtils.navigateUpFromSameTask(this);
-        return true;
-        
+            .setLink(Utils.createSpotLink(spotCity, spotName, spotId))
+            .setName(spotName)
+            .setDescription(spotDescription)
+            .setPicture(mediaPath)
+            .setApplicationName(getString(R.string.app_name))
+            .build();
+    	uiHelper.trackPendingDialogCall(shareDialog.present());
+        	return true;
+       
         case R.id.action_mapspot:
         	Log.d(TAG,"map = "+latitude+" long = "+longitude);
         	String uri = String.format(Locale.ENGLISH, "geo:%f,%f?q=%f,%f(%s)", Float.parseFloat(latitude), Float.parseFloat(longitude),Float.parseFloat(latitude), Float.parseFloat(longitude),spotName);
@@ -266,7 +261,8 @@ public class SpotActivity extends Activity {
         return true;
         default:
         	Log.d(TAG,"Default = "+item.getItemId());
-            return super.onOptionsItemSelected(item);
+        	onBackPressed();
+        	return super.onOptionsItemSelected(item);
          
         }
         

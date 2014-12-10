@@ -469,6 +469,7 @@ public class UploadSpotActivity extends Activity implements
             	
 	            return true;
 	        default:
+	        	onBackPressed();
 	            return super.onOptionsItemSelected(item);
 	    }
 	}

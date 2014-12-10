@@ -225,13 +225,10 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 			try {
 				
 				Bitmap realImage = BitmapFactory.decodeByteArray(data, 0, data.length);
-	            android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
-	            android.hardware.Camera.getCameraInfo(currentCameraId, info);
-	            Bitmap bitmap = Utils.rotateImage(realImage, info.orientation);
 	            
 	            
 				FileOutputStream fos = new FileOutputStream(pictureFile);
-				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+				realImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
 				fos.write(data);
 				fos.close();
 			} catch (FileNotFoundException e) {
@@ -253,8 +250,8 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 	private static File getOutputMediaFile(int type){
 		// To be safe, you should check that the SDCard is mounted
 		// using Environment.getExternalStorageState() before doing this.
-		File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-				Environment.DIRECTORY_PICTURES), "Spotz");
+		File mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "Spotz");
+		
 		// This location works best if you want the created images to be shared
 		// between applications and persist after your app has been uninstalled.
 		// Create the storage directory if it does not exist

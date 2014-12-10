@@ -9,11 +9,27 @@
         android:showAsAction="always"/>
     
     <item 
-        android:id="@+id/action_settings"
-        android:icon="@drawable/ic_menu_moreoverflow_normal_holo_dark"
-        android:title="@string/settings"
+		android:id="@+id/action_options"
+		android:title="Options"
+        android:icon="@drawable/ic_menu_moreoverflow"
         android:showAsAction="ifRoom"
-         />
+        >
+            <menu>
+                <group 
+                    android:id="@+id/menu_nav_group">
+                        <item 
+                            android:id="@+id/action_settings"
+                            android:icon="@drawable/ic_menu_settings_holo_light"
+                            android:title="@string/settings"/>
+                        <!-- 
+                        <item 
+                            android:id="@+id/action_share_twitter"
+                            android:title="@string/twitter_title"/>
+                       -->
+                </group>
+            </menu>
+  	</item>   
+    
     
     <!--
 <item

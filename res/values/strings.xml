@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+	<string name="facebook_title">Facebook</string>
+	<string name="twitter_title">Twitter</string>
+	
+	<string-array name="share_spinner">
+	    <item>Facebook</item>
+	 	<!--  <item>Twitter</item>
+	 	<item>Valor 3</item>-->	
+	 </string-array>
 
+	
     <string name="usersettings">User Settings</string>
     <string name="spottype">Spot Type:</string>
     <string name="city">City:</string>

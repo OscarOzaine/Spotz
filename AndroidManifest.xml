@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.spotz.gen"
-    android:versionCode="1"
-    android:versionName="1.1" >
+    android:versionCode="2"
+    android:versionName="1.2" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -115,10 +115,6 @@
         <!-- Spot Activity -->
         <activity android:name="com.spotz.SpotActivity" >
 
-            <!-- enable the search dialog to send searches to SearchableActivity -->
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value="com.example.androidhive.SpotActivity" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.spotz.MainActivity" />

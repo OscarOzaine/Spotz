@@ -3,11 +3,26 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:yourapp="http://schemas.android.com/apk/res-auto" >
     
-    <item 
-        android:id="@+id/action_sharespot"
+     <item 
+		android:id="@+id/action_sharespot"
         android:icon="@android:drawable/ic_menu_share"
         android:title="Share"
-        android:showAsAction="ifRoom"/>
+        android:showAsAction="ifRoom">
+            <menu>
+                <group 
+                    android:id="@+id/menu_nav_group">
+                        <item 
+                            android:id="@+id/action_share_facebook"
+                            android:icon="@drawable/ic_facebook"
+                            android:title="@string/facebook_title"/>
+                        <!-- 
+                        <item 
+                            android:id="@+id/action_share_twitter"
+                            android:title="@string/twitter_title"/>
+                       -->
+                </group>
+            </menu>
+  	</item>   
     
     <item 
         android:id="@+id/action_mapspot"
