@@ -6,6 +6,7 @@ import com.spotz.utils.Const;
 import com.spotz.utils.Utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import android.annotation.SuppressLint;
@@ -113,31 +114,23 @@ public class NewsViewAdapter extends BaseAdapter {
 		mediaPath = resultp.get(NewsActivity.TAG_IMAGE);
 		Log.d(TAG,"MediaPath="+mediaPath);
 		if(Utils.isVideo(mediaPath)){
-			imgSpot.setVisibility(View.GONE);
-			vidSpot.setVisibility(View.VISIBLE);
-			
-			MediaController mediaController= new MediaController(NewsActivity.instance);
-		    mediaController.setAnchorView(vidSpot);
-		    vidSpot.setVisibility(View.VISIBLE);
-		    vidSpot.setFocusable(true);
-		    vidSpot.setFocusableInTouchMode(true);
-		    vidSpot.requestFocus();
-            //Log.d(TAG,"ACAA = "+mediaPath);
-		    Uri uri=Uri.parse(mediaPath);        
-		    vidSpot.setMediaController(mediaController);
-		    vidSpot.setVideoURI(uri);        
-		    //vidSpot.requestFocus();
-		    //vidSpot.start();
-		    
-		    
-		    
+				imgSpot.setVisibility(View.GONE);
+				vidSpot.setVisibility(View.VISIBLE);
+				MediaController mediaController= new MediaController(NewsActivity.instance);
+			    mediaController.setAnchorView(vidSpot);
+			    vidSpot.setVisibility(View.VISIBLE);
+			    vidSpot.setFocusable(true);
+			    vidSpot.setFocusableInTouchMode(true);
+			    vidSpot.requestFocus();
+			    Uri uri=Uri.parse(mediaPath);
+			    vidSpot.setMediaController(mediaController);
+			    vidSpot.setVideoURI(uri);  
 		}
 		else{
 			imgSpot.setVisibility(View.VISIBLE);
 			vidSpot.setVisibility(View.GONE);
-			BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inSampleSize=8;      // 1/8 of original image
-			Bitmap bitmap = imageLoader.DisplayImage(mediaPath, imgSpot);
+			imageLoader.DisplayImage(mediaPath, imgSpot);
+			//Log.d("DisplayImage","mediaPath = "+mediaPath);
 		}
 		
 		

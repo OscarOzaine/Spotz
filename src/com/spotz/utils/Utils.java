@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -98,5 +101,23 @@ public class Utils {
     	return "http://myhotspotz.net/spots/"+cityName+"_"+spotName.replace(" ", "-")+"-"+Integer.toHexString(Integer.parseInt(spotId));
     }
     
+    public static String getMetadataParenthesis(String metadata){
+    	Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(metadata);
+        while(m.find()) {
+        	return m.group(1);
+          //System.out.println(m.group(1));    
+        }
+		return "-1";
+    }
+    
+    public static boolean isInteger(String s) {
+        try { 
+            Integer.parseInt(s); 
+        } catch(NumberFormatException e) { 
+            return false; 
+        }
+        // only got here if we didn't return false
+        return true;
+    }
     
 }

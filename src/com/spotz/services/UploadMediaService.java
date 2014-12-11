@@ -83,7 +83,7 @@ public class UploadMediaService extends IntentService  {
                 // open a URL connection to the Servlet
                 FileInputStream fileInputStream = new FileInputStream(sourceFile);
                 URL url = new URL(upLoadServerUri);
-
+                //Log.d(Const.TAG,"URL = "+upLoadServerUri );
                 // Open a HTTP  connection to  the URL
                 conn = (HttpURLConnection) url.openConnection(); 
                 conn.setDoInput(true); // Allow Inputs

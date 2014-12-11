@@ -18,6 +18,9 @@ import com.spotz.gen.R;
 import com.spotz.utils.Const;
 import com.spotz.utils.Settings;
 import com.spotz.utils.Utils;
+import com.spotz.utils.imaging.ImageMetadataReader;
+import com.spotz.utils.imaging.ImageProcessingException;
+import com.spotz.utils.metadata.Metadata;
 
 
 import android.annotation.SuppressLint;
@@ -32,6 +35,7 @@ import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PictureCallback;
 import android.media.CamcorderProfile;
+import android.media.ExifInterface;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
@@ -77,7 +81,7 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 	Intent mainIntent;
 	final static int MEDIA_VIDEO = 2;
 	final static int MEDIA_IMAGE = 1;
-	
+	int rotation = 0;
 	static int currentCameraId = 0;
 	
 	@Override
@@ -158,17 +162,21 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 
 	public static void setCameraDisplayOrientation(Activity activity,
 	         int cameraId, android.hardware.Camera camera) {
+		
 	     android.hardware.Camera.CameraInfo info =
 	             new android.hardware.Camera.CameraInfo();
+	     
 	     android.hardware.Camera.getCameraInfo(cameraId, info);
+	     
 	     int rotation = activity.getWindowManager().getDefaultDisplay()
 	             .getRotation();
+	     
 	     int degrees = 0;
 	     switch (rotation) {
-	         case Surface.ROTATION_0: degrees = 0; break;
-	         case Surface.ROTATION_90: degrees = 90; break;
-	         case Surface.ROTATION_180: degrees = 180; break;
-	         case Surface.ROTATION_270: degrees = 270; break;
+	         case Surface.ROTATION_0: degrees = 0; Log.d(TAG,"ACA = 0"); break;
+	         case Surface.ROTATION_90: degrees = 90; Log.d(TAG,"ACA = 90"); break;
+	         case Surface.ROTATION_180: degrees = 180; Log.d(TAG,"ACA = 180"); break;
+	         case Surface.ROTATION_270: degrees = 270; Log.d(TAG,"ACA = 270"); break;
 	     }
 
 	     int result;
@@ -178,6 +186,7 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 	     } else {  // back-facing
 	         result = (info.orientation - degrees + 360) % 360;
 	     }
+	     
 	     camera.setDisplayOrientation(result);
 	 }
 
@@ -216,19 +225,29 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
+			
+			/*
+			int rotation = CameraActivity.this.getWindowManager().getDefaultDisplay()
+		             .getRotation();
+			
+			Log.d(TAG,"OrientationACAA = "+rotation);
+			*/
 			File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+			
+			
+			
 			if (pictureFile == null){
 				Log.d(TAG, "Error creating media file, check storage permissions: " );
 				return;
 			}
-			
 			try {
 				
+				Log.d(TAG, pictureFile.getAbsolutePath()+" -- "+rotation);
 				Bitmap realImage = BitmapFactory.decodeByteArray(data, 0, data.length);
-	            
-	            
-				FileOutputStream fos = new FileOutputStream(pictureFile);
+				
+	            FileOutputStream fos = new FileOutputStream(pictureFile);
 				realImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+				
 				fos.write(data);
 				fos.close();
 			} catch (FileNotFoundException e) {
@@ -237,6 +256,17 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 				Log.d(TAG, "Error accessing file: " + e.getMessage());
 			}
 			
+			ExifInterface exif;
+			
+			try {
+				exif = new ExifInterface(pictureFile.getAbsolutePath());
+				exif.setAttribute(ExifInterface.TAG_ORIENTATION,Integer.toString(rotation));
+				exif.saveAttributes();
+				
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			//Log.d(TAG,""+pictureFile.getAbsolutePath());
 			Intent uploadSpotIntent = new Intent(CameraActivity.this, UploadSpotActivity.class);
 			uploadSpotIntent.putExtra("SpotMedia",pictureFile.getAbsolutePath());
@@ -285,7 +315,11 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		}else{
 			camera=Camera.open();
 		}
-		startPreview();
+		if (cameraConfigured && camera!=null) {
+			camera.startPreview();
+			inPreview=true;
+		}
+		
 		AppEventsLogger.activateApp(this);
 	}
 
@@ -304,7 +338,7 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 	private Camera.Size getBestPreviewSize(int width, int height,
 			Camera.Parameters parameters) {
 		Camera.Size result=null;
-		camera.setDisplayOrientation(90);
+		//camera.setDisplayOrientation(90);
 		
 		for (Camera.Size size : parameters.getSupportedPreviewSizes()) {
 			if (size.width<=width && size.height<=height) {
@@ -345,17 +379,11 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 
 				if (size!=null) {
 					parameters.setPreviewSize(size.width, size.height);
+					
 					camera.setParameters(parameters);
 					cameraConfigured=true;
 				}
 			}
-		}
-	}
-
-	private void startPreview() {
-		if (cameraConfigured && camera!=null) {
-			camera.startPreview();
-			inPreview=true;
 		}
 	}
 
@@ -373,29 +401,47 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 	        }
 			Parameters parameters = camera.getParameters();
 	        Display display = getWindowManager().getDefaultDisplay();
+	        
 			if(currentCameraId == 1){
-		        if(display.getRotation() == Surface.ROTATION_0){                     
-		            camera.setDisplayOrientation(90);
+		        if(display.getRotation() == Surface.ROTATION_0){ 
+		        	rotation = 90;
+		            
+		            //Log.d(TAG,"ROTATION 0");
 		        }
+		        /*
+		        if(display.getRotation() == Surface.ROTATION_90){
+		        	Log.d(TAG,"ROTATION 90");
+		        }
+		        if(display.getRotation() == Surface.ROTATION_180){
+		        	Log.d(TAG,"ROTATION 180");
+		        }
+		        */
 		        if(display.getRotation() == Surface.ROTATION_270){
-		            camera.setDisplayOrientation(180);
+		        	rotation = 180;
+		            //Log.d(TAG,"ROTATION 270");
 		        }
 			}else{
-		        if(display.getRotation() == Surface.ROTATION_0){
-		            parameters.setPreviewSize(height, width);                           
-		            camera.setDisplayOrientation(90);
+		        if(display.getRotation() == Surface.ROTATION_0){ 
+		        	rotation = 90;
+		            //Log.d(TAG,"ROTATION 0");
 		        }
-		        if(display.getRotation() == Surface.ROTATION_90 || display.getRotation() == Surface.ROTATION_180){
-		            parameters.setPreviewSize(width, height);                           
+		        /*
+		        if(display.getRotation() == Surface.ROTATION_90 ){
+		            Log.d(TAG,"ROTATION 90");
 		        }
-
+		        if(display.getRotation() == Surface.ROTATION_180){
+		        	Log.d(TAG,"ROTATION 180");
+		        }
+		        */
 		        if(display.getRotation() == Surface.ROTATION_270){
-		            parameters.setPreviewSize(width, height);
-		            camera.setDisplayOrientation(180);
+		        	rotation = 180;
+		            //Log.d(TAG,"ROTATION 270");
 		        }
 			}
+			camera.setDisplayOrientation(rotation);
+			parameters.setPreviewSize(height, width);
+			parameters.setRotation(rotation);
 			camera.setParameters(parameters);
-	        //startPreview();
 	        initPreview(width, height);
 	        previewCamera();   
 			Log.d(TAG,"surfaceChanged");

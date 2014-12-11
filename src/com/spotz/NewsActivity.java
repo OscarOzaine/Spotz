@@ -218,6 +218,7 @@ public class NewsActivity extends ListActivity {
 						 * */
 					
 						/*
+						 * 
 						ListAdapter adapter = new SimpleAdapter(
 								NewsActivity.this, outboxList,
 								R.layout.outbox_list_item, new String[] { TAG_ID, TAG_NAME, TAG_CREATED_AT, 
@@ -225,6 +226,8 @@ public class NewsActivity extends ListActivity {
 								new int[] { R.id.spotId, R.id.spotTitle, R.id.spotCreatedat ,
 											R.id.spotImage, R.id.spotCity, R.id.spotUser, R.id.spotDescription });
 						*/
+						
+						Log.d("DisplayImage","ACA");
 						adapter = new NewsViewAdapter(NewsActivity.this, outboxList);
 						// updating listview
 						setListAdapter(adapter);

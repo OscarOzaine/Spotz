@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -18,6 +19,12 @@ import com.spotz.location.LocationUtils;
 import com.spotz.services.UploadMediaService;
 import com.spotz.users.User;
 import com.spotz.utils.Utils;
+import com.spotz.utils.imaging.ImageMetadataReader;
+import com.spotz.utils.imaging.ImageProcessingException;
+import com.spotz.utils.metadata.Directory;
+import com.spotz.utils.metadata.Metadata;
+import com.spotz.utils.metadata.Tag;
+import com.spotz.utils.metadata.exif.ExifSubIFDDirectory;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -35,6 +42,7 @@ import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -125,11 +133,9 @@ public class UploadSpotActivity extends Activity implements
 			spotImage.setVisibility(View.GONE);
 			
 			spotVideo.setVisibility(View.VISIBLE);
-			
-			
 			MediaController mediaController= new MediaController(this);
 		    mediaController.setAnchorView(spotVideo);
-	/*	    
+		    /*	    
 		    DisplayMetrics displaymetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
             int videoheight = displaymetrics.heightPixels;
@@ -139,14 +145,14 @@ public class UploadSpotActivity extends Activity implements
             int right = left + (videowidth);
             int bottom = top + (videoheight);
             
-            
 		    AbsoluteLayout.LayoutParams params = (AbsoluteLayout.LayoutParams) spotVideo.getLayoutParams();
 		    params.width = videowidth;
 		    params.height = videoheight;
 		    params.x = left;
 		    params.y = top;
 		    spotVideo.requestLayout();
-*/
+		     */
+		    
 		    spotVideo.setVisibility(View.VISIBLE);
 		    spotVideo.setFocusable(true);
 		    spotVideo.setFocusableInTouchMode(true);
@@ -177,20 +183,84 @@ public class UploadSpotActivity extends Activity implements
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inSampleSize=8;      // 1/8 of original image
 			bitmap = BitmapFactory.decodeFile(mediaPath,options);
-			/*
-			Matrix mat = new Matrix();
-	        mat.postRotate(90);
-	        Bitmap bMapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
-	        // Get scaling factor to fit the max possible width of the ImageView
-	        float scalingFactor = getBitmapScalingFactor(bMapRotate);
-	        // Create a new bitmap with the scaling factor
-	        Bitmap newBitmap = Utils.ScaleBitmap(bMapRotate, scalingFactor);
-	        */
-	        // Set the bitmap as the ImageView source
-	        //spotMedia.setImageBitmap(newBitmap);
-	        spotImage.setImageBitmap(bitmap);
+			
+			
+			
+			
+			
+			
+			String orientation = "";
+			//int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+			Bitmap bMapRotate 	= null;
+			float scalingFactor = 0;
+			Bitmap newBitmap 	= null;
+			Matrix mat 			= null;
+			
+			Log.d(TAG,mediaPath + " -- "+orientation);
+			
+			try {
+				File jpegFile = new File(mediaPath);
+				Metadata metadata = ImageMetadataReader.readMetadata(jpegFile);
+
+				for (Directory directory : metadata.getDirectories()) {
+				    for (Tag tag : directory.getTags()) {
+				    
+				    	if(tag.getTagName().equals("Orientation")){
+				    		orientation = Utils.getMetadataParenthesis(tag.getDescription());
+				    		Log.d(TAG,"O111riACA= "+orientation);
+				    	}
+				    }
+				}
+			} catch (ImageProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Log.d(TAG,"OriACA= "+orientation);
+			switch(Integer.parseInt(orientation)) {
+			    case 90:
+			    	mat = new Matrix();
+			        mat.postRotate(90);
+			        bMapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
+			        // Get scaling factor to fit the max possible width of the ImageView
+			        scalingFactor = getBitmapScalingFactor(bMapRotate);
+			        // Create a new bitmap with the scaling factor
+			        newBitmap = Utils.ScaleBitmap(bMapRotate, scalingFactor);
+			        spotImage.setImageBitmap(newBitmap);
+			        Log.d(TAG,"90");
+		        break;
+			    case 180:
+			    	mat = new Matrix();
+			        mat.postRotate(180);
+			        bMapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
+			        // Get scaling factor to fit the max possible width of the ImageView
+			        scalingFactor = getBitmapScalingFactor(bMapRotate);
+			        // Create a new bitmap with the scaling factor
+			        newBitmap = Utils.ScaleBitmap(bMapRotate, scalingFactor);
+			        spotImage.setImageBitmap(newBitmap);
+			        Log.d(TAG,"180");
+			        break;
+			    case 270:
+			    	mat = new Matrix();
+			        mat.postRotate(270);
+			        bMapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
+			        // Get scaling factor to fit the max possible width of the ImageView
+			        scalingFactor = getBitmapScalingFactor(bMapRotate);
+			        // Create a new bitmap with the scaling factor
+			        newBitmap = Utils.ScaleBitmap(bMapRotate, scalingFactor);
+			        spotImage.setImageBitmap(newBitmap);
+			        Log.d(TAG,"270");
+			        break;// etc.
+			    default:
+			    	spotImage.setImageBitmap(bitmap);
+			    	Log.d(TAG,"0");
+			    	break;
+			}
+			
 		}
-		
 		
 		spinnerSpotType = (Spinner) findViewById(R.id.spinner_spottypes);
 		// Create an ArrayAdapter using the string array and a default spinner layout
@@ -274,6 +344,24 @@ public class UploadSpotActivity extends Activity implements
 
     }
     
+    private float getBitmapScalingFactor(Bitmap bm) {
+        // Get display width from device
+        int displayWidth = getWindowManager().getDefaultDisplay().getWidth();
+
+        // Get margin to use it for calculating to max width of the ImageView
+        LinearLayout.LayoutParams layoutParams = 
+            (LinearLayout.LayoutParams)this.spotImage.getLayoutParams();
+        int leftMargin = layoutParams.leftMargin;
+        int rightMargin = layoutParams.rightMargin;
+
+        // Calculate the max width of the imageView
+        int imageViewWidth = displayWidth - (leftMargin + rightMargin);
+
+        // Calculate scaling factor and return it
+        return ( (float) imageViewWidth / (float) bm.getWidth() );
+    }
+    
+    
     /*
      * Handle results returned to this Activity by other Activities started with
      * startActivityForResult(). In particular, the method onConnectionFailed() in
@@ -281,6 +369,8 @@ public class UploadSpotActivity extends Activity implements
      * start an Activity that handles Google Play services problems. The result of this
      * call returns here, to onActivityResult.
      */
+    
+    
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 
