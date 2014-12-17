@@ -1,6 +1,10 @@
 package com.spotz;
 
+import java.util.List;
+
 import com.facebook.Session;
+import com.spotz.database.Spot;
+import com.spotz.database.SpotsHelper;
 import com.spotz.gen.R;
 import com.spotz.services.UploadMediaService;
 import com.spotz.users.UserSettingsActivity;
@@ -44,6 +48,7 @@ public class MainActivity extends TabActivity {
 	private AsyncTask<String, String, String> execute;
 	
 	private int loading = 0;
+	SpotsHelper db = null;
 	
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 	    @Override
@@ -51,16 +56,34 @@ public class MainActivity extends TabActivity {
 	      Bundle bundle = intent.getExtras();
 	      if (bundle != null) {
 	        int resultCode = bundle.getInt("result");
+	        String dbspotId = bundle.getString("dbspotid");
+	        Log.d(TAG,"RESULTCODE = "+resultCode+ " spot "+dbspotId);
 	        if (resultCode == 1) {
-	        	setProgressBarIndeterminateVisibility(false);
+	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
 	        	Toast.makeText(MainActivity.this, "Successfully uploaded spot",Toast.LENGTH_LONG).show();
-	        } else {
-	        	setProgressBarIndeterminateVisibility(false);
+	        	db = new SpotsHelper(MainActivity.this);
+	        	List<Spot> list = db.getAllSpots();
+				for (int i = 0; i < list.size(); i++) {
+					Log.d(TAG,dbspotId+" - "+list.get(i).getId());
+					if(Integer.parseInt(dbspotId) == list.get(i).getId()){
+						Log.d(TAG,"LIST="+list.get(i));
+						db.deleteSpot(list.get(i));
+						//new LoadSpots().execute();
+					}
+				}
+	        } 
+	        else if(resultCode == 2){
+	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
+	        	Toast.makeText(MainActivity.this, "No internet connection",Toast.LENGTH_LONG).show();
+	        }
+	        else if(resultCode < 0) {
+	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
 	        	Toast.makeText(MainActivity.this, "Failed to upload spot", Toast.LENGTH_LONG).show();
 	        }
 	      }
 	    }
 	};
+	
 	
 	
     @Override
@@ -113,10 +136,6 @@ public class MainActivity extends TabActivity {
         tabHost.addTab(profileSpec); // Adding Profile tab
         
         
-        
-        
-        
-        
         tabHost.setCurrentTab(1);
         tabHost.setOnTabChangedListener(new OnTabChangeListener() {
 
@@ -155,18 +174,14 @@ public class MainActivity extends TabActivity {
       super.onResume();
       TabHost tabhost = getTabHost();
       TabWidget widget = tabhost.getTabWidget();
-      for(int i=0;i<tabhost.getTabWidget().getChildCount();i++) 
-      {
+      for(int i=0;i<tabhost.getTabWidget().getChildCount();i++) {
     	  View v = widget.getChildAt(i);
     	  v.setBackgroundResource(R.drawable.custom_tab_selector);
     	  //tabhost.getTabWidget().getChildAt(i).findViewById(android.R.id.`)
           TextView tv = (TextView) tabhost.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
           tv.setTextColor(Color.parseColor("#1f8b1f"));
-          
       } 
-      
-      
-      
+      invalidateOptionsMenu();
       registerReceiver(receiver, new IntentFilter(UploadMediaService.NOTIFICATION));
     }
     
@@ -178,8 +193,16 @@ public class MainActivity extends TabActivity {
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+    	db = new SpotsHelper(this);
+    	List<Spot> list = db.getAllSpots();
+    	//Log.d(TAG,"LIST SIZE = "+list.size());
     	
-        getMenuInflater().inflate(R.menu.home, menu);
+    	if(list.size() > 0){
+    		getMenuInflater().inflate(R.menu.home_myspots, menu);
+    	}else{
+    		getMenuInflater().inflate(R.menu.home, menu);
+    	}
+        
         /*
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -207,6 +230,12 @@ public class MainActivity extends TabActivity {
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+        
+        case R.id.action_uploadedspots:
+        	Intent uploadedSpots= new Intent(this, MySpotsActivity.class);
+        	//openMainActivity.setFlags(Intent.);
+            startActivity(uploadedSpots); 
+        	break;
         case R.id.action_logout:
         	
         	SessionManager.Logout();
@@ -247,7 +276,7 @@ public class MainActivity extends TabActivity {
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.popup_menu, popup.getMenu());
+        inflater.inflate(R.menu.popup_menu_myspots, popup.getMenu());
         popup.show();
     }
     

@@ -103,6 +103,9 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		buttonChangeMedia	= (ImageButton) findViewById(R.id.changeMedia);
 		buttonChangeCamera	= (ImageButton) findViewById(R.id.changeCamera);
 
+		buttonTakeSpot.setImageResource(R.drawable.ic_camera_picture);
+		buttonChangeMedia.setImageResource(R.drawable.ic_camera_video);
+		
 		currentCameraId = getIntent().getIntExtra("orientation", Camera.CameraInfo.CAMERA_FACING_BACK);
         
 		getActionBar().setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
@@ -149,15 +152,6 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 				changeCameraOrientation();
 			}
 		});
-	}
-
-	
-	@Override
-	public void onStart() {
-		super.onStart();
-		if(Const.D) Log.e(TAG, "++ ON START ++");
-		
-		//Check if user is logged in, if not: go to LogIn Screen
 	}
 
 	public static void setCameraDisplayOrientation(Activity activity,
@@ -226,15 +220,7 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
 			
-			/*
-			int rotation = CameraActivity.this.getWindowManager().getDefaultDisplay()
-		             .getRotation();
-			
-			Log.d(TAG,"OrientationACAA = "+rotation);
-			*/
 			File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-			
-			
 			
 			if (pictureFile == null){
 				Log.d(TAG, "Error creating media file, check storage permissions: " );
@@ -310,11 +296,11 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		Log.d(TAG,"onResume");
 		
 		if(currentCameraId == 1){
-			Log.d(TAG,""+findFrontFacingCamera());
-			camera = Camera.open(findFrontFacingCamera());
+			camera = Camera.open(currentCameraId);
 		}else{
 			camera=Camera.open();
 		}
+		
 		if (cameraConfigured && camera!=null) {
 			camera.startPreview();
 			inPreview=true;
@@ -395,55 +381,57 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		public void surfaceChanged(SurfaceHolder holder,
 				int format, int width,
 				int height) {
-			
-			if (inPreview){
-				camera.stopPreview();
-	        }
-			Parameters parameters = camera.getParameters();
-	        Display display = getWindowManager().getDefaultDisplay();
-	        
-			if(currentCameraId == 1){
-		        if(display.getRotation() == Surface.ROTATION_0){ 
-		        	rotation = 90;
-		            
-		            //Log.d(TAG,"ROTATION 0");
+			if(camera != null){
+				if (inPreview){
+					camera.stopPreview();
 		        }
-		        /*
-		        if(display.getRotation() == Surface.ROTATION_90){
-		        	Log.d(TAG,"ROTATION 90");
-		        }
-		        if(display.getRotation() == Surface.ROTATION_180){
-		        	Log.d(TAG,"ROTATION 180");
-		        }
-		        */
-		        if(display.getRotation() == Surface.ROTATION_270){
-		        	rotation = 180;
-		            //Log.d(TAG,"ROTATION 270");
-		        }
-			}else{
-		        if(display.getRotation() == Surface.ROTATION_0){ 
-		        	rotation = 90;
-		            //Log.d(TAG,"ROTATION 0");
-		        }
-		        /*
-		        if(display.getRotation() == Surface.ROTATION_90 ){
-		            Log.d(TAG,"ROTATION 90");
-		        }
-		        if(display.getRotation() == Surface.ROTATION_180){
-		        	Log.d(TAG,"ROTATION 180");
-		        }
-		        */
-		        if(display.getRotation() == Surface.ROTATION_270){
-		        	rotation = 180;
-		            //Log.d(TAG,"ROTATION 270");
-		        }
+				
+				Parameters parameters = camera.getParameters();
+		        Display display = getWindowManager().getDefaultDisplay();
+		        rotation = 0;
+				if(currentCameraId == 1){
+			        if(display.getRotation() == Surface.ROTATION_0){ 
+			        	rotation = 90;
+			            //Log.d(TAG,"ROTATION 0");
+			        }
+			        /*
+			        if(display.getRotation() == Surface.ROTATION_90){
+			        	Log.d(TAG,"ROTATION 90");
+			        }
+			        if(display.getRotation() == Surface.ROTATION_180){
+			        	Log.d(TAG,"ROTATION 180");
+			        }
+			        */
+			        if(display.getRotation() == Surface.ROTATION_270){
+			        	rotation = 180;
+			            //Log.d(TAG,"ROTATION 270");
+			        }
+				}else{
+			        if(display.getRotation() == Surface.ROTATION_0){ 
+			        	rotation = 90;
+			            //Log.d(TAG,"ROTATION 0");
+			        }
+			        /*
+			        if(display.getRotation() == Surface.ROTATION_90 ){
+			            Log.d(TAG,"ROTATION 90");
+			        }
+			        if(display.getRotation() == Surface.ROTATION_180){
+			        	Log.d(TAG,"ROTATION 180");
+			        }
+			        */
+			        if(display.getRotation() == Surface.ROTATION_270){
+			        	rotation = 180;
+			            //Log.d(TAG,"ROTATION 270");
+			        }
+				}
+				camera.setDisplayOrientation(rotation);
+				//parameters.setPreviewSize(height, width);
+				parameters.setRotation(rotation);
+				camera.setParameters(parameters);
+		        initPreview(width, height);
+		        previewCamera();   
 			}
-			camera.setDisplayOrientation(rotation);
-			parameters.setPreviewSize(height, width);
-			parameters.setRotation(rotation);
-			camera.setParameters(parameters);
-	        initPreview(width, height);
-	        previewCamera();   
+			
 			Log.d(TAG,"surfaceChanged");
 		}
 

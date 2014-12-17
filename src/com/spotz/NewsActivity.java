@@ -1,5 +1,6 @@
 package com.spotz;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,18 +10,31 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.spotz.MySpotsActivity.LoadSpots;
+import com.spotz.database.Spot;
+import com.spotz.database.SpotsHelper;
 import com.spotz.gen.R;
+import com.spotz.services.UploadMediaService;
 import com.spotz.utils.Const;
 import com.spotz.utils.JSONParser;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnLongClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class NewsActivity extends ListActivity {
 	
@@ -56,33 +70,62 @@ public class NewsActivity extends ListActivity {
 	static final String TAG_LONGITUDE = "longitude";
 	
 	static NewsActivity instance = null;
+	SpotsHelper db = null;
 
+	private BroadcastReceiver receiver = new BroadcastReceiver() {
+	    @Override
+	    public void onReceive(Context context, Intent intent) {
+	      Bundle bundle = intent.getExtras();
+	      if (bundle != null) {
+	        int resultCode = bundle.getInt("result");
+	        String dbspotId = bundle.getString("dbspotid");
+	        Log.d(TAG,"RESULTCODE = "+resultCode+ " spot "+dbspotId);
+	        if (resultCode == 1) {
+	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
+	        	Toast.makeText(NewsActivity.this, "Successfully uploaded spot",Toast.LENGTH_LONG).show();
+	        	db = new SpotsHelper(NewsActivity.this);
+	        	List<Spot> list = db.getAllSpots();
+				for (int i = 0; i < list.size(); i++) {
+					Log.d(TAG,dbspotId+" - "+list.get(i).getId());
+					if(Integer.parseInt(dbspotId) == list.get(i).getId()){
+						Log.d(TAG,"LIST="+list.get(i));
+						db.deleteSpot(list.get(i));
+						//new LoadSpots().execute();
+					}
+				}
+	        } 
+	        else if(resultCode == 2){
+	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
+	        	Toast.makeText(NewsActivity.this, "No internet connection",Toast.LENGTH_LONG).show();
+	        }
+	        else if(resultCode < 0) {
+	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
+	        	Toast.makeText(NewsActivity.this, "Failed to upload spot", Toast.LENGTH_LONG).show();
+	        }
+	      }
+	    }
+	};
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.news_list);
-		
-		ListView lv= (ListView) findViewById(android.R.id.list);
-		lv.setSelector(R.drawable.listselector);
-		
 		OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots";
-		// Hashmap for ListView
-        //outboxList = new ArrayList<HashMap<String, String>>();
-        
-        // Loading OUTBOX in Background Thread
-        //new LoadOutbox().execute();
 		instance = this;
 	}
 
+	
+	
 	@Override
     public synchronized void onResume() {
         super.onResume();
+        registerReceiver(receiver, new IntentFilter(UploadMediaService.NOTIFICATION));
      // Hashmap for ListView
         outboxList = new ArrayList<HashMap<String, String>>();
         
         int type = -1;
         OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+type;
-		new LoadOutbox().execute();
+		new LoadSpots().execute();
 		Const.v(TAG, "+ ON RESUME +");
     }
 	
@@ -108,7 +151,7 @@ public class NewsActivity extends ListActivity {
 	 * Background Async Task to Load all OUTBOX messages by making HTTP Request
 	 * */
 	
-	public class LoadOutbox extends AsyncTask<String, String, String> {
+	public class LoadSpots extends AsyncTask<String, String, String> {
 
 		/**
 		 * Before starting background thread Show Progress Dialog
@@ -116,11 +159,14 @@ public class NewsActivity extends ListActivity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+			setProgressBarIndeterminateVisibility(true);
+			
 			pDialog = new ProgressDialog(NewsActivity.this);
-			pDialog.setMessage("Loading Spots ...");
+			pDialog.setMessage(getString(R.string.loading_spots));
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(false);
 			pDialog.show();
+			
 		}
 
 		/**
@@ -128,17 +174,25 @@ public class NewsActivity extends ListActivity {
 		 * */
 		protected String doInBackground(String... args) {
 			loadNews = true;
-			// Building Parameters
-			List<NameValuePair> params = new ArrayList<NameValuePair>();
-			
-			// getting JSON string from URL
-			JSONObject json = jsonParser.makeHttpRequest(OUTBOX_URL, "GET",
-					params);
-			
-			// Check your log cat for JSON reponse
-			Log.d(TAG, json.toString());
-			String urlImage = "";
 			try {
+				// Building Parameters
+				List<NameValuePair> params = new ArrayList<NameValuePair>();
+				
+				// getting JSON string from URL
+				JSONObject json = jsonParser.makeHttpRequest(OUTBOX_URL, "GET",
+						params);
+				
+				// Check your log cat for JSON reponse
+				/*
+				Log.d(TAG, json.toString());
+				if(!json.toString().isEmpty()){
+					
+				}else{
+					loadNews = false;
+				}
+				*/
+				String urlImage = "";
+			
 				outbox = json.getJSONArray(TAG_SPOTS);
 				// looping through All messages
 				for (int i = 0; i < outbox.length(); i++) {
@@ -177,15 +231,12 @@ public class NewsActivity extends ListActivity {
 					
 					urlImage = "http://myhotspotz.net/public/images/spots/"+image;
 					map.put(TAG_IMAGE,urlImage);
-					
 					map.put(TAG_CITYNAME, cityname);
 					map.put(TAG_EMAIL, email);
 					map.put(TAG_DESCRIPTION, description);
-					
 					map.put(TAG_SPOTTYPE, spottype);
 					map.put(TAG_LIKES, likes);
 					map.put(TAG_DISLIKES, dislikes);
-					
 					map.put(TAG_LATITUDE, latitude);
 					map.put(TAG_LONGITUDE, longitude);
 					// adding HashList to ArrayList
@@ -198,8 +249,11 @@ public class NewsActivity extends ListActivity {
 			} catch (RuntimeException e){
 				loadNews = false;
 				Log.d(TAG,"RuntimeException");
+			} catch (Exception e){
+				loadNews = false;
+				Log.d(TAG,"Exception");
 			}
-
+			
 			return null;
 		}
 
@@ -209,6 +263,7 @@ public class NewsActivity extends ListActivity {
 		protected void onPostExecute(String file_url) {
 			// dismiss the dialog after getting all products
 			pDialog.dismiss();
+			setProgressBarIndeterminateVisibility(false);
 			// updating UI from Background Thread
 			if(loadNews){
 				runOnUiThread(new Runnable() {
@@ -227,7 +282,6 @@ public class NewsActivity extends ListActivity {
 											R.id.spotImage, R.id.spotCity, R.id.spotUser, R.id.spotDescription });
 						*/
 						
-						Log.d("DisplayImage","ACA");
 						adapter = new NewsViewAdapter(NewsActivity.this, outboxList);
 						// updating listview
 						setListAdapter(adapter);

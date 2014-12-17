@@ -1,0 +1,57 @@
+<menu 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:yourapp="http://schemas.android.com/apk/res-auto" >
+
+    
+    <item 
+        android:id="@+id/action_uploadedspots"
+        android:icon="@drawable/ic_myspots"
+        android:title="@string/myspots"
+        android:showAsAction="always"/>
+    
+    <item 
+        android:id="@+id/action_refresh"
+        android:icon="@drawable/ic_popup_sync_2"
+        android:title="@string/refresh"
+        android:showAsAction="always"/>
+        
+    <item 
+		android:id="@+id/action_options"
+		android:title="Options"
+        android:icon="@drawable/ic_menu_moreoverflow"
+        android:showAsAction="ifRoom"
+        >
+            <menu>
+                <group 
+                    android:id="@+id/menu_nav_group">
+                        <item 
+                            android:id="@+id/action_settings"
+                            android:icon="@drawable/ic_menu_settings_holo_light"
+                            android:title="@string/settings"/>
+                        <!-- 
+                        <item 
+                            android:id="@+id/action_share_twitter"
+                            android:title="@string/twitter_title"/>
+                       -->
+                </group>
+            </menu>
+  	</item>   
+    
+    
+    <!--
+<item
+    android:id="@+id/action_settings"
+    android:title="@string/action_settings"
+    android:showAsAction="ifRoom"
+    android:actionViewClass="android.widget.SearchView"
+    android:hint = "@string/search_hint"
+    android:icon="@drawable/ic_search" />
+
+-->
+
+<item
+    android:id="@+id/action_logout"
+    android:title="@string/logout" />
+
+
+</menu>

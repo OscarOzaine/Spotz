@@ -8,6 +8,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import com.spotz.database.Spot;
+import com.spotz.database.SpotsHelper;
 import com.spotz.utils.Const;
 import com.spotz.utils.Utils;
 
@@ -17,21 +20,36 @@ import android.util.Log;
 
 public class UploadMediaService extends IntentService  {
 	
-	String imagePath, spotName, spotDescription, spotTypeId, userId, latitude, longitude;
+	String imagePath, spotName, spotDescription, spotTypeId, userId, latitude, longitude, spotType;
+	String dbSpotID;
 	String upLoadServerUri = "http://api.myhotspotz.net/app/uploadSpot";
 	int serverResponseCode = 0;
+	
 	public static final String NOTIFICATION = "com.spotz.MainActivity";
+	
+	public boolean internetConection = false;
+	SpotsHelper db = null;
+	
 	public UploadMediaService() {
 		super("UploadMediaService");
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-	    Log.d("UploadMediaService", "onStartCommand");
+		Utils util = new Utils(this);
+    	if(util.isOnline()){
+    		internetConection = true;
+    	}
+    	else{
+    		internetConection = false;
+    	}
+	    //Log.d("UploadMediaService", "onStartCommand");
+    	dbSpotID 		= intent.getStringExtra("dbspotid");
 	    imagePath		= intent.getStringExtra("imagepath");
 	    spotName		= intent.getStringExtra("spotname");
 	    spotDescription	= intent.getStringExtra("spotdescription");
 	    spotTypeId		= intent.getStringExtra("spottypeId");
+	    spotType		= intent.getStringExtra("spottype");
 	    userId			= intent.getStringExtra("userid");
 	    latitude		= intent.getStringExtra("latitude");
 	    longitude		= intent.getStringExtra("longitude");
@@ -43,19 +61,15 @@ public class UploadMediaService extends IntentService  {
 		// TODO Auto-generated method stub
 		// Normally we would do some work here, like download a file.
 	      // For our sample, we just sleep for 5 seconds.
-		if(uploadSpot(imagePath, spotName, spotDescription, 
-				spotTypeId, userId,latitude, longitude) == 1){
-			publishResults(1);
-		}		
-        else{
-        	publishResults(-1);
-        }
-	      
+		
+		int result = uploadSpot(imagePath, spotName, spotDescription, 
+				spotType,spotTypeId, userId,latitude, longitude);
+		publishResults(result,dbSpotID);
 	}
 
 	  
 	public int uploadSpot(String sourceFileUri, String spotname, String spotdescription, 
-						String spottype, String userid, String latitude, String longitude) {
+						String spottype,String spottypeid, String userid, String latitude, String longitude) {
 
         String fileName = sourceFileUri;
 
@@ -78,106 +92,115 @@ public class UploadMediaService extends IntentService  {
         }
         else
         {
-            try { 
+        	if(internetConection){
+        		try { 
+                    // open a URL connection to the Servlet
+                    FileInputStream fileInputStream = new FileInputStream(sourceFile);
+                    URL url = new URL(upLoadServerUri);
+                    //Log.d(Const.TAG,"URL = "+upLoadServerUri );
+                    // Open a HTTP  connection to  the URL
+                    conn = (HttpURLConnection) url.openConnection(); 
+                    conn.setDoInput(true); // Allow Inputs
+                    conn.setDoOutput(true); // Allow Outputs
+                    conn.setUseCaches(false); // Don't use a Cached Copy
+                    conn.setRequestMethod("POST");
+                    conn.setRequestProperty("Connection", "Keep-Alive");
+                    conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+                    conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+                    conn.setRequestProperty("mediafile", fileName); 
+                    conn.setRequestProperty("name", spotname);
+                    conn.setRequestProperty("description", spotdescription );
+                    conn.setRequestProperty("type", ""+spottypeid);
+                    conn.setRequestProperty("latitude", ""+latitude);
+                    conn.setRequestProperty("longitude", ""+longitude);
+                    conn.setRequestProperty("userid", ""+userid);
+                    
+                    dos = new DataOutputStream(conn.getOutputStream());
 
-                // open a URL connection to the Servlet
-                FileInputStream fileInputStream = new FileInputStream(sourceFile);
-                URL url = new URL(upLoadServerUri);
-                //Log.d(Const.TAG,"URL = "+upLoadServerUri );
-                // Open a HTTP  connection to  the URL
-                conn = (HttpURLConnection) url.openConnection(); 
-                conn.setDoInput(true); // Allow Inputs
-                conn.setDoOutput(true); // Allow Outputs
-                conn.setUseCaches(false); // Don't use a Cached Copy
-                conn.setRequestMethod("POST");
-                conn.setRequestProperty("Connection", "Keep-Alive");
-                conn.setRequestProperty("ENCTYPE", "multipart/form-data");
-                conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-                conn.setRequestProperty("mediafile", fileName); 
-                conn.setRequestProperty("name", spotname);
-                conn.setRequestProperty("description", spotdescription );
-                conn.setRequestProperty("type", ""+spottype);
-                conn.setRequestProperty("latitude", ""+latitude);
-                conn.setRequestProperty("longitude", ""+longitude);
-                conn.setRequestProperty("userid", ""+userid);
-                
-                dos = new DataOutputStream(conn.getOutputStream());
+                    dos.writeBytes(twoHyphens + boundary + lineEnd); 
+                    dos.writeBytes("Content-Disposition: form-data; name=\"mediafile\";filename="+ fileName + "" + lineEnd);
+                    dos.writeBytes(lineEnd);
 
-                dos.writeBytes(twoHyphens + boundary + lineEnd); 
-                dos.writeBytes("Content-Disposition: form-data; name=\"mediafile\";filename="+ fileName + "" + lineEnd);
-                dos.writeBytes(lineEnd);
+                    // create a buffer of  maximum size
+                    bytesAvailable = fileInputStream.available(); 
 
-                // create a buffer of  maximum size
-                bytesAvailable = fileInputStream.available(); 
-
-                bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                buffer = new byte[bufferSize];
-
-                // read file and write it into form...
-                bytesRead = fileInputStream.read(buffer, 0, bufferSize);  
-                
-                while (bytesRead > 0) {
-
-                    dos.write(buffer, 0, bufferSize);
-                    bytesAvailable = fileInputStream.available();
                     bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);   
+                    buffer = new byte[bufferSize];
 
+                    // read file and write it into form...
+                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);  
+                    
+                    while (bytesRead > 0) {
+
+                        dos.write(buffer, 0, bufferSize);
+                        bytesAvailable = fileInputStream.available();
+                        bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                        bytesRead = fileInputStream.read(buffer, 0, bufferSize);   
+
+                    }
+                    
+                    // send multipart form data necesssary after file data...
+                    dos.writeBytes(lineEnd);
+                    dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+                    // Responses from the server (code and message)
+                    serverResponseCode = conn.getResponseCode();
+                    String serverResponseMessage = conn.getResponseMessage();
+                    
+                    Log.i(Const.TAG, "HTTP Response is : "+ serverResponseMessage + ": " + serverResponseCode);
+
+                    
+                    reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    serverResponse = new StringBuilder();
+               
+                    String line = null;
+                    while ((line = reader.readLine()) != null){
+                    	serverResponse.append(line);
+                    }
+                    
+                    if(serverResponseCode == 200){
+                    	Log.d(Const.TAG,"File Upload Complete.");
+                    }
+                    
+                    //close the streams //
+                    fileInputStream.close();
+                    dos.flush();
+                    dos.close();
+                } catch (MalformedURLException ex) {
+
+                	ex.printStackTrace();
+                	Log.d(Const.TAG,"MalformedURLException");
+                    Log.e(Const.TAG, "error: " + ex.getMessage(), ex);  
+                } catch (Exception e) {
+                	e.printStackTrace();
+
+                	Log.d(Const.TAG,"Got Exception : see logcat");
+                    Log.e(Const.TAG, "Exception : "+ e.getMessage(), e); 
                 }
+                Log.d(Const.TAG, "READ "+serverResponse);
                 
-                // send multipart form data necesssary after file data...
-                dos.writeBytes(lineEnd);
-                dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-
-                // Responses from the server (code and message)
-                serverResponseCode = conn.getResponseCode();
-                String serverResponseMessage = conn.getResponseMessage();
-                
-                Log.i(Const.TAG, "HTTP Response is : "+ serverResponseMessage + ": " + serverResponseCode);
-
-                
-                reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                serverResponse = new StringBuilder();
-           
-                String line = null;
-                while ((line = reader.readLine()) != null){
-                	serverResponse.append(line);
+                if(Utils.isNumeric(serverResponse.toString())){
+                	return Integer.parseInt(serverResponse.toString());
+                }else{
+                	Log.d(Const.TAG,"Error: "+serverResponse.toString());
+                	return Integer.parseInt(serverResponse.toString()); 
                 }
-                
-                if(serverResponseCode == 200){
-                	Log.d(Const.TAG,"File Upload Complete.");
-                }
-                
-                //close the streams //
-                fileInputStream.close();
-                dos.flush();
-                dos.close();
-            } catch (MalformedURLException ex) {
-
-            	ex.printStackTrace();
-            	Log.d(Const.TAG,"MalformedURLException");
-                Log.e(Const.TAG, "error: " + ex.getMessage(), ex);  
-            } catch (Exception e) {
-            	e.printStackTrace();
-
-            	Log.d(Const.TAG,"Got Exception : see logcat");
-                Log.e(Const.TAG, "Exception : "+ e.getMessage(), e); 
-            }
-            Log.d(Const.TAG, "READ "+serverResponse);
-            
-            if(Utils.isNumeric(serverResponse.toString())){
-            	return Integer.parseInt(serverResponse.toString());
-            }else{
-            	Log.d(Const.TAG,"Error: "+serverResponse.toString());
-            	return Integer.parseInt(serverResponse.toString()); 
-            }
+        	}
+        	else{
+        		db = new SpotsHelper(this);
+        		db.addSpot(new Spot(spotname, spotdescription,spottype,spottypeid,latitude,longitude,userid,sourceFileUri));
+        		
+        		return 2;
+        	}
             
         } // End else block 
     }	
 	
-	private void publishResults(int result) {
+	private void publishResults(int result,String dbSpotId) {
 	    Intent intent = new Intent(NOTIFICATION);
 	    intent.putExtra("result", result);
+	    intent.putExtra("dbspotid", dbSpotId);
+	    Log.d("UploadMediaaaa","dbspot = " + dbSpotId);
 	    sendBroadcast(intent);
 	  }
 }

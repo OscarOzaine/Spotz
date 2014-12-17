@@ -27,14 +27,20 @@
                 android:contentDescription="SpotImage"
                 android:src="@drawable/ic_world"
                 android:visibility="gone" />
-
-            <VideoView
-                android:id="@+id/spotVideoUpload"
-                android:layout_width="fill_parent"
-                android:layout_height="240dp"
-                android:layout_marginBottom="10dp"
-                android:visibility="visible"
-                android:layout_gravity="center" />
+            
+            <FrameLayout
+		        android:id="@+id/videoSurfaceContainer"
+		        android:layout_width="fill_parent"
+		        android:layout_height="240dp"
+		        android:layout_marginLeft="15dp"
+		        android:layout_marginRight="15dp"
+		        android:layout_marginBottom="15dp" >
+		        <SurfaceView
+		            android:id="@+id/videoSurface"
+		            android:layout_width="fill_parent"
+		            android:layout_height="240dp" />
+		    </FrameLayout>
+		    
 
         </LinearLayout>
 

@@ -9,7 +9,6 @@
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content"
         >
-        
     </SurfaceView>
 
     <LinearLayout
@@ -23,7 +22,8 @@
             android:id="@+id/button_nextscreen" 
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_menu_mapmode"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_arrow_right"
             >
         </ImageButton>
         
@@ -41,6 +41,7 @@
             android:id="@+id/button_takespot" 
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
             android:src="@drawable/ic_menu_camera">
         </ImageButton>
         
@@ -59,6 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_menu_my_calendar"
+            android:background="@android:color/transparent"
             android:text="@string/change_media_camera" />
     </LinearLayout>
 
@@ -72,9 +74,10 @@
 
         <ImageButton
             android:id="@+id/changeCamera"
+            android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_popup_sync_1"
+            android:src="@drawable/ic_rotate_camera"
             android:text="@string/change_camera" />
     </LinearLayout>
 

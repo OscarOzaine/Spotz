@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,7 +45,6 @@ public class NewsViewAdapter extends BaseAdapter {
 	TextView txtcreated_at;
 	TextView txtcityname;
 	ImageView imgSpot;
-	VideoView vidSpot;
 	TextView txtemail;
 	TextView txtdescription;
 	TextView txtspottype;
@@ -74,9 +74,7 @@ public class NewsViewAdapter extends BaseAdapter {
 	}
 
 	public View getView(final int position, View convertView, ViewGroup parent) {
-
-
-
+		
 		inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -90,49 +88,34 @@ public class NewsViewAdapter extends BaseAdapter {
 		txtname = (TextView) itemView.findViewById(R.id.spotTitle);
 		txtcreated_at = (TextView) itemView.findViewById(R.id.spotCreatedat);
 		txtcityname = (TextView) itemView.findViewById(R.id.spotCity);
-		txtemail = (TextView) itemView.findViewById(R.id.spotUser);
+		//txtemail = (TextView) itemView.findViewById(R.id.spotUser);
 		txtdescription = (TextView) itemView.findViewById(R.id.spotDescription);
 		txtspottype = (TextView) itemView.findViewById(R.id.spotType);
-		txtlikes = (TextView) itemView.findViewById(R.id.spotLikes);
-		txtdislikes = (TextView) itemView.findViewById(R.id.spotDislikes);
-
+		//txtlikes = (TextView) itemView.findViewById(R.id.spotLikes);
+		//txtdislikes = (TextView) itemView.findViewById(R.id.spotDislikes);
 
 		// Locate the ImageView in listview_item.xml
 		imgSpot = (ImageView) itemView.findViewById(R.id.spotImage);
-		vidSpot = (VideoView) itemView.findViewById(R.id.spotVideo);
-
+		
 		txtid.setText(resultp.get(NewsActivity.TAG_ID));
 		txtname.setText(resultp.get(NewsActivity.TAG_NAME));
-		txtcreated_at.setText(resultp.get(NewsActivity.TAG_CREATED_AT));
+		//txtcreated_at.setText(resultp.get(NewsActivity.TAG_CREATED_AT));
 		txtcityname.setText(resultp.get(NewsActivity.TAG_CITYNAME));
-		txtemail.setText(resultp.get(NewsActivity.TAG_EMAIL));
+		//txtemail.setText(resultp.get(NewsActivity.TAG_EMAIL));
 		txtdescription.setText(resultp.get(NewsActivity.TAG_DESCRIPTION));
 		txtspottype.setText(resultp.get(NewsActivity.TAG_SPOTTYPE));
-		txtlikes.setText(resultp.get(NewsActivity.TAG_LIKES));
-		txtdislikes.setText(resultp.get(NewsActivity.TAG_DISLIKES));
+		//txtlikes.setText(resultp.get(NewsActivity.TAG_LIKES));
+		//txtdislikes.setText(resultp.get(NewsActivity.TAG_DISLIKES));
 		
 		mediaPath = resultp.get(NewsActivity.TAG_IMAGE);
 		Log.d(TAG,"MediaPath="+mediaPath);
 		if(Utils.isVideo(mediaPath)){
-				imgSpot.setVisibility(View.GONE);
-				vidSpot.setVisibility(View.VISIBLE);
-				MediaController mediaController= new MediaController(NewsActivity.instance);
-			    mediaController.setAnchorView(vidSpot);
-			    vidSpot.setVisibility(View.VISIBLE);
-			    vidSpot.setFocusable(true);
-			    vidSpot.setFocusableInTouchMode(true);
-			    vidSpot.requestFocus();
-			    Uri uri=Uri.parse(mediaPath);
-			    vidSpot.setMediaController(mediaController);
-			    vidSpot.setVideoURI(uri);  
+			imgSpot.setImageResource(R.drawable.ic_play_video);
 		}
 		else{
 			imgSpot.setVisibility(View.VISIBLE);
-			vidSpot.setVisibility(View.GONE);
 			imageLoader.DisplayImage(mediaPath, imgSpot);
-			//Log.d("DisplayImage","mediaPath = "+mediaPath);
 		}
-		
 		
 		//////////////////
 		/*

@@ -1,5 +1,6 @@
 package com.spotz;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -11,6 +12,7 @@ import org.json.JSONObject;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
 import com.spotz.camera.ImageLoader;
+import com.spotz.camera.VideoControllerView;
 import com.spotz.gen.R;
 import com.spotz.utils.JSONParser;
 import com.spotz.utils.Utils;
@@ -23,25 +25,31 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
+import android.view.View.OnTouchListener;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-public class SpotActivity extends Activity {
-	// All xml labels
+public class SpotActivity extends Activity implements MediaPlayer.OnPreparedListener {
+	
 	TextView txtName, txtLikes, txtDislikes, txtType, txtCity;
 	TextView txtDescription, txtCreatedat, txtEmail;
 	ImageView imgSpot;
-	VideoView vidSpot;
 	String TAG = "SpotActivity";
 	// Progress Dialog
 	private ProgressDialog pDialog;
@@ -74,6 +82,12 @@ public class SpotActivity extends Activity {
 	
 	private UiLifecycleHelper uiHelper;
 	
+	FrameLayout frameLayoutVideo = null;
+    SurfaceView videoSurface = null;
+    MediaPlayer mediaPlayer = null;
+    VideoControllerView controller = null;
+    SurfaceHolder videoHolder = null;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -94,8 +108,8 @@ public class SpotActivity extends Activity {
 		//txtCreatedat	= (TextView) findViewById(R.id.spot_created_at);
 		txtEmail		= (TextView) findViewById(R.id.spot_email);
 	    imgSpot			= (ImageView) findViewById(R.id.spot_image);
-	    vidSpot 		= (VideoView) findViewById(R.id.spot_video);
-	    
+	    frameLayoutVideo= (FrameLayout) findViewById(R.id.spotvideoSurfaceContainer);
+		
 		Intent intent = getIntent();
 		
 		spotId			= intent.getStringExtra("id");
@@ -111,42 +125,58 @@ public class SpotActivity extends Activity {
 		longitude 		= intent.getStringExtra("longitude");
 		latitude 		= intent.getStringExtra("latitude");
 		
+		
+		videoSurface	= (SurfaceView) findViewById(R.id.spotvideoSurface);
+        videoHolder		= videoSurface.getHolder();
+        
+        videoHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        videoHolder.addCallback(surfaceCallback);
+        videoSurface.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+        		controller.show(); 
+        		return true; 
+            }
+        });
+		
 		//Log.d(TAG,"imagepath = "+mediaPath);
 		if(Utils.isVideo(mediaPath)){
 			imgSpot.setVisibility(View.GONE);
-			vidSpot.setVisibility(View.VISIBLE);
+			frameLayoutVideo.setVisibility(View.VISIBLE);
 			
-			mediaController = new MediaController(this);
-		    mediaController.setAnchorView(vidSpot);
-		    vidSpot.setVisibility(View.VISIBLE);
-		    vidSpot.setFocusable(true);
-		    vidSpot.setFocusableInTouchMode(true);
-		    
-            Log.d(TAG,"Spotssss = "+mediaPath);
-		    Uri uri=Uri.parse(mediaPath);        
-		    vidSpot.setMediaController(mediaController);
-		    vidSpot.setVideoURI(uri);        
-		    vidSpot.requestFocus();
-		    vidSpot.start();
-		    
+			try {
+	        	mediaPlayer = new MediaPlayer(); 
+	    		controller = new VideoControllerView(this);
+	        	mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+	        	mediaPlayer.setDataSource(SpotActivity.this, Uri.parse(mediaPath));
+	        	mediaPlayer.setOnPreparedListener(this);
+	        	mediaPlayer.prepareAsync();
+	        	Log.d(TAG,"Mediaplayer="+mediaPath);
+	        } catch (IllegalArgumentException e) {
+	            e.printStackTrace();
+	        } catch (SecurityException e) {
+	            e.printStackTrace();
+	        } catch (IllegalStateException e) {
+	            e.printStackTrace();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+			
 		}else{
-			vidSpot.setVisibility(View.GONE);
 			imgSpot.setVisibility(View.VISIBLE);
+			frameLayoutVideo.setVisibility(View.GONE);
+			
 			ImageLoader imageLoader = new ImageLoader(getBaseContext());
 	        // Capture position and set results to the ImageView
 	        // Passes flag images URL into ImageLoader.class
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inSampleSize=8;      // 1/8 of original image
 			Bitmap bitmap = imageLoader.DisplayImage(mediaPath, imgSpot);
-			
 			float scalingFactor = getBitmapScalingFactor(bitmap);
 	        Bitmap newBitmap = Utils.ScaleBitmap(bitmap, scalingFactor);
 	        imgSpot.setImageBitmap(newBitmap);
 		}
 		
-		
-		
-        
 		txtName.setText(spotName);
 		txtLikes.setText(spotLikes);
 		txtDislikes.setText(spotDislikes);
@@ -156,13 +186,10 @@ public class SpotActivity extends Activity {
 		//txtCreatedat.setText("");
 		txtEmail.setText(spotEmail);
 		
-		
 		//PROFILE_URL = PROFILE_URL + "/"+spotId;
 		//Log.d(TAG,spotId);
-		
         // Loading Profile in Background Thread
         //new LoadSpot().execute();
-		
 		uiHelper = new UiLifecycleHelper(this, null);
 	    uiHelper.onCreate(savedInstanceState);
 	}
@@ -261,7 +288,9 @@ public class SpotActivity extends Activity {
         return true;
         default:
         	Log.d(TAG,"Default = "+item.getItemId());
+        	
         	onBackPressed();
+        	
         	return super.onOptionsItemSelected(item);
          
         }
@@ -345,4 +374,117 @@ public class SpotActivity extends Activity {
 		}
 
 	}
+	
+	
+	SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
+		public void surfaceCreated(SurfaceHolder holder) {
+			// TODO Auto-generated method stub
+		}
+
+		public void surfaceChanged(SurfaceHolder holder,
+				int format, int width,
+				int height) {
+			Log.d(TAG,"surfaceChanged");
+		}
+
+		public void surfaceDestroyed(SurfaceHolder holder) {
+			// no-op
+		}
+	};
+    
+	VideoControllerView.MediaPlayerControl mediaPlayerControl = new VideoControllerView.MediaPlayerControl(){
+		
+		
+		
+		@Override
+		public void start() {
+			// TODO Auto-generated method stub
+			mediaPlayer.start();
+		}
+
+
+		@Override
+		public void pause() {
+			// TODO Auto-generated method stub
+			mediaPlayer.pause();
+		}
+
+
+		@Override
+		public int getDuration() {
+			// TODO Auto-generated method stub
+			return mediaPlayer.getDuration();
+		}
+
+
+		@Override
+		public int getCurrentPosition() {
+			// TODO Auto-generated method stub
+			return mediaPlayer.getCurrentPosition();
+		}
+
+
+		@Override
+		public void seekTo(int pos) {
+			// TODO Auto-generated method stub
+			mediaPlayer.seekTo(pos);
+		}
+
+
+		@Override
+		public boolean isPlaying() {
+			// TODO Auto-generated method stub
+			return mediaPlayer.isPlaying();
+		}
+
+
+		@Override
+		public int getBufferPercentage() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+
+		@Override
+		public boolean canPause() {
+			// TODO Auto-generated method stub
+			return true;
+		}
+
+
+		@Override
+		public boolean canSeekBackward() {
+			// TODO Auto-generated method stub
+			return true;
+		}
+
+
+		@Override
+		public boolean canSeekForward() {
+			// TODO Auto-generated method stub
+			return true;
+		}
+
+
+		@Override
+		public boolean isFullScreen() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+
+		@Override
+		public void toggleFullScreen() {
+			// TODO Auto-generated method stub
+		}
+	};
+	
+	@Override
+	public void onPrepared(MediaPlayer mp) {
+		mediaPlayer.setDisplay(videoSurface.getHolder());
+    	controller.setMediaPlayer(mediaPlayerControl);
+        controller.setAnchorView((FrameLayout) findViewById(R.id.spotvideoSurfaceContainer));
+        mediaPlayer.start();
+	}
+	
 }

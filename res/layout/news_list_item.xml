@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:layout_marginBottom="5dp"
-    
+    android:background="@drawable/list_selector_flatcolor"
+    android:longClickable="true"
     >
 
     <!-- Artist Name -->
@@ -15,13 +16,13 @@
             android:visibility="gone"/>
 
     <!-- Rightend Duration -->
-
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/LinearLayout04"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true" >
+        android:layout_alignParentRight="true" 
+        android:orientation="horizontal">
         <TextView
             android:id="@+id/spotTitle"
             android:layout_width="match_parent"
@@ -31,7 +32,15 @@
             android:textSize="15sp"
             android:textStyle="bold"
             android:typeface="sans" />
-    </LinearLayout>
+        <ImageButton
+            android:id="@+id/spot_newssettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:contentDescription="image"
+            android:src="@drawable/ic_find_next_holo_light"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/thumbnail"
@@ -48,20 +57,6 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:contentDescription="image" />
-        
-        <VideoView
-            android:id="@+id/spotVideo"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true"
-            android:paddingLeft="2dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-             />
 
     </LinearLayout>
 
@@ -108,23 +103,6 @@
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/TextView05"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Date:" />
-
-                <TextView
-                    android:id="@+id/spotCreatedat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="1dip"
-                    android:scrollHorizontally="false"
-                    android:text="date"
-                    android:textColor="#343434"
-                    android:textSize="12sp" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -134,24 +112,6 @@
                 android:layout_weight="0.50"
                 android:gravity="right"
                 android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/TextView06"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:text="By:" />
-
-                <TextView
-                    android:id="@+id/spotUser"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="1dip"
-                    android:scrollHorizontally="false"
-                    android:text="Usuario"
-                    android:textColor="#343434"
-                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/TextView08"
@@ -172,58 +132,6 @@
                     android:textSize="12sp" />
 
             </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/spotLayoutType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:visibility="gone" >
-
-            <LinearLayout
-                android:id="@+id/LinearLayout03"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.50"
-                android:gravity="left"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:id="@+id/textView1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Likes:" />
-
-                <TextView
-                    android:id="@+id/spotLikes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TextView" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/spotLayoutCity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.50"
-                android:gravity="right"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Dislikes:" />
-
-                <TextView
-                    android:id="@+id/spotDislikes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TextView" />
-            </LinearLayout>
-
         </LinearLayout>
 
     </LinearLayout>

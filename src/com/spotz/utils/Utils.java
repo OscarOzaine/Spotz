@@ -14,11 +14,18 @@ import org.json.JSONObject;
 import com.spotz.CameraActivity;
 import com.spotz.gen.R;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.media.ExifInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.v4.content.CursorLoader;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
@@ -26,6 +33,11 @@ import android.widget.LinearLayout;
 public class Utils {
 	
 	public static String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+	static Context mContext;
+	
+	public Utils(Context mContext){
+		this.mContext = mContext;
+	}
 	
     public static void CopyStream(InputStream is, OutputStream os){
         final int buffer_size=1024;
@@ -118,6 +130,13 @@ public class Utils {
         }
         // only got here if we didn't return false
         return true;
+    }
+    
+    public static boolean isOnline() {
+    	ConnectivityManager cm =
+            (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
     
 }

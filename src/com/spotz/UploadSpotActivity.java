@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -14,49 +16,49 @@ import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationRequest;
+import com.spotz.camera.ImageLoader;
+import com.spotz.camera.VideoControllerView;
 import com.spotz.gen.R;
 import com.spotz.location.LocationUtils;
 import com.spotz.services.UploadMediaService;
 import com.spotz.users.User;
 import com.spotz.utils.Utils;
-import com.spotz.utils.imaging.ImageMetadataReader;
-import com.spotz.utils.imaging.ImageProcessingException;
-import com.spotz.utils.metadata.Directory;
-import com.spotz.utils.metadata.Metadata;
-import com.spotz.utils.metadata.Tag;
-import com.spotz.utils.metadata.exif.ExifSubIFDDirectory;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
+import android.hardware.Camera.Parameters;
 import android.location.Location;
 import android.location.LocationListener;
-import android.media.ExifInterface;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.Surface;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.AbsoluteLayout;
+import android.view.View.OnTouchListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
@@ -69,22 +71,21 @@ public class UploadSpotActivity extends Activity implements
 			LocationListener,
 			GooglePlayServicesClient.ConnectionCallbacks,
 			GooglePlayServicesClient.OnConnectionFailedListener, 
-			com.google.android.gms.location.LocationListener {
+			com.google.android.gms.location.LocationListener,
+			MediaPlayer.OnPreparedListener{
 
 	// A request to connect to Location Services
 	private LocationRequest mLocationRequest;
-	
 	// Stores the current instantiation of the location client in this object
 	private LocationClient mLocationClient;
-
 	
 	// All xml labels
 	TextView txtName, txtType, txtDescription;
 	EditText editSpotName, editSpotDescription;
 	Spinner SpinnerSpotType, spinnerSpotType;
 	ImageView spotImage;
-	VideoView spotVideo;
 	String currentLat = "", currentLng = "";
+	ImageButton btn1,btn2;
 	
 	static String TAG = "UploadSpotActivity";
 	// Progress Dialog
@@ -107,6 +108,14 @@ public class UploadSpotActivity extends Activity implements
     DisplayMetrics dm;
     Bitmap bitmap;
     
+    FrameLayout frameLayoutVideo = null;
+    SurfaceView videoSurface = null;
+    MediaPlayer mediaPlayer = null;
+    VideoControllerView controller = null;
+    SurfaceHolder videoHolder = null;
+    
+    int position;
+    
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -119,146 +128,67 @@ public class UploadSpotActivity extends Activity implements
         actionBar.setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
 		
 		//findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-		spotImage = (ImageView) findViewById(R.id.spotImageUpload);
-		spotVideo = (VideoView) findViewById(R.id.spotVideoUpload);
-		editSpotName = (EditText) findViewById(R.id.editSpotName);
+		spotImage 			= (ImageView) findViewById(R.id.spotImageUpload);
+		
+		editSpotName 		= (EditText) findViewById(R.id.editSpotName);
 		editSpotDescription = (EditText) findViewById(R.id.editSpotDescription);
-		SpinnerSpotType = (Spinner) findViewById(R.id.spinner_spottypes);
+		SpinnerSpotType 	= (Spinner) findViewById(R.id.spinner_spottypes);
+		frameLayoutVideo	= (FrameLayout) findViewById(R.id.videoSurfaceContainer);
 		
 		Intent intent = getIntent();
 		
 		mediaPath = intent.getStringExtra("SpotMedia");
-		Log.d(TAG,"imagepath = "+mediaPath);
+		videoSurface	= (SurfaceView) findViewById(R.id.videoSurface);
+        videoHolder		= videoSurface.getHolder();
+        
+        videoHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        videoHolder.addCallback(surfaceCallback);
+        videoSurface.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+        		controller.show(); 
+        		return true; 
+            }
+        });
+        
+        Log.d(TAG,"imagepath = "+mediaPath);
 		if(Utils.isVideo(mediaPath)){
 			spotImage.setVisibility(View.GONE);
-			
-			spotVideo.setVisibility(View.VISIBLE);
-			MediaController mediaController= new MediaController(this);
-		    mediaController.setAnchorView(spotVideo);
-		    /*	    
-		    DisplayMetrics displaymetrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-            int videoheight = displaymetrics.heightPixels;
-            int videowidth = displaymetrics.widthPixels;
-            int left = spotVideo.getLeft();
-            int top = spotVideo.getTop();
-            int right = left + (videowidth);
-            int bottom = top + (videoheight);
-            
-		    AbsoluteLayout.LayoutParams params = (AbsoluteLayout.LayoutParams) spotVideo.getLayoutParams();
-		    params.width = videowidth;
-		    params.height = videoheight;
-		    params.x = left;
-		    params.y = top;
-		    spotVideo.requestLayout();
-		     */
-		    
-		    spotVideo.setVisibility(View.VISIBLE);
-		    spotVideo.setFocusable(true);
-		    spotVideo.setFocusableInTouchMode(true);
-		    spotVideo.requestFocus();
-
-		   /*
-		    DisplayMetrics displaymetrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-            int videoheight = displaymetrics.heightPixels;
-            int videowidth = displaymetrics.widthPixels;
-            int left = spotVideo.getLeft();
-            int top = spotVideo.getTop();
-            int right = left + (videowidth);
-            int bottom = top + (videoheight);
-            
-            spotVideo.layout(left, top, right, bottom);
-            */
-            
-		    Uri uri=Uri.parse(mediaPath);        
-		    spotVideo.setMediaController(mediaController);
-		    spotVideo.setVideoURI(uri);        
-		    spotVideo.requestFocus();
-		    spotVideo.start();
+			frameLayoutVideo.setVisibility(View.VISIBLE);
+	        try {
+	        	mediaPlayer = new MediaPlayer(); 
+	    		controller = new VideoControllerView(this);
+	        	mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+	        	mediaPlayer.setDataSource(UploadSpotActivity.this, Uri.parse(mediaPath));
+	        	mediaPlayer.setOnPreparedListener(this);
+	        	mediaPlayer.prepareAsync();
+	        	Log.d(TAG,"Mediaplayer="+mediaPath);
+	        } catch (IllegalArgumentException e) {
+	            e.printStackTrace();
+	        } catch (SecurityException e) {
+	            e.printStackTrace();
+	        } catch (IllegalStateException e) {
+	            e.printStackTrace();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
 		}
 		else{
-			spotVideo.setVisibility(View.GONE);
 			spotImage.setVisibility(View.VISIBLE);
+			frameLayoutVideo.setVisibility(View.GONE);
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inSampleSize=8;      // 1/8 of original image
 			bitmap = BitmapFactory.decodeFile(mediaPath,options);
 			
-			
-			
-			
-			
-			
-			String orientation = "";
-			//int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-			Bitmap bMapRotate 	= null;
-			float scalingFactor = 0;
-			Bitmap newBitmap 	= null;
-			Matrix mat 			= null;
-			
-			Log.d(TAG,mediaPath + " -- "+orientation);
-			
+			InputStream imageStream = null;
 			try {
-				File jpegFile = new File(mediaPath);
-				Metadata metadata = ImageMetadataReader.readMetadata(jpegFile);
-
-				for (Directory directory : metadata.getDirectories()) {
-				    for (Tag tag : directory.getTags()) {
-				    
-				    	if(tag.getTagName().equals("Orientation")){
-				    		orientation = Utils.getMetadataParenthesis(tag.getDescription());
-				    		Log.d(TAG,"O111riACA= "+orientation);
-				    	}
-				    }
-				}
-			} catch (ImageProcessingException e) {
+				imageStream = new FileInputStream(mediaPath);
+			} catch (FileNotFoundException e1) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				e1.printStackTrace();
 			}
-			Log.d(TAG,"OriACA= "+orientation);
-			switch(Integer.parseInt(orientation)) {
-			    case 90:
-			    	mat = new Matrix();
-			        mat.postRotate(90);
-			        bMapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
-			        // Get scaling factor to fit the max possible width of the ImageView
-			        scalingFactor = getBitmapScalingFactor(bMapRotate);
-			        // Create a new bitmap with the scaling factor
-			        newBitmap = Utils.ScaleBitmap(bMapRotate, scalingFactor);
-			        spotImage.setImageBitmap(newBitmap);
-			        Log.d(TAG,"90");
-		        break;
-			    case 180:
-			    	mat = new Matrix();
-			        mat.postRotate(180);
-			        bMapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
-			        // Get scaling factor to fit the max possible width of the ImageView
-			        scalingFactor = getBitmapScalingFactor(bMapRotate);
-			        // Create a new bitmap with the scaling factor
-			        newBitmap = Utils.ScaleBitmap(bMapRotate, scalingFactor);
-			        spotImage.setImageBitmap(newBitmap);
-			        Log.d(TAG,"180");
-			        break;
-			    case 270:
-			    	mat = new Matrix();
-			        mat.postRotate(270);
-			        bMapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
-			        // Get scaling factor to fit the max possible width of the ImageView
-			        scalingFactor = getBitmapScalingFactor(bMapRotate);
-			        // Create a new bitmap with the scaling factor
-			        newBitmap = Utils.ScaleBitmap(bMapRotate, scalingFactor);
-			        spotImage.setImageBitmap(newBitmap);
-			        Log.d(TAG,"270");
-			        break;// etc.
-			    default:
-			    	spotImage.setImageBitmap(bitmap);
-			    	Log.d(TAG,"0");
-			    	break;
-			}
+			bitmap = ImageLoader.rotateBitmap(imageStream, mediaPath, bitmap);
+			spotImage.setImageBitmap(bitmap);
 			
 		}
 		
@@ -280,6 +210,7 @@ public class UploadSpotActivity extends Activity implements
         mPrefs = getSharedPreferences(LocationUtils.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         mEditor = mPrefs.edit();
         mLocationClient = new LocationClient(this, this, this);
+        
 	}
 	
 	
@@ -289,14 +220,15 @@ public class UploadSpotActivity extends Activity implements
      */
     @Override
     public void onStop() {
-        // If the client is connected
+    	super.onStop();
+    	// If the client is connected
         if (mLocationClient.isConnected()) {
             stopPeriodicUpdates();
         }
         // After disconnect() is called, the client is considered "dead".
         mLocationClient.disconnect();
         //bitmap.recycle();
-        super.onStop();
+        
     }
 	
     /*
@@ -305,10 +237,17 @@ public class UploadSpotActivity extends Activity implements
      */
     @Override
     public void onPause() {
-        // Save the current setting for updates
+    	super.onPause();
+    	// Save the current setting for updates
         mEditor.putBoolean(LocationUtils.KEY_UPDATES_REQUESTED, mUpdatesRequested);
         mEditor.commit();
-        super.onPause();
+        if(frameLayoutVideo.isShown()){
+	        if (mediaPlayer.isPlaying()) {  
+	            //  
+	            position=mediaPlayer.getCurrentPosition();  
+	            mediaPlayer.stop();  
+	        }
+    	}
     }
 	
     /*
@@ -344,6 +283,7 @@ public class UploadSpotActivity extends Activity implements
 
     }
     
+  
     private float getBitmapScalingFactor(Bitmap bm) {
         // Get display width from device
         int displayWidth = getWindowManager().getDefaultDisplay().getWidth();
@@ -461,7 +401,7 @@ public class UploadSpotActivity extends Activity implements
         if (servicesConnected()) {
 
             // Get the current location
-            Location currentLocation = mLocationClient.getLastLocation();
+            //Location currentLocation = mLocationClient.getLastLocation();
 
             // Display the current location in the UI
             //Log.d(TAG,"Location = "+LocationUtils.getLatLng(this, currentLocation));
@@ -530,16 +470,15 @@ public class UploadSpotActivity extends Activity implements
             	//Enviar imagen al servidor y registrar en la DB
 	        	final String spotName = editSpotName.getText().toString();
 	        	final String spotDescription = editSpotDescription.getText().toString();
+	        	final String spotType = SpinnerSpotType.getSelectedItem().toString();
 	        	final long spotTypeId = SpinnerSpotType.getSelectedItemId();
-	    		
-	        	if(spotName != "" && spotDescription != "" && spotTypeId != 0){
-	        		Log.d(TAG, "Uploaddd");
-	        		
+	        	if(spotName != "" && spotDescription != "" && spotType != ""){
 	        		Intent intentUploadService = new Intent(UploadSpotActivity.this, UploadMediaService.class);
 	        		intentUploadService.putExtra("imagepath", mediaPath);
 	        		intentUploadService.putExtra("spotname", spotName);
 	        		intentUploadService.putExtra("spotdescription", spotDescription);
 	        		intentUploadService.putExtra("spottypeId", ""+spotTypeId);
+	        		intentUploadService.putExtra("spottype", spotType);
 	        		intentUploadService.putExtra("userid", ""+User.current().getID());
 	        		intentUploadService.putExtra("latitude", currentLat);
 	        		intentUploadService.putExtra("longitude", currentLng);
@@ -550,13 +489,11 @@ public class UploadSpotActivity extends Activity implements
 					startActivity(intent);   
 					overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
 					finish();
-					
 	        	}
 	        	else{
 	        		Toast.makeText(UploadSpotActivity.this, "Debes llenar todos los campos", 
                             Toast.LENGTH_SHORT).show();
 	        	}
-            	
 	            return true;
 	        default:
 	        	onBackPressed();
@@ -873,6 +810,116 @@ public class UploadSpotActivity extends Activity implements
             return mDialog;
         }
     }
-	
     
+    SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
+		public void surfaceCreated(SurfaceHolder holder) {
+			// TODO Auto-generated method stub
+		}
+
+		public void surfaceChanged(SurfaceHolder holder,
+				int format, int width,
+				int height) {
+			Log.d(TAG,"surfaceChanged");
+		}
+
+		public void surfaceDestroyed(SurfaceHolder holder) {
+			// no-op
+		}
+	};
+    
+	VideoControllerView.MediaPlayerControl mediaPlayerControl = new VideoControllerView.MediaPlayerControl(){
+		
+		
+		
+		@Override
+		public void start() {
+			// TODO Auto-generated method stub
+			mediaPlayer.start();
+		}
+
+
+		@Override
+		public void pause() {
+			// TODO Auto-generated method stub
+			mediaPlayer.pause();
+		}
+
+
+		@Override
+		public int getDuration() {
+			// TODO Auto-generated method stub
+			return mediaPlayer.getDuration();
+		}
+
+
+		@Override
+		public int getCurrentPosition() {
+			// TODO Auto-generated method stub
+			return mediaPlayer.getCurrentPosition();
+		}
+
+
+		@Override
+		public void seekTo(int pos) {
+			// TODO Auto-generated method stub
+			mediaPlayer.seekTo(pos);
+		}
+
+
+		@Override
+		public boolean isPlaying() {
+			// TODO Auto-generated method stub
+			return mediaPlayer.isPlaying();
+		}
+
+
+		@Override
+		public int getBufferPercentage() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+
+		@Override
+		public boolean canPause() {
+			// TODO Auto-generated method stub
+			return true;
+		}
+
+
+		@Override
+		public boolean canSeekBackward() {
+			// TODO Auto-generated method stub
+			return true;
+		}
+
+
+		@Override
+		public boolean canSeekForward() {
+			// TODO Auto-generated method stub
+			return true;
+		}
+
+
+		@Override
+		public boolean isFullScreen() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+
+		@Override
+		public void toggleFullScreen() {
+			// TODO Auto-generated method stub
+		}
+	};
+	
+	@Override
+	public void onPrepared(MediaPlayer mp) {
+		mediaPlayer.setDisplay(videoSurface.getHolder());
+    	controller.setMediaPlayer(mediaPlayerControl);
+        controller.setAnchorView((FrameLayout) findViewById(R.id.videoSurfaceContainer));
+        mediaPlayer.start();
+	}
+
 }

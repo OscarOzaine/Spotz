@@ -67,13 +67,14 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 		  };
 	
 	String fileName = "";
+	int rotation = 0;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG,"onCreate");
         
-        Log.d(TAG,"Video = "+getIntent().getIntExtra("orientation", Camera.CameraInfo.CAMERA_FACING_BACK));
+        //Log.d(TAG,"Video = "+getIntent().getIntExtra("orientation", Camera.CameraInfo.CAMERA_FACING_BACK));
         currentCameraId = getIntent().getIntExtra("orientation", Camera.CameraInfo.CAMERA_FACING_BACK);
         
         recording = false;
@@ -92,7 +93,8 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
         buttonNextScreen 	= (ImageButton) findViewById(R.id.button_nextscreen);
 		buttonChangeMedia	= (ImageButton) findViewById(R.id.changeMedia);
 		
-		buttonTakeSpot.setImageResource(R.drawable.ic_notrecording);
+		buttonChangeMedia.setImageResource(R.drawable.ic_camera_picture);
+		buttonTakeSpot.setImageResource(R.drawable.ic_video_record);
 		
 		buttonNextScreen.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -102,36 +104,6 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 			}
 		});
 		
-        buttonTakeSpot.setOnClickListener(new View.OnClickListener() {
-			@SuppressWarnings("deprecation")
-			public void onClick(View v) {
-				if(recording){
-					mediaRecorder.stop();
-					mediaRecorder.release();
-					//Thread stopThread = new Thread (new stopRecording (mediaRecorder));
-					//stopThread.start();
-					recording = false;
-					camera.stopPreview();
-					camera.unlock();
-					Intent uploadSpotIntent = new Intent(VideoActivity.this, UploadSpotActivity.class);
-					uploadSpotIntent.putExtra("SpotMedia",fileName);
-					startActivity(uploadSpotIntent);
-					overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_left );
-					//finish();
-				}else{
-					if(mediaRecorder == null){
-						mediaRecorder = new MediaRecorder();
-				        initMediaRecorder();
-					}
-					// The following two lines should precede setAudioSource line
-					startMediaRecorder();
-					recording = true;
-					buttonTakeSpot.setImageResource(R.drawable.ic_recording);
-					
-				}
-			}
-		});
-        
         buttonChangeCamera.setOnClickListener(new View.OnClickListener() {
 			@SuppressWarnings("deprecation")
 			public void onClick(View v) {
@@ -150,6 +122,40 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 				finish();
 			}
 		});
+        
+        
+        buttonTakeSpot.setOnClickListener(new View.OnClickListener() {
+			@SuppressWarnings("deprecation")
+			public void onClick(View v) {
+				if(recording){
+					recording = false;
+					mediaRecorder.stop();
+					mediaRecorder.release();
+					//Thread stopThread = new Thread (new stopRecording (mediaRecorder));
+					//stopThread.start();
+					
+					camera.stopPreview();
+					camera.unlock();
+					buttonTakeSpot.setImageResource(R.drawable.ic_video_record);
+					
+					Intent uploadSpotIntent = new Intent(VideoActivity.this, UploadSpotActivity.class);
+					uploadSpotIntent.putExtra("SpotMedia",fileName);
+					startActivity(uploadSpotIntent);
+					overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_left );
+					//finish();
+				}else{
+					if(mediaRecorder == null){
+						mediaRecorder = new MediaRecorder();
+				        initMediaRecorder();
+					}
+					// The following two lines should precede setAudioSource line
+					startMediaRecorder();
+					recording = true;
+					buttonTakeSpot.setImageResource(R.drawable.ic_video_recording);
+					
+				}
+			}
+		});
     }
     
 	private void initMediaRecorder(){
@@ -157,6 +163,7 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 		camera.unlock();
 		mediaRecorder.reset();
         mediaRecorder = new MediaRecorder();
+        
         mediaRecorder.setCamera(camera);
 		mediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
 		mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -181,8 +188,8 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
         
         mediaRecorder.setMaxDuration(60000); // Set max duration 60 sec.
         mediaRecorder.setMaxFileSize(50000000); // Set max file size 50M
-        mediaRecorder.setPreviewDisplay(surfaceHolder.getSurface()); 
-        mediaRecorder.setOrientationHint(270);
+        mediaRecorder.setPreviewDisplay(surfaceHolder.getSurface());
+        mediaRecorder.setOrientationHint(90);
 	}
 	
 	/*
@@ -247,27 +254,45 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 	        }
 			Parameters parameters = camera.getParameters();
 	        Display display = getWindowManager().getDefaultDisplay();
+	        rotation = 0;
 			if(currentCameraId == 1){
-		        if(display.getRotation() == Surface.ROTATION_0){                     
-		            //camera.setDisplayOrientation(90);
+		        if(display.getRotation() == Surface.ROTATION_0){ 
+		        	rotation = 90;
+		            //Log.d(TAG,"ROTATION 0");
 		        }
+		        /*
+		        if(display.getRotation() == Surface.ROTATION_90){
+		        	Log.d(TAG,"ROTATION 90");
+		        }
+		        if(display.getRotation() == Surface.ROTATION_180){
+		        	Log.d(TAG,"ROTATION 180");
+		        }
+		        */
 		        if(display.getRotation() == Surface.ROTATION_270){
-		            //camera.setDisplayOrientation(180);
+		        	//rotation = 180;
+		            //Log.d(TAG,"ROTATION 270");
 		        }
 			}else{
-		        if(display.getRotation() == Surface.ROTATION_0){
-		            parameters.setPreviewSize(height, width);                           
-		            //camera.setDisplayOrientation(90);
+		        if(display.getRotation() == Surface.ROTATION_0){ 
+		        	rotation = 90;
+		            //Log.d(TAG,"ROTATION 0");
 		        }
-		        if(display.getRotation() == Surface.ROTATION_90 || display.getRotation() == Surface.ROTATION_180){
-		            parameters.setPreviewSize(width, height);                           
+		        /*
+		        if(display.getRotation() == Surface.ROTATION_90 ){
+		            Log.d(TAG,"ROTATION 90");
 		        }
-
+		        if(display.getRotation() == Surface.ROTATION_180){
+		        	Log.d(TAG,"ROTATION 180");
+		        }
+		        */
 		        if(display.getRotation() == Surface.ROTATION_270){
-		            parameters.setPreviewSize(width, height);
-		            //camera.setDisplayOrientation(180);
+		        	//rotation = 180;
+		            //Log.d(TAG,"ROTATION 270");
 		        }
 			}
+			camera.setDisplayOrientation(rotation);
+			//parameters.setPreviewSize(height, width);
+			parameters.setRotation(rotation);
 			camera.setParameters(parameters);
 	        
 	        //startPreview();
@@ -293,23 +318,27 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 		}
 		
 		startPreview();
+		Log.d(TAG,"onResume "+recording);
+		
 	}
 
 	@Override
 	public void onPause() {
+		super.onPause();
 		if (inPreview) {
 			camera.stopPreview();
 		}
 		camera.release();
 		camera		= null;
 		inPreview	= false;
-		super.onPause();
+		
 	}
 
 	@Override
     public void onDestroy() {
-        super.onDestroy();
-        //stopRecording(mediaRecorder);
+		preview.destroyDrawingCache();
+        surfaceHolder.removeCallback(surfaceCallback);
+		super.onDestroy();
         Const.v(TAG, "--- ON DESTROY ---");
     }
 	
@@ -396,7 +425,7 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 	         case Surface.ROTATION_180: degrees = 180; break;
 	         case Surface.ROTATION_270: degrees = 270; break;
 	     }
-
+	     
 	     int result;
 	     if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
 	         result = (info.orientation + degrees) % 360;
@@ -477,9 +506,12 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 
 		//swap the id of the camera to be used
 		if(currentCameraId == Camera.CameraInfo.CAMERA_FACING_BACK){
+			Log.d(TAG,"Front");
+			
 		    currentCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
 		}
 		else {
+			Log.d(TAG,"Back");
 		    currentCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
 		}
 		camera = Camera.open(currentCameraId);

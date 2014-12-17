@@ -3,6 +3,8 @@
 
 	<string name="facebook_title">Facebook</string>
 	<string name="twitter_title">Twitter</string>
+	<string name="myspots">My Spotz</string>
+	<string name="loading_spots">Loading Spots ...</string>
 	
 	<string-array name="share_spinner">
 	    <item>Facebook</item>
@@ -10,7 +12,7 @@
 	 	<item>Valor 3</item>-->	
 	 </string-array>
 
-	
+	<string name="description">Description</string>
     <string name="usersettings">User Settings</string>
     <string name="spottype">Spot Type:</string>
     <string name="city">City:</string>
@@ -77,10 +79,17 @@
     <string name="connection_problem">Connection problems, verify your internet conection</string>
     <string name="logout">Logout</string>
     <string name="profile_options">Profile Options</string>
-
+	<string name="options">Options</string>
+	
     <string-array name="profile_options_array">
         <item>Change Profile Picture</item>
     </string-array>
+    
+    <string-array name="myspots_options_array">
+        <item>Retry upload</item>
+        <item>Delete spot</item>
+    </string-array>
+    
     <string-array name="spottype_array">
         <item>Spot Types</item>
         <item>Social</item>

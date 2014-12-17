@@ -2,12 +2,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:yourapp="http://schemas.android.com/apk/res-auto" >
 
+    
     <item 
         android:id="@+id/action_refresh"
         android:icon="@drawable/ic_popup_sync_2"
         android:title="@string/refresh"
         android:showAsAction="always"/>
-    
+        
     <item 
 		android:id="@+id/action_options"
 		android:title="Options"
