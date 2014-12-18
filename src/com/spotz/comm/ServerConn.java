@@ -126,6 +126,7 @@ public class ServerConn{
 			for (int i = 0; i < optionparams.length; i++) {
 				for (int j = 1; j < optionparams[i].length; j++) {
 					params.add(new BasicNameValuePair(optionparams[i][0], optionparams[i][j]));
+					//Log.d(TAG,optionparams[i][0]+" - "+optionparams[i][j]);
 				}
 			}
 			OutputStream os = conn.getOutputStream();
@@ -174,13 +175,14 @@ public class ServerConn{
 			return null;
 		
 		StringBuffer result = new StringBuffer("");
-		Log.d(TAG,""+result.toString());
+		
 		Scanner reader;	
 		//get the response and append it 
 		reader = new Scanner(conn.getInputStream());
 		while (reader.hasNextLine()) {
 			result.append(reader.nextLine());
 		}
+		Log.d(TAG,"ACAAA="+result.toString());
 		reader.close();
 		conn.disconnect();
 		conn = null;

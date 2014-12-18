@@ -98,9 +98,14 @@ public class NewsActivity extends ListActivity {
 	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
 	        	Toast.makeText(NewsActivity.this, "No internet connection",Toast.LENGTH_LONG).show();
 	        }
+	        else if(resultCode == 3){
+	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
+	        	Toast.makeText(NewsActivity.this, "Spot deleted successfully",Toast.LENGTH_LONG).show();
+	        	//new LoadSpots().execute();
+	        }
 	        else if(resultCode < 0) {
 	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
-	        	Toast.makeText(NewsActivity.this, "Failed to upload spot", Toast.LENGTH_LONG).show();
+	        	Toast.makeText(NewsActivity.this, "Failed, try again later", Toast.LENGTH_LONG).show();
 	        }
 	      }
 	    }
@@ -136,7 +141,7 @@ public class NewsActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id){
     	TextView tv = (TextView) v.findViewById(R.id.spotId);
     	String spotIdHidden = tv.getText().toString();
-    	//Log.d(TAG,"SpotId = "+spotIdHidden);
+    	//Log.d(TAG,"S>>>potId = "+spotIdHidden);
     	Intent spotIntent = new Intent(this, SpotActivity.class);
     	spotIntent.putExtra("SpotID",spotIdHidden);
         startActivity(spotIntent);
@@ -268,22 +273,8 @@ public class NewsActivity extends ListActivity {
 			if(loadNews){
 				runOnUiThread(new Runnable() {
 					public void run() {
-						/**
-						 * Updating parsed JSON data into ListView
-						 * */
-					
-						/*
-						 * 
-						ListAdapter adapter = new SimpleAdapter(
-								NewsActivity.this, outboxList,
-								R.layout.outbox_list_item, new String[] { TAG_ID, TAG_NAME, TAG_CREATED_AT, 
-																		  TAG_IMAGE, TAG_CITYNAME, TAG_EMAIL, TAG_DESCRIPTION },
-								new int[] { R.id.spotId, R.id.spotTitle, R.id.spotCreatedat ,
-											R.id.spotImage, R.id.spotCity, R.id.spotUser, R.id.spotDescription });
-						*/
 						
 						adapter = new NewsViewAdapter(NewsActivity.this, outboxList);
-						// updating listview
 						setListAdapter(adapter);
 						
 					}

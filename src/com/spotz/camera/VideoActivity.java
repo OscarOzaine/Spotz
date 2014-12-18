@@ -269,7 +269,7 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 		        }
 		        */
 		        if(display.getRotation() == Surface.ROTATION_270){
-		        	//rotation = 180;
+		        	rotation = 180;
 		            //Log.d(TAG,"ROTATION 270");
 		        }
 			}else{
@@ -286,7 +286,7 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 		        }
 		        */
 		        if(display.getRotation() == Surface.ROTATION_270){
-		        	//rotation = 180;
+		        	rotation = 180;
 		            //Log.d(TAG,"ROTATION 270");
 		        }
 			}

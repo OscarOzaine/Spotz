@@ -130,6 +130,7 @@ public class MessageManager {
 					// getResponse & process it
 					
 					SRVreceived = ServerConn.getResponse(con);
+					Log.d(TAG,"SRVreceived "+ SRVreceived);
 					if(SRVreceived.equals("")){
 						JSONObject error = new JSONObject();
 						try {
@@ -189,7 +190,7 @@ public class MessageManager {
 		String query = String.format(Locale.US,"fblogin/");
 		
 		String email = null, gender = null, first_name = null, last_name = null;
-		String birthday = null, id = null, link = null, token = null;
+		String id = null, link = null, token = null;
 		JSONArray arr;
 		try {
 			arr = userInfo.getJSONArray("info");
@@ -199,7 +200,7 @@ public class MessageManager {
 				gender = arr.getJSONObject(i).getString("gender");
 				first_name = arr.getJSONObject(i).getString("first_name");
 				last_name = arr.getJSONObject(i).getString("last_name");
-				birthday = arr.getJSONObject(i).getString("birthday");
+				//birthday = arr.getJSONObject(i).getString("birthday");
 				id = arr.getJSONObject(i).getString("id");
 				link = arr.getJSONObject(i).getString("link");
 				token = accessToken;
@@ -216,7 +217,6 @@ public class MessageManager {
 		        { "gender", gender},
 		        { "first_name", first_name},
 		        { "last_name", last_name},
-		        { "birthday", birthday},
 		        { "id", id},
 		        { "link", link},
 		        { "token", token}

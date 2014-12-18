@@ -57,6 +57,15 @@ public class MySpotsViewAdapter extends BaseAdapter {
 	ArrayList<HashMap<String, String>> outboxList;
 	MySpotsViewAdapter adapter;
 	
+	final String spotIdHidden 	= "";
+ 	final String spotTitle 		= "";
+ 	final String spotImage 		= "";
+ 	final String spotDescription = "";
+ 	final String spotType 		= "";
+ 	final String spotTypeId		= "";
+ 	final String spotLatitude 	= "";
+ 	final String spotLongitude	= "";
+	
 	public MySpotsViewAdapter(Context context,
 			ArrayList<HashMap<String, String>> arraylist) {
 		this.context = context;
@@ -143,20 +152,12 @@ public class MySpotsViewAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(MySpotsActivity.instance);
-		     	final String spotIdHidden = txtid.getText().toString();
-		     	final String spotTitle = txtname.getText().toString();
-		     	final String spotImage = mediaPath;
-		     	final String spotDescription = txtDescription.getText().toString();
-		     	final String spotType = txtType.getText().toString();
-		     	final String spotTypeId= txtTypeId.getText().toString();
-		     	final String spotLatitude = txtLatitude.getText().toString();
-		     	final String spotLongitude = txtLongitude.getText().toString();
+		     	
 		        Log.d(TAG,""+spotIdHidden);
 				builder.setTitle(R.string.options)
 			           .setItems(R.array.myspots_options_array, new DialogInterface.OnClickListener() {
 			               public void onClick(DialogInterface dialog, int which) {
 			            	   if(which == 0){
-			            		   
 			            		   Intent intentUploadService = new Intent(MySpotsActivity.instance, UploadMediaService.class);
 				   	        		intentUploadService.putExtra("imagepath", spotImage);
 				   	        		intentUploadService.putExtra("spotname", spotTitle);

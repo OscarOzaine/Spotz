@@ -199,7 +199,6 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
     	Log.d(TAG,"Id = "+user.getId());
     	Log.d(TAG,"FirstName = "+user.getFirstName());
     	Log.d(TAG,"lastname = "+user.getLastName());
-    	Log.d(TAG,"birthday = "+user.getBirthday());
     	Log.d(TAG,"Link = "+user.getLink());
     	*/
     	try {

@@ -3,6 +3,7 @@ package com.spotz;
 import java.util.List;
 
 import com.facebook.Session;
+import com.spotz.NewsActivity.LoadSpots;
 import com.spotz.database.Spot;
 import com.spotz.database.SpotsHelper;
 import com.spotz.gen.R;
@@ -55,6 +56,7 @@ public class MainActivity extends TabActivity {
 	    public void onReceive(Context context, Intent intent) {
 	      Bundle bundle = intent.getExtras();
 	      if (bundle != null) {
+	    	  
 	        int resultCode = bundle.getInt("result");
 	        String dbspotId = bundle.getString("dbspotid");
 	        Log.d(TAG,"RESULTCODE = "+resultCode+ " spot "+dbspotId);
@@ -75,6 +77,11 @@ public class MainActivity extends TabActivity {
 	        else if(resultCode == 2){
 	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
 	        	Toast.makeText(MainActivity.this, "No internet connection",Toast.LENGTH_LONG).show();
+	        }
+	        else if(resultCode == 3){
+	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
+	        	Toast.makeText(MainActivity.this, "Spot deleted successfully",Toast.LENGTH_LONG).show();
+	        	findViewById(R.id.action_refresh).performClick();
 	        }
 	        else if(resultCode < 0) {
 	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);

@@ -90,6 +90,15 @@
         <item>Delete spot</item>
     </string-array>
     
+    <string-array name="news_options_array">
+        <item>View</item>
+    </string-array>
+    
+    <string-array name="mynews_options_array">
+        <item>View</item>
+        <item>Delete</item>
+    </string-array>
+    
     <string-array name="spottype_array">
         <item>Spot Types</item>
         <item>Social</item>

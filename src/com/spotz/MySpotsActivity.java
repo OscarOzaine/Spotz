@@ -78,6 +78,18 @@ public class MySpotsActivity extends ListActivity {
 
 	SpotsHelper db = null;
 	
+	TextView txtSpotId, txtSpotTitle, txtImagepath, txtSpotDescription, txtSpotType;
+	TextView txtSpotTypeId, txtSpotLatitude, txtSpotLongitude;
+	
+	String spotIdHidden = "";
+ 	String spotTitle = "";
+ 	String spotImage = "";
+ 	String spotDescription = "";
+ 	String spotType = "";
+ 	String spotTypeId= "";
+ 	String spotLatitude = "";
+ 	String spotLongitude = "";
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -92,23 +104,23 @@ public class MySpotsActivity extends ListActivity {
 		    public boolean onItemLongClick(AdapterView<?> arg0, View arg1,int row, long arg3) {
 		    	AlertDialog.Builder builder = new AlertDialog.Builder(MySpotsActivity.instance);
 				// Add the buttons
-		    	TextView txtSpotId = (TextView) arg1.findViewById(R.id.uploadedspotId);
-		    	TextView txtSpotTitle = (TextView) arg1.findViewById(R.id.uploadedspotTitle);
-		    	TextView txtImagepath = (TextView) arg1.findViewById(R.id.uploadedspotImagePath);
-		    	TextView txtSpotDescription = (TextView) arg1.findViewById(R.id.uploadedspotDescription);
-		    	TextView txtSpotType = (TextView) arg1.findViewById(R.id.uploadedspotType);
-		    	TextView txtSpotTypeId = (TextView) arg1.findViewById(R.id.uploadedSpotTypeId);
-		    	TextView txtSpotLatitude = (TextView) arg1.findViewById(R.id.uploadedspotLatitude);
-		    	TextView txtSpotLongitude = (TextView) arg1.findViewById(R.id.uploadedspotLongitude);
+		    	txtSpotId = (TextView) arg1.findViewById(R.id.uploadedspotId);
+		    	txtSpotTitle = (TextView) arg1.findViewById(R.id.uploadedspotTitle);
+		    	txtImagepath = (TextView) arg1.findViewById(R.id.uploadedspotImagePath);
+		    	txtSpotDescription = (TextView) arg1.findViewById(R.id.uploadedspotDescription);
+		    	txtSpotType = (TextView) arg1.findViewById(R.id.uploadedspotType);
+		    	txtSpotTypeId = (TextView) arg1.findViewById(R.id.uploadedSpotTypeId);
+		    	txtSpotLatitude = (TextView) arg1.findViewById(R.id.uploadedspotLatitude);
+		    	txtSpotLongitude = (TextView) arg1.findViewById(R.id.uploadedspotLongitude);
 		    	
-		    	final String spotIdHidden = txtSpotId.getText().toString();
-		     	final String spotTitle = txtSpotTitle.getText().toString();
-		     	final String spotImage = txtImagepath.getText().toString();
-		     	final String spotDescription = txtSpotDescription.getText().toString();
-		     	final String spotType = txtSpotType.getText().toString();
-		     	final String spotTypeId= txtSpotTypeId.getText().toString();
-		     	final String spotLatitude = txtSpotLatitude.getText().toString();
-		     	final String spotLongitude = txtSpotLongitude.getText().toString();
+		    	spotIdHidden = txtSpotId.getText().toString();
+		     	spotTitle = txtSpotTitle.getText().toString();
+		     	spotImage = txtImagepath.getText().toString();
+		     	spotDescription = txtSpotDescription.getText().toString();
+		     	spotType = txtSpotType.getText().toString();
+		     	spotTypeId= txtSpotTypeId.getText().toString();
+		     	spotLatitude = txtSpotLatitude.getText().toString();
+		     	spotLongitude = txtSpotLongitude.getText().toString();
 		     	
 		     	/*
 		        Log.d(TAG,""+spotIdHidden);

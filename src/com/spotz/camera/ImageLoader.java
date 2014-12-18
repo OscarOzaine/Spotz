@@ -99,8 +99,9 @@ public class ImageLoader {
             Utils.CopyStream(is, os);
             os.close();
             conn.disconnect();
-            bitmap = decodeFile(f,url);
-            Log.d("DisplayImage","getBitmap");
+	        //bitmap = BitmapFactory.decodeFile(path, options);
+	        bitmap = decodeFile(f,url);
+            //Log.d("DisplayImage","getBitmap");
             return rotateBitmap(is,url,bitmap);
         } catch (Throwable ex) {
             ex.printStackTrace();
@@ -117,6 +118,7 @@ public class ImageLoader {
             // Decode image size
             BitmapFactory.Options o = new BitmapFactory.Options();
             o.inJustDecodeBounds = true;
+            o.inSampleSize = 4;
             FileInputStream stream1 = new FileInputStream(f);
             BitmapFactory.decodeStream(stream1, null, o);
             
@@ -242,95 +244,32 @@ public class ImageLoader {
 			    case 90:
 			    	mat = new Matrix();
 			        mat.postRotate(90);
-			        bMapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
-			        // Get scaling factor to fit the max possible width of the ImageView
-			        scalingFactor = 1;
-			        // Create a new bitmap with the scaling factor
-			        newBitmap = Utils.ScaleBitmap(bMapRotate, scalingFactor);
-			        //spotImage.setImageBitmap(newBitmap);
-			        Log.d("DisplayImage","90");
-			        return newBitmap;
-			        
+				    Log.d("DisplayImage","90");
 			    case 180:
 			    	mat = new Matrix();
 			        mat.postRotate(180);
-			        bMapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
-			        // Get scaling factor to fit the max possible width of the ImageView
-			        scalingFactor = 1;
-			        // Create a new bitmap with the scaling factor
-			        newBitmap = Utils.ScaleBitmap(bMapRotate, scalingFactor);
-			        //spotImage.setImageBitmap(newBitmap);
 			        Log.d("DisplayImage","180");
-			        return newBitmap;
-			        
 			    case 270:
 			    	mat = new Matrix();
 			        mat.postRotate(270);
-			        bMapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
-			        // Get scaling factor to fit the max possible width of the ImageView
-			        scalingFactor = 1;
-			        // Create a new bitmap with the scaling factor
-			        newBitmap = Utils.ScaleBitmap(bMapRotate, scalingFactor);
 			        Log.d("DisplayImage","270");
-			        return newBitmap;
-			        //spotImage.setImageBitmap(newBitmap);
-			        
 			    default:
 			    	Log.d("DisplayImage","0");
-			    	return bitmap;
-			    	//spotImage.setImageBitmap(bitmap);
-			    	
 			}
-            /*
-            Matrix matrix = new Matrix();
-            switch (orientation) {
-            case 2:
-            	Log.d("DisplayImage","2");
-                matrix.setScale(-1, 1);
-                break;
-            case 3:
-            	Log.d("DisplayImage","3");
-                matrix.setRotate(180);
-                break;
-            case 4:
-            	Log.d("DisplayImage","4");
-                matrix.setRotate(180);
-                matrix.postScale(-1, 1);
-                break;
-            case 5:
-            	Log.d("DisplayImage","5");
-                matrix.setRotate(90);
-                matrix.postScale(-1, 1);
-                break;
-            case 6:
-            	Log.d("DisplayImage","6");
-                matrix.setRotate(90);
-                break;
-            case 7:
-            	Log.d("DisplayImage","7");
-                matrix.setRotate(-90);
-                matrix.postScale(-1, 1);
-                break;
-            case 8:
-            	Log.d("DisplayImage","8");
-                matrix.setRotate(-90);
-                break;
-            default:
-            	Log.d("DisplayImage","9");
-            	matrix.setRotate(90);
-                return bitmap;
-            }
+            if(bitmap != null){
+	        	bMapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
+		        // Get scaling factor to fit the max possible width of the ImageView
+		        scalingFactor = 1;
+		        // Create a new bitmap with the scaling factor
+		        newBitmap = Utils.ScaleBitmap(bMapRotate, scalingFactor);
+		        //spotImage.setImageBitmap(newBitmap);
+		        Log.d("DisplayImage","90");
+		        return newBitmap;
+	        }else{
+	        	Log.d("DisplayImage","90");
+		        return bitmap;
+	        }
             
-            try {
-                Bitmap oriented = Bitmap.createBitmap(bitmap, 0, 0,
-                        bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                bitmap.recycle();
-                return oriented;
-            } catch (OutOfMemoryError e) {
-                e.printStackTrace();
-                return bitmap;
-            }
-            */
         } catch (IOException e) {
             e.printStackTrace();
         }

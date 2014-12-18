@@ -17,7 +17,7 @@ public class User {
 	//User properties
 	protected 	int		uID, uFollowers, uPlusReputation, uMinusReputation, uSharedlocation,uConfirmed;
 	protected	double	uLatitude, uLongitude;
-	protected 	String	uSuspended,uUsername, uEmail, uFirstname, uLastname, uLink, uImage,uCreated_at;
+	protected 	String	uSuspended,uUsername, uFirstname, uLastname, uLink, uImage, uCreated_at, uEmail;
 	
 	//JSON proccessing constants IDs
 	private final static String 
@@ -72,7 +72,6 @@ public class User {
 	public void initPlayer(int id, String username, String email, String firstname,String lastname){
 		uID 		= id;
 		uUsername 	= username;
-		uEmail   	= email;
 		uFirstname	= firstname;
 		uLastname	= lastname;
 		notifyListener();
@@ -111,7 +110,6 @@ public class User {
 			Log.v(Const.TAG, "PlayerInit aca"+ Settings.getIns(null).getPref().getString(Settings.USER_JSON, "ida"));
 			uID				= infoJson.getInt(ID);
 			uUsername		= infoJson.getString(USERNAME);
-			uEmail			= infoJson.getString(EMAIL);
 			uImage			= infoJson.getString(IMAGE);
 			uPlusReputation	= Integer.parseInt(infoJson.getString(PLUS));
 			uMinusReputation= Integer.parseInt(infoJson.getString(MINUS));
@@ -125,6 +123,8 @@ public class User {
 			uLatitude		= Double.parseDouble(infoJson.getString(CURRENT_LAT));
 			uLongitude		= Double.parseDouble(infoJson.getString(CURRENT_LNG));
 			uCreated_at		= infoJson.getString(CREATED_AT);
+			uEmail			= infoJson.getString(EMAIL);
+			
 		} catch (Exception e) {	if(Const.D)e.printStackTrace(); }
 		if(Const.D){
 			Log.v(Const.TAG, "PlayerInitComplete");
@@ -174,10 +174,6 @@ public class User {
 	public String getUsername() {
 		return uUsername;
 	}
-	/** @return the email address	 */
-	public String getEmail() {
-		return uEmail;
-	}
 	
 	/** @return the first name */
 	public String getFirstName() {
@@ -203,6 +199,12 @@ public class User {
 	public String getCreatedat() {
 		return uCreated_at;
 	}
+	
+	/** @return the profile creation date of the user */
+	public String getEmail() {
+		return uEmail;
+	}
+	
 	
 	/************************* InfoUpdateListener Implementations  *************************/
 	
