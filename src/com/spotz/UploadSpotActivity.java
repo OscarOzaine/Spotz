@@ -129,7 +129,6 @@ public class UploadSpotActivity extends Activity implements
 		
 		//findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 		spotImage 			= (ImageView) findViewById(R.id.spotImageUpload);
-		
 		editSpotName 		= (EditText) findViewById(R.id.editSpotName);
 		editSpotDescription = (EditText) findViewById(R.id.editSpotDescription);
 		SpinnerSpotType 	= (Spinner) findViewById(R.id.spinner_spottypes);
@@ -137,7 +136,7 @@ public class UploadSpotActivity extends Activity implements
 		
 		Intent intent = getIntent();
 		
-		mediaPath = intent.getStringExtra("SpotMedia");
+		mediaPath 		= intent.getStringExtra("SpotMedia");
 		videoSurface	= (SurfaceView) findViewById(R.id.videoSurface);
         videoHolder		= videoSurface.getHolder();
         
@@ -155,10 +154,13 @@ public class UploadSpotActivity extends Activity implements
 		if(Utils.isVideo(mediaPath)){
 			spotImage.setVisibility(View.GONE);
 			frameLayoutVideo.setVisibility(View.VISIBLE);
+			//frameLayoutVideo.setRotation(90);
 	        try {
 	        	mediaPlayer = new MediaPlayer(); 
+	        	
 	    		controller = new VideoControllerView(this);
-	        	mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+	        	//controller.setRotation(180);
+	    		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 	        	mediaPlayer.setDataSource(UploadSpotActivity.this, Uri.parse(mediaPath));
 	        	mediaPlayer.setOnPreparedListener(this);
 	        	mediaPlayer.prepareAsync();

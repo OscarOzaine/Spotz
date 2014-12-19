@@ -12,7 +12,7 @@
 	 	<item>Valor 3</item>-->	
 	 </string-array>
 
-	<string name="description">Description</string>
+	<string name="description">Description:</string>
     <string name="usersettings">User Settings</string>
     <string name="spottype">Spot Type:</string>
     <string name="city">City:</string>
@@ -22,9 +22,9 @@
     <string name="last_name">Last Name:</string>
     <string name="inputvalue">Input value:</string>
     
-    <string name="dislikes">Likes:</string>
+    <string name="dislikes">Dislikes:</string>
     <string name="likes">Likes:</string>
-    <string name="like_example">Likes:</string>
+    <string name="like_example">0</string>
     <string name="change_media_camera">Change video to image and viceversa</string>
     <string name="change_camera">Change camera</string>
     <string name="facebook_app_id">843086735711329</string>

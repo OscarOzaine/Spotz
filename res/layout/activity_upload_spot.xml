@@ -32,8 +32,6 @@
 		        android:id="@+id/videoSurfaceContainer"
 		        android:layout_width="fill_parent"
 		        android:layout_height="240dp"
-		        android:layout_marginLeft="15dp"
-		        android:layout_marginRight="15dp"
 		        android:layout_marginBottom="15dp" >
 		        <SurfaceView
 		            android:id="@+id/videoSurface"

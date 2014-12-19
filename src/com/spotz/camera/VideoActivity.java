@@ -189,7 +189,7 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
         mediaRecorder.setMaxDuration(60000); // Set max duration 60 sec.
         mediaRecorder.setMaxFileSize(50000000); // Set max file size 50M
         mediaRecorder.setPreviewDisplay(surfaceHolder.getSurface());
-        mediaRecorder.setOrientationHint(90);
+        mediaRecorder.setOrientationHint(270);
 	}
 	
 	/*
@@ -316,10 +316,8 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 		}else{
 			camera=Camera.open();
 		}
-		
 		startPreview();
 		Log.d(TAG,"onResume "+recording);
-		
 	}
 
 	@Override
@@ -338,6 +336,7 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
     public void onDestroy() {
 		preview.destroyDrawingCache();
         surfaceHolder.removeCallback(surfaceCallback);
+        
 		super.onDestroy();
         Const.v(TAG, "--- ON DESTROY ---");
     }

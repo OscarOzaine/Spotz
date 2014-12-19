@@ -38,6 +38,11 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -127,10 +132,13 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
 		
 		
 		videoSurface	= (SurfaceView) findViewById(R.id.spotvideoSurface);
+		
+		//videoSurface.setRotation(90);
         videoHolder		= videoSurface.getHolder();
         
         videoHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         videoHolder.addCallback(surfaceCallback);
+        
         videoSurface.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -141,12 +149,18 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
 		
 		//Log.d(TAG,"imagepath = "+mediaPath);
 		if(Utils.isVideo(mediaPath)){
+
 			imgSpot.setVisibility(View.GONE);
-			frameLayoutVideo.setVisibility(View.VISIBLE);
+			//frameLayoutVideo.setRotation(270);
+			//frameLayoutVideo.refreshDrawableState();
+			//frameLayoutVideo.setRotationX(90);
 			
+			frameLayoutVideo.setVisibility(View.VISIBLE);
+
 			try {
 	        	mediaPlayer = new MediaPlayer(); 
 	    		controller = new VideoControllerView(this);
+	    		
 	        	mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 	        	mediaPlayer.setDataSource(SpotActivity.this, Uri.parse(mediaPath));
 	        	mediaPlayer.setOnPreparedListener(this);
@@ -227,14 +241,20 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
 
 	@Override
 	public void onPause() {
+		if(mediaPlayer != null){
+			mediaPlayer.stop();
+			mediaPlayer.release();
+		}
+			
 	    super.onPause();
 	    uiHelper.onPause();
 	}
 
 	@Override
 	public void onDestroy() {
+		uiHelper.onDestroy();
 	    super.onDestroy();
-	    uiHelper.onDestroy();
+	    
 	}
 	
 	private float getBitmapScalingFactor(Bitmap bm) {
@@ -394,8 +414,6 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
     
 	VideoControllerView.MediaPlayerControl mediaPlayerControl = new VideoControllerView.MediaPlayerControl(){
 		
-		
-		
 		@Override
 		public void start() {
 			// TODO Auto-generated method stub
@@ -481,10 +499,17 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
 	
 	@Override
 	public void onPrepared(MediaPlayer mp) {
+		
+		//videoSurface.getHolder().setType(SurfaceHolder.SURFACE_TYPE_NORMAL);
+		//videoSurface.getHolder().lockCanvas().rotate(90);
 		mediaPlayer.setDisplay(videoSurface.getHolder());
-    	controller.setMediaPlayer(mediaPlayerControl);
+		
+    	//mediaPlayer.
+		controller.setMediaPlayer(mediaPlayerControl);
         controller.setAnchorView((FrameLayout) findViewById(R.id.spotvideoSurfaceContainer));
+        
         mediaPlayer.start();
+        
 	}
 	
 }

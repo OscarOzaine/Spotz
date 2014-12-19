@@ -14,9 +14,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:orientation="vertical" 
-        android:layout_marginLeft="6dp"
         android:layout_marginTop="6dp"
-        android:layout_marginRight="6dp"
         android:elevation="25dp"
          >
 
@@ -26,17 +24,14 @@
             android:layout_height="wrap_content"
             android:text="SpotName"
             android:textColor="#040404"
-            android:textSize="15sp"
+            android:textSize="17sp"
             android:textStyle="bold"
             android:typeface="sans"
             android:paddingLeft="2dp"
-            android:paddingTop="2dp"
             android:paddingBottom="2dp"
             android:layout_marginLeft="2dp"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_world" 
             android:adjustViewBounds="true" />
 
         <ImageView
@@ -46,10 +41,8 @@
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:paddingLeft="2dp"
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
-            android:layout_marginLeft="2dp"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
             android:src="@drawable/ic_world" />
@@ -59,11 +52,13 @@
 	        android:id="@+id/spotvideoSurfaceContainer"
 	        android:layout_width="fill_parent"
 	        android:layout_height="240dp"
-	        android:layout_marginBottom="15dp" >
+	        android:layout_marginBottom="15dp" 
+	        android:orientation="vertical">
 	        <SurfaceView
 	            android:id="@+id/spotvideoSurface"
 	            android:layout_width="fill_parent"
-	            android:layout_height="240dp" />
+	            android:layout_height="240dp"
+	             />
 	    </FrameLayout>
     </LinearLayout>
 
@@ -88,16 +83,15 @@
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/likes" />
+                android:text="@string/likes"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/spot_likes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/like_example"
-                android:textColor="#040404"
-                android:textSize="15dip"
-                android:typeface="sans" />
+                android:textColor="#757575"/>
 
         </LinearLayout>
 
@@ -112,16 +106,16 @@
                 android:id="@+id/spotCreatedat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/dislikes" />
+                android:text="@string/dislikes"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/spot_dislikes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/like_example"
-                android:textColor="#040404"
-                android:textSize="15dip"
-                android:typeface="sans" />
+                android:textColor="#757575"
+                 />
         </LinearLayout>
     </LinearLayout>
 
@@ -153,10 +147,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/spottype"
-                    android:textColor="#040404"
+                    android:textColor="@color/black"
                     android:layout_marginBottom="15dp"
-                    android:textSize="15dip"
-                    android:typeface="sans" />
+                     />
 
                 <TextView
                     android:id="@+id/TextView05"
@@ -164,9 +157,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/city"
                     android:layout_marginBottom="15dp"
-                    android:textColor="#040404"
-                    android:textSize="15dip"
-                    android:typeface="sans" />
+                    android:textColor="@color/black"
+                     />
             </LinearLayout>
 
             <LinearLayout
@@ -178,19 +170,15 @@
                     android:id="@+id/spot_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="aca"
-                    android:textColor="#040404"
-                    android:textSize="15dip"
-                    android:typeface="sans" />
+                    android:textColor="#757575"
+                     />
 
                 <TextView
                     android:id="@+id/spot_city"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="cityacaa"
-                    android:textColor="#040404"
-                    android:textSize="15dip"
-                    android:typeface="sans" />
+                    android:textColor="#757575"
+                     />
             </LinearLayout>
 
         </LinearLayout>
@@ -212,9 +200,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/user"
                     android:layout_marginBottom="15dp"
-                    android:textColor="#040404"
-                    android:textSize="15dip"
-                    android:typeface="sans" />
+                    android:textColor="@color/black"
+                    />
 
                 <TextView
                     android:id="@+id/TextView08"
@@ -222,9 +209,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/followers"
                     android:layout_marginBottom="15dp"
-                    android:textColor="#040404"
-                    android:textSize="15dip"
-                    android:typeface="sans" />
+                    android:textColor="@color/black"
+                     />
 
             </LinearLayout>
 
@@ -237,19 +223,15 @@
                     android:id="@+id/spot_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="oz"
-                    android:textColor="#040404"
-                    android:textSize="15dip"
-                    android:typeface="sans" />
+                    android:textColor="#757575"
+                     />
 
                 <TextView
                     android:id="@+id/spot_followers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="12"
-                    android:textColor="#040404"
-                    android:textSize="15dip"
-                    android:typeface="sans" />
+                    android:textColor="#757575"
+                     />
 
             </LinearLayout>
         </LinearLayout>
@@ -273,19 +255,16 @@
             android:id="@+id/spotDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Description:"
+            android:text="@string/description"
             android:textColor="#040404"
-            android:textSize="15dip"
-            android:typeface="sans" />
+             />
         
         <TextView
             android:id="@+id/spot_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Descripcion"
-            android:textColor="#040404"
-            android:textSize="15dip"
-            android:typeface="sans" />
+            android:textColor="#757575"
+             />
     </LinearLayout>
     
 </RelativeLayout>
