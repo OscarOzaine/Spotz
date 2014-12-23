@@ -6,7 +6,6 @@ import com.spotz.utils.metadata.Metadata;
 import com.spotz.utils.metadata.icc.IccReader;
 import com.spotz.utils.metadata.png.PngChromaticitiesDirectory;
 import com.spotz.utils.metadata.png.PngDirectory;
-import com.spotz.utils.metadata.xmp.XmpReader;
 
 import java.io.*;
 import java.util.*;
@@ -136,14 +135,7 @@ public class PngMetadataReader
                     metadata.getOrCreateDirectory(PngDirectory.class).addError("Invalid compression flag value");
                 }
 
-                if (text != null) {
-                    if (keyword.equals("XML:com.adobe.xmp")) {
-                        // NOTE in testing images, the XMP has parsed successfully, but we are not extracting tags from it as necessary
-                        new XmpReader().extract(text, metadata);
-                    } else {
-                        textPairs.add(new KeyValuePair(keyword, text));
-                    }
-                }
+                
             } else if (chunkType.equals(PngChunkType.tIME)) {
                 SequentialByteArrayReader reader = new SequentialByteArrayReader(bytes);
                 int year = reader.getUInt16();

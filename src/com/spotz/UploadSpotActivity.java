@@ -79,7 +79,7 @@ public class UploadSpotActivity extends Activity implements
 	private LocationClient mLocationClient;
 	
 	// All xml labels
-	TextView txtName, txtType, txtDescription;
+	TextView txtType, txtDescription;
 	EditText editSpotName, editSpotDescription;
 	Spinner SpinnerSpotType, spinnerSpotType;
 	ImageView spotImage;

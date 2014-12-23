@@ -32,7 +32,6 @@ import com.spotz.utils.metadata.jfif.JfifReader;
 import com.spotz.utils.metadata.jpeg.JpegCommentReader;
 import com.spotz.utils.metadata.jpeg.JpegReader;
 import com.spotz.utils.metadata.photoshop.PhotoshopReader;
-import com.spotz.utils.metadata.xmp.XmpReader;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -54,7 +53,6 @@ public class JpegMetadataReader
             new JpegCommentReader(),
             new JfifReader(),
             new ExifReader(),
-            new XmpReader(),
             new IccReader(),
             new PhotoshopReader(),
             new IptcReader(),

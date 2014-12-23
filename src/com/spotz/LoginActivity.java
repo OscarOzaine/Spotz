@@ -82,9 +82,6 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
         public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
             Log.d("HelloFacebook", "Success!");
         }
-        
-       
-        
     };
     
     
@@ -281,8 +278,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
     @Override
     public void onStart() {
         super.onStart();
-        SessionManager.requestLogin(this);
-        Const.v(TAG, "++ ON START ++");        
+        //SessionManager.requestLogin(this); 
     }
 
     @Override
@@ -350,13 +346,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
 		}
 		
 		
-		/////
-		/*
-		Intent returnIntent = new Intent(LoginActivity.this,CameraActivity.class);
-		setResult(RESULT_OK, returnIntent);
-		//finish this activity
-		finish();
-		*/
+		
 		Intent cameraIntent= new Intent(LoginActivity.this, CameraActivity.class);
     	cameraIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
     	//openMainActivity.setFlags(Intent.);

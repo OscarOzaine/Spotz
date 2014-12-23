@@ -25,7 +25,7 @@ public class LoginService extends IntentService  {
 	String accesstoken;
 	String upLoadServerUri = "http://api.myhotspotz.net/app/uploadProfilePic";
 	int serverResponseCode = 0;
-	String TAG = "UploadProfilePicService";
+	String TAG = "LoginService";
 	public LoginService() {
 		super("LoginService");
 	}

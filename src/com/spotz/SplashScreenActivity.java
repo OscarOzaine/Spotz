@@ -19,14 +19,9 @@ import android.view.Window;
 public class SplashScreenActivity extends Activity {
  
     // Set the duration of the splash screen
-<<<<<<< HEAD
-    private static final long SPLASH_SCREEN_DELAY = 1500;
     private String TAG = "SplashScreenActivity";
-    
-=======
     private static final long SPLASH_SCREEN_DELAY = 1000;
- 
->>>>>>> origin/master
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,12 +49,14 @@ public class SplashScreenActivity extends Activity {
             @Override
             public void run() {
             	Intent intent;
-            	if(SessionManager.requestLogin(SplashScreenActivity.this)){
+            	if(SessionManager.isLoggedIn(SplashScreenActivity.this)){
+            		Log.d(TAG,"LOGGEDIN");
             		intent = new Intent().setClass(SplashScreenActivity.this, CameraActivity.class);
-            	}
-            	else{
+            	}else{
+            		Log.d(TAG,"NOTTTLOGGEDIN");
             		intent = new Intent().setClass(SplashScreenActivity.this, LoginActivity.class);
             	}
+            	
             	startActivity(intent);
                 overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
                 // Close the activity so the user won't able to go back this

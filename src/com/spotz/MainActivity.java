@@ -245,14 +245,7 @@ public class MainActivity extends TabActivity {
             startActivity(uploadedSpots); 
         	break;
         case R.id.action_logout:
-        	
-        	SessionManager.Logout();
-    		SessionManager.requestLogin(this);
-    		if (Session.getActiveSession() != null) {
-    		    Session.getActiveSession().closeAndClearTokenInformation();
-    		}
-
-    		Session.setActiveSession(null);
+        	SessionManager.Logout(this);
     		Intent cameraIntent= new Intent(this, LoginActivity.class);
         	//openMainActivity.setFlags(Intent.);
             startActivity(cameraIntent); 
