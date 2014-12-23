@@ -114,7 +114,7 @@ public class NewsViewAdapter extends BaseAdapter {
 		//txtdislikes.setText(resultp.get(NewsActivity.TAG_DISLIKES));
 		
 		mediaPath = resultp.get(NewsActivity.TAG_IMAGE);
-		Log.d(TAG,"MediaPath="+mediaPath);
+		//Log.d(TAG,"MediaPath="+mediaPath);
 		if(Utils.isVideo(mediaPath)){
 			imgSpot.setImageResource(R.drawable.ic_play_video);
 		}

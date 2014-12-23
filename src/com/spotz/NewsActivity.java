@@ -10,10 +10,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.android.gms.location.LocationClient;
 import com.spotz.MySpotsActivity.LoadSpots;
 import com.spotz.database.Spot;
 import com.spotz.database.SpotsHelper;
 import com.spotz.gen.R;
+import com.spotz.location.LocationUtils;
+import com.spotz.location.MyLocation;
+import com.spotz.location.MyLocation.LocationResult;
 import com.spotz.services.UploadMediaService;
 import com.spotz.utils.Const;
 import com.spotz.utils.JSONParser;
@@ -23,12 +27,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnLongClickListener;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
@@ -36,20 +45,23 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class NewsActivity extends ListActivity {
+public class NewsActivity extends ListActivity implements OnScrollListener {
 	
-	boolean loadNews = true;
+	static boolean loadNews = true;
+	static int startNew = 0;
+	static int rowNews = 4;
+	static boolean flag_loading = false;
 	// Progress Dialog
-	private ProgressDialog pDialog;
-	String TAG = "NewsActivity";
+	private static ProgressDialog pDialog;
+	static String TAG = "NewsActivity";
 	// Creating JSON Parser object
-	JSONParser jsonParser = new JSONParser();
+	static JSONParser jsonParser = new JSONParser();
 
-	ArrayList<HashMap<String, String>> outboxList;
-	NewsViewAdapter adapter;
-	ListView listView;
+	static ArrayList<HashMap<String, String>> outboxList;
+	static NewsViewAdapter adapter;
 	// products JSONArray
-	JSONArray outbox = null;
+	static JSONArray outbox = null;
+	
 
 	// Outbox JSON url
 	private static String OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots";
@@ -71,7 +83,11 @@ public class NewsActivity extends ListActivity {
 	
 	static NewsActivity instance = null;
 	SpotsHelper db = null;
-
+	
+	static int typeSpots = -1;
+	static String currentLat = ""+Const.currentLatitude;
+	static String currentLng = ""+Const.currentLongitude;
+	
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 	    @Override
 	    public void onReceive(Context context, Intent intent) {
@@ -111,12 +127,28 @@ public class NewsActivity extends ListActivity {
 	    }
 	};
 	
+	
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.news_list);
 		OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots";
 		instance = this;
+		LocationResult locationResult = new LocationResult(){
+		    @Override
+		    public void gotLocation(Location location){
+		    	Const.currentLatitude = location.getLatitude();
+		    	Const.currentLongitude = location.getLongitude();
+		    	Log.d(TAG,"getLocationACAs"+Const.currentLongitude+"  "+Const.currentLatitude);
+		        //Got the location!
+		    }
+		};
+		MyLocation myLocation = new MyLocation();
+		myLocation.getLocation(this, locationResult);
+		
+		
 	}
 
 	
@@ -125,13 +157,13 @@ public class NewsActivity extends ListActivity {
     public synchronized void onResume() {
         super.onResume();
         registerReceiver(receiver, new IntentFilter(UploadMediaService.NOTIFICATION));
+        getListView().setOnScrollListener(this);
      // Hashmap for ListView
         outboxList = new ArrayList<HashMap<String, String>>();
-        
-        int type = -1;
-        OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+type;
+        OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+typeSpots+"/"+currentLat+"/"+currentLng+"/"+startNew+"/"+rowNews;
+        initialize();
 		new LoadSpots().execute();
-		Const.v(TAG, "+ ON RESUME +");
+		Const.v(TAG, "+ ON RESUME +"+OUTBOX_URL);
     }
 	
 	public static final String SHOWITEMINTENT_EXTRA_FETCHROWID = "fetchRow";
@@ -155,8 +187,7 @@ public class NewsActivity extends ListActivity {
     /**
 	 * Background Async Task to Load all OUTBOX messages by making HTTP Request
 	 * */
-	
-	public class LoadSpots extends AsyncTask<String, String, String> {
+	public static class LoadSpots extends AsyncTask<String, String, String> {
 
 		/**
 		 * Before starting background thread Show Progress Dialog
@@ -164,10 +195,10 @@ public class NewsActivity extends ListActivity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			setProgressBarIndeterminateVisibility(true);
-			
-			pDialog = new ProgressDialog(NewsActivity.this);
-			pDialog.setMessage(getString(R.string.loading_spots));
+			instance.setProgressBarIndeterminateVisibility(true);
+			OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+typeSpots+"/"+currentLat+"/"+currentLng+"/"+startNew+"/"+rowNews;
+			pDialog = new ProgressDialog(NewsActivity.instance);
+			pDialog.setMessage(instance.getString(R.string.loading_spots));
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(false);
 			pDialog.show();
@@ -186,7 +217,8 @@ public class NewsActivity extends ListActivity {
 				// getting JSON string from URL
 				JSONObject json = jsonParser.makeHttpRequest(OUTBOX_URL, "GET",
 						params);
-				
+				Log.d(TAG,"HTTP="+OUTBOX_URL);
+				startNew+=4; 
 				// Check your log cat for JSON reponse
 				/*
 				Log.d(TAG, json.toString());
@@ -266,29 +298,236 @@ public class NewsActivity extends ListActivity {
 		 * After completing background task Dismiss the progress dialog
 		 * **/
 		protected void onPostExecute(String file_url) {
-			// dismiss the dialog after getting all products
+			pDialog.dismiss();
+			instance.setProgressBarIndeterminateVisibility(false);
+			// updating UI from Background Thread
+			if(loadNews){
+				instance.runOnUiThread(new Runnable() {
+					public void run() {
+						adapter = new NewsViewAdapter(NewsActivity.instance, outboxList);
+						instance.setListAdapter(adapter);
+					}
+				});
+			}
+		}
+	}
+
+	
+	public class LoadMoreSpots extends AsyncTask<String, String, String> {
+
+		/**
+		 * Before starting background thread Show Progress Dialog
+		 * */
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			setProgressBarIndeterminateVisibility(true);
+			OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+typeSpots+"/"+currentLat+"/"+currentLng+"/"+startNew+"/"+rowNews;
+			pDialog = new ProgressDialog(NewsActivity.this);
+			pDialog.setMessage(getString(R.string.loading_spots));
+			pDialog.setIndeterminate(false);
+			pDialog.setCancelable(false);
+			pDialog.show();
+			
+		}
+
+		/**
+		 * getting Outbox JSON
+		 * */
+		protected String doInBackground(String... args) {
+			loadNews = true;
+			try {
+				// Building Parameters
+				List<NameValuePair> params = new ArrayList<NameValuePair>();
+				
+				// getting JSON string from URL
+				JSONObject json = jsonParser.makeHttpRequest(OUTBOX_URL, "GET",
+						params);
+				
+				if(json == null){
+					//Log.d(TAG,"DontLoadNews"+json.toString());
+					loadNews = false;
+				}else{
+					loadNews = true;
+					//Log.d(TAG,"LoadEm"+json.toString());
+					
+					Log.d(TAG,"MOREHTTP="+OUTBOX_URL);
+					startNew+=4; 
+					// Check your log cat for JSON reponse
+					/*
+					Log.d(TAG, json.toString());
+					if(!json.toString().isEmpty()){
+						
+					}else{
+						loadNews = false;
+					}
+					*/
+					String urlImage = "";
+				
+					outbox = json.getJSONArray(TAG_SPOTS);
+					// looping through All messages
+					for (int i = 0; i < outbox.length(); i++) {
+						JSONObject c = outbox.getJSONObject(i);
+
+						// Storing each json item in variable
+						String id = c.getString(TAG_ID);
+						
+						String name = c.getString(TAG_NAME);
+						String created_at = c.getString(TAG_CREATED_AT);
+						String image = c.getString(TAG_IMAGE);
+						String cityname = c.getString(TAG_CITYNAME);
+						String email = c.getString(TAG_EMAIL);
+						String description = c.getString(TAG_DESCRIPTION);
+						String spottype = c.getString(TAG_SPOTTYPE);
+						String likes = c.getString(TAG_LIKES);
+						String dislikes = c.getString(TAG_DISLIKES);
+						String latitude = c.getString(TAG_LATITUDE);
+						String longitude = c.getString(TAG_LONGITUDE);
+						
+						
+						// subject taking only first 23 chars
+						// to fit into screen
+						/*
+						if(subject.length() > 23){
+							subject = subject.substring(0, 22) + "..";
+						}
+						*/
+						// creating new HashMap
+						HashMap<String, String> map = new HashMap<String, String>();
+						
+						// adding each child node to HashMap key => value
+						map.put(TAG_ID, id);
+						map.put(TAG_NAME, name);
+						map.put(TAG_CREATED_AT, created_at);
+						
+						urlImage = "http://myhotspotz.net/public/images/spots/"+image;
+						map.put(TAG_IMAGE,urlImage);
+						map.put(TAG_CITYNAME, cityname);
+						map.put(TAG_EMAIL, email);
+						map.put(TAG_DESCRIPTION, description);
+						map.put(TAG_SPOTTYPE, spottype);
+						map.put(TAG_LIKES, likes);
+						map.put(TAG_DISLIKES, dislikes);
+						map.put(TAG_LATITUDE, latitude);
+						map.put(TAG_LONGITUDE, longitude);
+						// adding HashList to ArrayList
+						outboxList.add(map);
+					}
+				}
+
+				
+				
+			} catch (JSONException e) {
+				loadNews = false;
+				e.printStackTrace();
+				Log.d(TAG,"Json exception");
+			} catch (RuntimeException e){
+				loadNews = false;
+				e.printStackTrace();
+				Log.d(TAG,"RuntimeException");
+			} catch (Exception e){
+				loadNews = false;
+				Log.d(TAG,"Exception");
+			} 
+			
+			return null;
+		}
+
+		/**
+		 * After completing background task Dismiss the progress dialog
+		 * **/
+		protected void onPostExecute(String file_url) {
 			pDialog.dismiss();
 			setProgressBarIndeterminateVisibility(false);
 			// updating UI from Background Thread
 			if(loadNews){
 				runOnUiThread(new Runnable() {
 					public void run() {
-						
-						adapter = new NewsViewAdapter(NewsActivity.this, outboxList);
-						setListAdapter(adapter);
-						
+						Log.d(TAG,"notify changes");
+						adapter.notifyDataSetChanged();
+						flag_loading = false;
+						//adapter = new NewsViewAdapter(NewsActivity.this, outboxList);
+						//setListAdapter(adapter);
 					}
 				});
 			}
-			
-
 		}
-		
-		
-
+	}
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// TODO Auto-generated method stub
+		//Log.d(TAG,"onScrollStateChanged "+scrollState);
 		
 	}
 	
-
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+		//Log.d(TAG,"onScroll firstvisible "+firstVisibleItem+" - visibleitemcnt = "+visibleItemCount+" totalItemC ="+totalItemCount);
+		// TODO Auto-generated method stub
+		if(firstVisibleItem+visibleItemCount == totalItemCount && totalItemCount != 0){
+			//Log.d(TAG,"addItems0");
+            if(flag_loading == false){
+                flag_loading = true;
+                additems();
+            }
+        }
+	}
 	
+	public void additems(){
+		Log.d(TAG,"addItems");
+		//new LoadSpots().execute();
+		new LoadMoreSpots().execute();
+		
+		/*
+		String id = "aca";
+		String name = "aca";
+		String created_at = "aca";
+		String image = "aca";
+		String cityname = "aca";
+		String email = "aca";
+		String description = "aca";
+		String spottype = "aca";
+		String likes = "aca";
+		String dislikes = "aca";
+		String latitude ="aca";
+		String longitude ="aca";
+		
+		
+		// subject taking only first 23 chars
+		// to fit into screen
+		
+		// creating new HashMap
+		HashMap<String, String> map = new HashMap<String, String>();
+		
+		// adding each child node to HashMap key => value
+		map.put(TAG_ID, id);
+		map.put(TAG_NAME, name);
+		map.put(TAG_CREATED_AT, created_at);
+		
+		String urlImage = "http://myhotspotz.net/public/images/spots/"+image;
+		map.put(TAG_IMAGE,urlImage);
+		map.put(TAG_CITYNAME, cityname);
+		map.put(TAG_EMAIL, email);
+		map.put(TAG_DESCRIPTION, description);
+		map.put(TAG_SPOTTYPE, spottype);
+		map.put(TAG_LIKES, likes);
+		map.put(TAG_DISLIKES, dislikes);
+		map.put(TAG_LATITUDE, latitude);
+		map.put(TAG_LONGITUDE, longitude);
+		outboxList.add(map);
+		//adapter = new NewsViewAdapter(NewsActivity.this, outboxList);
+		adapter.notifyDataSetChanged();
+		*/
+		//setListAdapter(adapter);
+		
+		//this.notifyDataSetChanged();
+	}
+	
+	public static void initialize(){
+		startNew = 0;
+		outboxList = new ArrayList<HashMap<String, String>>();
+		flag_loading = false;
+		loadNews = true;
+	}
 }

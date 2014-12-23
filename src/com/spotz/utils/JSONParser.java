@@ -79,11 +79,18 @@ public class JSONParser {
             StringBuilder sb = new StringBuilder();
             String line = null;
             while ((line = reader.readLine()) != null) {
+            	
+            	if(line.equals("-1")){
+            		return null;
+            	}
+            	
+            	
                 sb.append(line + "\n");
             }
             is.close();
             
             json = Html.fromHtml((String) sb.toString()).toString();
+            
             
         } catch (Exception e) {
             Log.e("Buffer Error", "Error converting result " + e.toString());
@@ -91,6 +98,7 @@ public class JSONParser {
  
         // try parse the string to a JSON object
         try {
+        	
             jObj = new JSONObject(json);
         } catch (JSONException e) {
             Log.e("JSON Parser", "Error parsing data " + e.toString());

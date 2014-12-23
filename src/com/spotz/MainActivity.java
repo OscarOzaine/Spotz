@@ -3,12 +3,13 @@ package com.spotz;
 import java.util.List;
 
 import com.facebook.Session;
-import com.spotz.NewsActivity.LoadSpots;
+import com.spotz.NewsActivity;
 import com.spotz.database.Spot;
 import com.spotz.database.SpotsHelper;
 import com.spotz.gen.R;
 import com.spotz.services.UploadMediaService;
 import com.spotz.users.UserSettingsActivity;
+import com.spotz.NewsActivity.*;
 
 import android.app.ActionBar;
 import android.app.SearchManager;
@@ -259,9 +260,12 @@ public class MainActivity extends TabActivity {
     		finish();  
         	break;
         case R.id.action_refresh:
+        	
+        	NewsActivity.initialize();
+        	new LoadSpots().execute();
         	//NewsActivity.LoadOutbox().execute();
-        	getTabHost().setCurrentTab(2);
-        	getTabHost().setCurrentTab(1);
+        	//getTabHost().setCurrentTab(2);
+        	//getTabHost().setCurrentTab(1);
         	break;
         case R.id.action_settings:
         	Intent userSettingsIntent = new Intent(this, UserSettingsActivity.class);

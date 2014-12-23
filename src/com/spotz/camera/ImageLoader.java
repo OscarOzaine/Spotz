@@ -143,7 +143,7 @@ public class ImageLoader {
             o2.inSampleSize = scale;
             FileInputStream stream2 = new FileInputStream(f);
             Bitmap bitmap = BitmapFactory.decodeStream(stream2, null, o2);
-            Log.d("DisplayImage","decodeFile");
+            //Log.d("DisplayImage","decodeFile");
             InputStream inStream = new FileInputStream(f);
             bitmap = rotateBitmap(inStream,url,bitmap);
             stream2.close();
@@ -225,10 +225,10 @@ public class ImageLoader {
     }
     
     public static Bitmap rotateBitmap(InputStream inputStream,String src, Bitmap bitmap) {
-    	Log.d("DisplayImage","src = "+src);
+    	//Log.d("DisplayImage","src = "+src);
         try {
             String orientation = getExifOrientation(inputStream, src);
-            Log.d("DisplayImage","Orientation = "+orientation);
+            //Log.d("DisplayImage","Orientation = "+orientation);
             if (orientation.equals("1")) {
                 return bitmap;
             }
@@ -244,17 +244,17 @@ public class ImageLoader {
 			    case 90:
 			    	mat = new Matrix();
 			        mat.postRotate(90);
-				    Log.d("DisplayImage","90");
+				    //Log.d("DisplayImage","90");
 			    case 180:
 			    	mat = new Matrix();
 			        mat.postRotate(180);
-			        Log.d("DisplayImage","180");
+			        //Log.d("DisplayImage","180");
 			    case 270:
 			    	mat = new Matrix();
 			        mat.postRotate(270);
-			        Log.d("DisplayImage","270");
+			        //Log.d("DisplayImage","270");
 			    default:
-			    	Log.d("DisplayImage","0");
+			    	//Log.d("DisplayImage","0");
 			}
             if(bitmap != null){
 	        	bMapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
@@ -263,10 +263,10 @@ public class ImageLoader {
 		        // Create a new bitmap with the scaling factor
 		        newBitmap = Utils.ScaleBitmap(bMapRotate, scalingFactor);
 		        //spotImage.setImageBitmap(newBitmap);
-		        Log.d("DisplayImage","90");
+		        //Log.d("DisplayImage","90");
 		        return newBitmap;
 	        }else{
-	        	Log.d("DisplayImage","90");
+	        	//Log.d("DisplayImage","90");
 		        return bitmap;
 	        }
             
@@ -279,7 +279,7 @@ public class ImageLoader {
 
     private static String getExifOrientation(InputStream inputStream, String src) throws IOException {
         String orientation = "0";
-        	Log.d("DisplayImage","SRC = "+src);
+        	//Log.d("DisplayImage","SRC = "+src);
         	try {
         		//URL url = new URL(src);
 				Metadata metadata = ImageMetadataReader.readMetadata(inputStream);

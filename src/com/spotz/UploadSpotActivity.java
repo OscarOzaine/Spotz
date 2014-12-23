@@ -65,7 +65,6 @@ import android.widget.MediaController;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 public class UploadSpotActivity extends Activity implements
 			LocationListener,
@@ -150,7 +149,7 @@ public class UploadSpotActivity extends Activity implements
             }
         });
         
-        Log.d(TAG,"imagepath = "+mediaPath);
+        //Log.d(TAG,"imagepath = "+mediaPath);
 		if(Utils.isVideo(mediaPath)){
 			spotImage.setVisibility(View.GONE);
 			frameLayoutVideo.setVisibility(View.VISIBLE);
@@ -164,7 +163,7 @@ public class UploadSpotActivity extends Activity implements
 	        	mediaPlayer.setDataSource(UploadSpotActivity.this, Uri.parse(mediaPath));
 	        	mediaPlayer.setOnPreparedListener(this);
 	        	mediaPlayer.prepareAsync();
-	        	Log.d(TAG,"Mediaplayer="+mediaPath);
+	        	//Log.d(TAG,"Mediaplayer="+mediaPath);
 	        } catch (IllegalArgumentException e) {
 	            e.printStackTrace();
 	        } catch (SecurityException e) {

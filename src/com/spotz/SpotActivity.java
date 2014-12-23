@@ -84,7 +84,6 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
 	String longitude = "", latitude = "";
 	MediaController mediaController;
 	
-	
 	private UiLifecycleHelper uiHelper;
 	
 	FrameLayout frameLayoutVideo = null;
@@ -417,28 +416,37 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
 		@Override
 		public void start() {
 			// TODO Auto-generated method stub
-			mediaPlayer.start();
+			if(mediaPlayer!=null)
+				mediaPlayer.start();
 		}
 
 
 		@Override
 		public void pause() {
 			// TODO Auto-generated method stub
-			mediaPlayer.pause();
+			if(mediaPlayer!=null)
+				mediaPlayer.pause();
+			
 		}
 
 
 		@Override
 		public int getDuration() {
 			// TODO Auto-generated method stub
-			return mediaPlayer.getDuration();
+			if(mediaPlayer!=null)
+				return mediaPlayer.getDuration();
+			else
+				return 0;
 		}
 
 
 		@Override
 		public int getCurrentPosition() {
 			// TODO Auto-generated method stub
-			return mediaPlayer.getCurrentPosition();
+			if(mediaPlayer!=null)
+				return mediaPlayer.getCurrentPosition();
+			else
+				return 0;
 		}
 
 
@@ -452,7 +460,10 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
 		@Override
 		public boolean isPlaying() {
 			// TODO Auto-generated method stub
-			return mediaPlayer.isPlaying();
+			if(mediaPlayer!=null)
+				return mediaPlayer.isPlaying();
+			else
+				return false;
 		}
 
 
@@ -509,7 +520,6 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
         controller.setAnchorView((FrameLayout) findViewById(R.id.spotvideoSurfaceContainer));
         
         mediaPlayer.start();
-        
 	}
 	
 }
