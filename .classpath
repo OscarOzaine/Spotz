@@ -2,8 +2,12 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Ozaine/Desktop/AndroidDev/metadata-extractor-master/metadata-extractor-master/Libraries/junit-4.11.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Ozaine/Desktop/AndroidDev/metadata-extractor-master/metadata-extractor-master/Libraries/junit-4.11-src.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Ozaine/Desktop/AndroidDev/metadata-extractor-master/metadata-extractor-master/Libraries/xmpcore-5.1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Ozaine/Desktop/AndroidDev/metadata-extractor-master/metadata-extractor-master/Libraries/xmpcore-5.1.2-sources.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
