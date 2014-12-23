@@ -19,9 +19,14 @@ import android.view.Window;
 public class SplashScreenActivity extends Activity {
  
     // Set the duration of the splash screen
+<<<<<<< HEAD
     private static final long SPLASH_SCREEN_DELAY = 1500;
     private String TAG = "SplashScreenActivity";
     
+=======
+    private static final long SPLASH_SCREEN_DELAY = 1000;
+ 
+>>>>>>> origin/master
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,36 +53,18 @@ public class SplashScreenActivity extends Activity {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-            	
+            	Intent intent;
             	if(SessionManager.requestLogin(SplashScreenActivity.this)){
-            		Intent mainIntent = new Intent().setClass(
-                            SplashScreenActivity.this, CameraActivity.class);
-                    startActivity(mainIntent);
-                    overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
-                    // Close the activity so the user won't able to go back this
-                    // activity pressing Back button
-                    finish();
+            		intent = new Intent().setClass(SplashScreenActivity.this, CameraActivity.class);
             	}
             	else{
-            		Intent mainIntent = new Intent().setClass(
-                            SplashScreenActivity.this, LoginActivity.class);
-                    startActivity(mainIntent);
-                    overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
-                    // Close the activity so the user won't able to go back this
-                    // activity pressing Back button
-                    finish();
+            		intent = new Intent().setClass(SplashScreenActivity.this, LoginActivity.class);
             	}
-            	
-            	/*
-                // Start the next activity
-                Intent mainIntent = new Intent().setClass(
-                        SplashScreenActivity.this, MainActivity.class);
-                startActivity(mainIntent);
- 
+            	startActivity(intent);
+                overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
                 // Close the activity so the user won't able to go back this
-                // activity pressing Back button
+                // activity by pressing Back button
                 finish();
-                */
             }
         };
  
