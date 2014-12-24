@@ -233,10 +233,10 @@ public class NewsActivity extends Activity implements OnScrollListener {
         spinnerSpotDistance.setSelection(Const.spotDistancePosition);
         registerReceiver(receiver, new IntentFilter(UploadMediaService.NOTIFICATION));
         listNews.setOnScrollListener(this);
-        //Hashmap for ListView
+     // Hashmap for ListView
         outboxList = new ArrayList<HashMap<String, String>>();
         OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+Const.spotTypePosition+"/"+currentLat+"/"+currentLng+"/"+startNew+"/"+rowNews;
-        //initialize();
+        initialize();
 		//new LoadSpots().execute();
 		Const.v(TAG, "+ ON RESUME +"+OUTBOX_URL);
     }
@@ -532,6 +532,10 @@ public class NewsActivity extends Activity implements OnScrollListener {
 		loadNews = true;
 		listNews.setAdapter(null);
 	}
+	
+	
+
+	
 	
 	
 }
