@@ -100,20 +100,23 @@
     </string-array>
     
     <string-array name="spottype_array">
-        <item>Spot Types</item>
+        <item>Type(All)</item>
         <item>Social</item>
         <item>Cultural</item>
         <item>Musical</item>
-        <item>Robo</item>
-        <item>Reten</item>
-        <item>Accidente</item>
-        <item>Protesta</item>
-        <item>Vandalismo</item>
-        <item>Bache</item>
-        <item>Asalto</item>
-        <item>Deportivo</item>
+        <item>Theft</item>
+        <item>Roadblock</item>
+        <item>Accident</item>
+        <item>Protest</item>
+        <item>Vandalism</item>
+        <item>Bump</item>
+        <item>Assault</item>
+        <item>Sport</item>
     </string-array>
-
+    
+    <string-array name="spotdistance_array">
+        <item>City</item>
+    </string-array>
     
     <string-array name="pais">
       <item>España</item>

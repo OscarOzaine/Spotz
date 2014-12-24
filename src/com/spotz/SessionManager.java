@@ -36,9 +36,7 @@ public class SessionManager {
 		.remove(Settings.USER_JSON)
 		.remove(Settings.TEAM_JSON)
 		.commit();
-		
 		com.facebook.Session.getActiveSession().closeAndClearTokenInformation();
-		
 		Log.d(TAG,"LOGOUT");
 	}
 	

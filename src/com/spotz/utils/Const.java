@@ -15,6 +15,10 @@ public class Const {
 	public static double currentLatitude = 0.0;
 	public static double currentLongitude = 0.0;
 	
+	public static int spotTypePosition 		= 0;
+	public static int spotDistancePosition 	= 0;
+	
+	
     //Log\.([a-z]) -> Const.$1
     /** Android logging, only prints out if debug variable is set to true*/
     public static void v(String tag, String msg){

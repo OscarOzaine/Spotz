@@ -130,7 +130,6 @@ public class UploadSpotActivity extends Activity implements
 		spotImage 			= (ImageView) findViewById(R.id.spotImageUpload);
 		editSpotName 		= (EditText) findViewById(R.id.editSpotName);
 		editSpotDescription = (EditText) findViewById(R.id.editSpotDescription);
-		SpinnerSpotType 	= (Spinner) findViewById(R.id.spinner_spottypes);
 		frameLayoutVideo	= (FrameLayout) findViewById(R.id.videoSurfaceContainer);
 		
 		Intent intent = getIntent();

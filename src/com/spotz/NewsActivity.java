@@ -15,12 +15,13 @@ import com.spotz.MySpotsActivity.LoadSpots;
 import com.spotz.database.Spot;
 import com.spotz.database.SpotsHelper;
 import com.spotz.gen.R;
-import com.spotz.location.LocationUtils;
 import com.spotz.location.MyLocation;
 import com.spotz.location.MyLocation.LocationResult;
 import com.spotz.services.UploadMediaService;
 import com.spotz.utils.Const;
 import com.spotz.utils.JSONParser;
+
+import android.app.Activity;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -39,13 +40,17 @@ import android.view.View.OnLongClickListener;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class NewsActivity extends ListActivity implements OnScrollListener {
+public class NewsActivity extends Activity implements OnScrollListener {
 	
 	static boolean loadNews = true;
 	static int startNew = 0;
@@ -84,9 +89,12 @@ public class NewsActivity extends ListActivity implements OnScrollListener {
 	static NewsActivity instance = null;
 	SpotsHelper db = null;
 	
-	static int typeSpots = -1;
+	
 	static String currentLat = ""+Const.currentLatitude;
 	static String currentLng = ""+Const.currentLongitude;
+	
+	Spinner spinnerSpotType, spinnerSpotDistance;
+	static ListView listNews;
 	
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 	    @Override
@@ -148,41 +156,94 @@ public class NewsActivity extends ListActivity implements OnScrollListener {
 		MyLocation myLocation = new MyLocation();
 		myLocation.getLocation(this, locationResult);
 		
+		//Types
+		spinnerSpotType = (Spinner) findViewById(R.id.filter_spottypes);
+		ArrayAdapter<CharSequence> adapterTypes = ArrayAdapter.createFromResource(this,
+		        R.array.spottype_array, android.R.layout.simple_spinner_item);
+		adapterTypes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerSpotType.setAdapter(adapterTypes);
+		
+		// Distance
+		spinnerSpotDistance = (Spinner) findViewById(R.id.filter_spotdistance);
+		ArrayAdapter<CharSequence> adapterDistance = ArrayAdapter.createFromResource(this,
+		        R.array.spotdistance_array, android.R.layout.simple_spinner_item);
+		adapterDistance.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerSpotDistance.setAdapter(adapterDistance);
+		
+		spinnerSpotType.setOnItemSelectedListener(
+				new OnItemSelectedListener() {
+		    @Override
+		    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+		        // your code here
+		    	listNews.setAdapter(null);
+		    	startNew = 0;
+		    	outboxList.clear();
+		    	Const.spotTypePosition 		= position;
+		        Const.spotDistancePosition 	= position;
+		    	new LoadSpots().execute();
+		    	//Log.d(TAG,"onItemSelected"+position);
+		    }
+
+		    @Override
+		    public void onNothingSelected(AdapterView<?> parentView) {
+		        // your code here
+		    	
+		    }
+
+		});
+		
+		listNews	= (ListView) findViewById(R.id.list_news);
+		listNews.setOnItemClickListener(
+		        new OnItemClickListener(){
+		            @Override
+		            public void onItemClick(AdapterView<?> arg0, View view,
+		                    int position, long id) {
+		            	TextView tv = (TextView) view.findViewById(R.id.spotId);
+		            	String spotIdHidden = tv.getText().toString();
+		            	//Log.d(TAG,"S>>>potId = "+spotIdHidden);
+		            	Intent spotIntent = new Intent(NewsActivity.this, SpotActivity.class);
+		            	spotIntent.putExtra("SpotID",spotIdHidden);
+		                startActivity(spotIntent);
+		                overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
+		                //Intent tmpIntent = new Intent(this, YourActivityForShowingItem.class);
+		                //tmpIntent.putExtra(SHOWITEMINTENT_EXTRA_FETCHROWID, position);
+		                //startActivityForResult(tmpIntent, ACTIVITY_SHOWITEM);
+		            }   
+		        }       
+		);
+		
+		
+		
 		
 	}
 
-	
+	@Override
+    public void onStop() {
+        super.onStop();
+        Const.spotTypePosition = spinnerSpotType.getSelectedItemPosition();
+        Const.spotDistancePosition = spinnerSpotDistance.getSelectedItemPosition();
+        
+        Const.v(TAG, "-- ON STOP --");
+    }
 	
 	@Override
     public synchronized void onResume() {
         super.onResume();
+        spinnerSpotType.setSelection(Const.spotTypePosition);
+        spinnerSpotDistance.setSelection(Const.spotDistancePosition);
         registerReceiver(receiver, new IntentFilter(UploadMediaService.NOTIFICATION));
-        getListView().setOnScrollListener(this);
-     // Hashmap for ListView
+        listNews.setOnScrollListener(this);
+        //Hashmap for ListView
         outboxList = new ArrayList<HashMap<String, String>>();
-        OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+typeSpots+"/"+currentLat+"/"+currentLng+"/"+startNew+"/"+rowNews;
-        initialize();
-		new LoadSpots().execute();
+        OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+Const.spotTypePosition+"/"+currentLat+"/"+currentLng+"/"+startNew+"/"+rowNews;
+        //initialize();
+		//new LoadSpots().execute();
 		Const.v(TAG, "+ ON RESUME +"+OUTBOX_URL);
     }
 	
 	public static final String SHOWITEMINTENT_EXTRA_FETCHROWID = "fetchRow";
     public static final int ACTIVITY_SHOWITEM = 0; /*Intent request user index*/
 
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id){
-    	TextView tv = (TextView) v.findViewById(R.id.spotId);
-    	String spotIdHidden = tv.getText().toString();
-    	//Log.d(TAG,"S>>>potId = "+spotIdHidden);
-    	Intent spotIntent = new Intent(this, SpotActivity.class);
-    	spotIntent.putExtra("SpotID",spotIdHidden);
-        startActivity(spotIntent);
-        overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
-        //Intent tmpIntent = new Intent(this, YourActivityForShowingItem.class);
-       // tmpIntent.putExtra(SHOWITEMINTENT_EXTRA_FETCHROWID, position);
-        //startActivityForResult(tmpIntent, ACTIVITY_SHOWITEM);
-        
-    }
     
     /**
 	 * Background Async Task to Load all OUTBOX messages by making HTTP Request
@@ -196,7 +257,8 @@ public class NewsActivity extends ListActivity implements OnScrollListener {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			instance.setProgressBarIndeterminateVisibility(true);
-			OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+typeSpots+"/"+currentLat+"/"+currentLng+"/"+startNew+"/"+rowNews;
+			OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+Const.spotTypePosition+"/"+currentLat+"/"+currentLng+"/"+startNew+"/"+rowNews;
+			Log.d(TAG,OUTBOX_URL);
 			pDialog = new ProgressDialog(NewsActivity.instance);
 			pDialog.setMessage(instance.getString(R.string.loading_spots));
 			pDialog.setIndeterminate(false);
@@ -218,73 +280,73 @@ public class NewsActivity extends ListActivity implements OnScrollListener {
 				JSONObject json = jsonParser.makeHttpRequest(OUTBOX_URL, "GET",
 						params);
 				Log.d(TAG,"HTTP="+OUTBOX_URL);
-				startNew+=4; 
-				// Check your log cat for JSON reponse
-				/*
-				Log.d(TAG, json.toString());
-				if(!json.toString().isEmpty()){
-					
-				}else{
+				if(json == null){
 					loadNews = false;
+					Log.d(TAG,"JSONNULL");
 				}
-				*/
-				String urlImage = "";
-			
-				outbox = json.getJSONArray(TAG_SPOTS);
-				// looping through All messages
-				for (int i = 0; i < outbox.length(); i++) {
-					JSONObject c = outbox.getJSONObject(i);
+				else{
+					
+					startNew+=4; 
+					
+					String urlImage = "";
+					outbox = json.getJSONArray(TAG_SPOTS);
+					// looping through All messages
+					for (int i = 0; i < outbox.length(); i++) {
+						JSONObject c = outbox.getJSONObject(i);
 
-					// Storing each json item in variable
-					String id = c.getString(TAG_ID);
-					
-					String name = c.getString(TAG_NAME);
-					String created_at = c.getString(TAG_CREATED_AT);
-					String image = c.getString(TAG_IMAGE);
-					String cityname = c.getString(TAG_CITYNAME);
-					String email = c.getString(TAG_EMAIL);
-					String description = c.getString(TAG_DESCRIPTION);
-					String spottype = c.getString(TAG_SPOTTYPE);
-					String likes = c.getString(TAG_LIKES);
-					String dislikes = c.getString(TAG_DISLIKES);
-					String latitude = c.getString(TAG_LATITUDE);
-					String longitude = c.getString(TAG_LONGITUDE);
-					
-					
-					// subject taking only first 23 chars
-					// to fit into screen
-					/*
-					if(subject.length() > 23){
-						subject = subject.substring(0, 22) + "..";
+						// Storing each json item in variable
+						String id = c.getString(TAG_ID);
+						
+						String name = c.getString(TAG_NAME);
+						String created_at = c.getString(TAG_CREATED_AT);
+						String image = c.getString(TAG_IMAGE);
+						String cityname = c.getString(TAG_CITYNAME);
+						String email = c.getString(TAG_EMAIL);
+						String description = c.getString(TAG_DESCRIPTION);
+						String spottype = c.getString(TAG_SPOTTYPE);
+						String likes = c.getString(TAG_LIKES);
+						String dislikes = c.getString(TAG_DISLIKES);
+						String latitude = c.getString(TAG_LATITUDE);
+						String longitude = c.getString(TAG_LONGITUDE);
+						
+						
+						// subject taking only first 23 chars
+						// to fit into screen
+						/*
+						if(subject.length() > 23){
+							subject = subject.substring(0, 22) + "..";
+						}
+						*/
+						// creating new HashMap
+						HashMap<String, String> map = new HashMap<String, String>();
+						
+						// adding each child node to HashMap key => value
+						map.put(TAG_ID, id);
+						map.put(TAG_NAME, name);
+						map.put(TAG_CREATED_AT, created_at);
+						
+						urlImage = "http://myhotspotz.net/public/images/spots/"+image;
+						map.put(TAG_IMAGE,urlImage);
+						map.put(TAG_CITYNAME, cityname);
+						map.put(TAG_EMAIL, email);
+						map.put(TAG_DESCRIPTION, description);
+						map.put(TAG_SPOTTYPE, spottype);
+						map.put(TAG_LIKES, likes);
+						map.put(TAG_DISLIKES, dislikes);
+						map.put(TAG_LATITUDE, latitude);
+						map.put(TAG_LONGITUDE, longitude);
+						// adding HashList to ArrayList
+						outboxList.add(map);
 					}
-					*/
-					// creating new HashMap
-					HashMap<String, String> map = new HashMap<String, String>();
-					
-					// adding each child node to HashMap key => value
-					map.put(TAG_ID, id);
-					map.put(TAG_NAME, name);
-					map.put(TAG_CREATED_AT, created_at);
-					
-					urlImage = "http://myhotspotz.net/public/images/spots/"+image;
-					map.put(TAG_IMAGE,urlImage);
-					map.put(TAG_CITYNAME, cityname);
-					map.put(TAG_EMAIL, email);
-					map.put(TAG_DESCRIPTION, description);
-					map.put(TAG_SPOTTYPE, spottype);
-					map.put(TAG_LIKES, likes);
-					map.put(TAG_DISLIKES, dislikes);
-					map.put(TAG_LATITUDE, latitude);
-					map.put(TAG_LONGITUDE, longitude);
-					// adding HashList to ArrayList
-					outboxList.add(map);
 				}
+				
 				
 			} catch (JSONException e) {
 				loadNews = false;
 				e.printStackTrace();
 			} catch (RuntimeException e){
 				loadNews = false;
+				e.printStackTrace();
 				Log.d(TAG,"RuntimeException");
 			} catch (Exception e){
 				loadNews = false;
@@ -305,7 +367,7 @@ public class NewsActivity extends ListActivity implements OnScrollListener {
 				instance.runOnUiThread(new Runnable() {
 					public void run() {
 						adapter = new NewsViewAdapter(NewsActivity.instance, outboxList);
-						instance.setListAdapter(adapter);
+						listNews.setAdapter(adapter);
 					}
 				});
 			}
@@ -322,13 +384,12 @@ public class NewsActivity extends ListActivity implements OnScrollListener {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			setProgressBarIndeterminateVisibility(true);
-			OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+typeSpots+"/"+currentLat+"/"+currentLng+"/"+startNew+"/"+rowNews;
+			OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+Const.spotTypePosition+"/"+currentLat+"/"+currentLng+"/"+startNew+"/"+rowNews;
 			pDialog = new ProgressDialog(NewsActivity.this);
 			pDialog.setMessage(getString(R.string.loading_spots));
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(false);
 			pDialog.show();
-			
 		}
 
 		/**
@@ -347,21 +408,14 @@ public class NewsActivity extends ListActivity implements OnScrollListener {
 				if(json == null){
 					//Log.d(TAG,"DontLoadNews"+json.toString());
 					loadNews = false;
+					Log.d(TAG,"JSONNULL");
 				}else{
 					loadNews = true;
 					//Log.d(TAG,"LoadEm"+json.toString());
 					
 					Log.d(TAG,"MOREHTTP="+OUTBOX_URL);
 					startNew+=4; 
-					// Check your log cat for JSON reponse
-					/*
-					Log.d(TAG, json.toString());
-					if(!json.toString().isEmpty()){
-						
-					}else{
-						loadNews = false;
-					}
-					*/
+					
 					String urlImage = "";
 				
 					outbox = json.getJSONArray(TAG_SPOTS);
@@ -415,8 +469,6 @@ public class NewsActivity extends ListActivity implements OnScrollListener {
 					}
 				}
 
-				
-				
 			} catch (JSONException e) {
 				loadNews = false;
 				e.printStackTrace();
@@ -446,8 +498,7 @@ public class NewsActivity extends ListActivity implements OnScrollListener {
 						Log.d(TAG,"notify changes");
 						adapter.notifyDataSetChanged();
 						flag_loading = false;
-						//adapter = new NewsViewAdapter(NewsActivity.this, outboxList);
-						//setListAdapter(adapter);
+						
 					}
 				});
 			}
@@ -469,59 +520,9 @@ public class NewsActivity extends ListActivity implements OnScrollListener {
 			//Log.d(TAG,"addItems0");
             if(flag_loading == false){
                 flag_loading = true;
-                additems();
+                new LoadMoreSpots().execute();
             }
         }
-	}
-	
-	public void additems(){
-		Log.d(TAG,"addItems");
-		//new LoadSpots().execute();
-		new LoadMoreSpots().execute();
-		
-		/*
-		String id = "aca";
-		String name = "aca";
-		String created_at = "aca";
-		String image = "aca";
-		String cityname = "aca";
-		String email = "aca";
-		String description = "aca";
-		String spottype = "aca";
-		String likes = "aca";
-		String dislikes = "aca";
-		String latitude ="aca";
-		String longitude ="aca";
-		
-		
-		// subject taking only first 23 chars
-		// to fit into screen
-		
-		// creating new HashMap
-		HashMap<String, String> map = new HashMap<String, String>();
-		
-		// adding each child node to HashMap key => value
-		map.put(TAG_ID, id);
-		map.put(TAG_NAME, name);
-		map.put(TAG_CREATED_AT, created_at);
-		
-		String urlImage = "http://myhotspotz.net/public/images/spots/"+image;
-		map.put(TAG_IMAGE,urlImage);
-		map.put(TAG_CITYNAME, cityname);
-		map.put(TAG_EMAIL, email);
-		map.put(TAG_DESCRIPTION, description);
-		map.put(TAG_SPOTTYPE, spottype);
-		map.put(TAG_LIKES, likes);
-		map.put(TAG_DISLIKES, dislikes);
-		map.put(TAG_LATITUDE, latitude);
-		map.put(TAG_LONGITUDE, longitude);
-		outboxList.add(map);
-		//adapter = new NewsViewAdapter(NewsActivity.this, outboxList);
-		adapter.notifyDataSetChanged();
-		*/
-		//setListAdapter(adapter);
-		
-		//this.notifyDataSetChanged();
 	}
 	
 	public static void initialize(){
@@ -529,5 +530,8 @@ public class NewsActivity extends ListActivity implements OnScrollListener {
 		outboxList = new ArrayList<HashMap<String, String>>();
 		flag_loading = false;
 		loadNews = true;
+		listNews.setAdapter(null);
 	}
+	
+	
 }
