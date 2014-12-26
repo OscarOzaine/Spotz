@@ -125,8 +125,10 @@ public class MessageManager {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
+					
 					// Connect To Server
-					HttpURLConnection con = ServerConn.Connect(ServerConn.metPOST, Settings.getIns(null).getRegEventAdd(), query, optionparams);
+					Log.d(TAG,Settings.getRegEventAdd()+ query);
+					HttpURLConnection con = ServerConn.Connect(ServerConn.metPOST, Settings.getRegEventAdd(), query, optionparams);
 					// getResponse & process it
 					
 					SRVreceived = ServerConn.getResponse(con);
@@ -221,7 +223,13 @@ public class MessageManager {
 		        { "link", link},
 		        { "token", token}
 		    };
-		
+		Log.d(TAG,email);
+		Log.d(TAG,gender);
+		Log.d(TAG,first_name);
+		Log.d(TAG,last_name);
+		Log.d(TAG,id);
+		Log.d(TAG,link);
+		Log.d(TAG,token);
 		boolean ret = mInternetSend(query, Events.FACEBOOK_LOGIN,optionparams);
 		if( !ret && mLoginListener != null)
 			mLoginListener.onLoginError(MainActivity.instance.getString(R.string.not_connected));

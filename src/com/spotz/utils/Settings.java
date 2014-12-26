@@ -30,7 +30,7 @@ public class Settings {
     //Server's address Cons
 	private static final String defaultSRVAddress = "http://api.myhotspotz.net/app/";
 	
-	private String SRVaddress = defaultSRVAddress;
+	private static String SRVaddress = defaultSRVAddress;
 	
 	private SharedPreferences prefs;// To save preferences accesible by other Apps, just 
     private SharedPreferences.Editor prefsEditor;
@@ -39,6 +39,7 @@ public class Settings {
 	public Settings(Context ctx){
 		mContext = ctx;
 		SRVaddress = getPref().getString(SERVER_IP, defaultSRVAddress);
+		//Log.d(TAG,"SRVaddress"+SRVaddress);
 	}
 	
 	/** Singleton */
@@ -116,7 +117,7 @@ public class Settings {
         return menu;
 	}
 	
-	public String getRegEventAdd(){
+	public static String getRegEventAdd(){
 		if( SRVaddress.equals(defaultSRVAddress))
 			return SRVaddress;
 		return SRVaddress;

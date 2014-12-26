@@ -150,11 +150,17 @@ public class NewsActivity extends Activity implements OnScrollListener {
 		    	Const.currentLatitude = location.getLatitude();
 		    	Const.currentLongitude = location.getLongitude();
 		    	Log.d(TAG,"getLocationACAs"+Const.currentLongitude+"  "+Const.currentLatitude);
+		    	//if(Const.currentLongitude != 0){
+		    		new LoadSpots().execute();
+		    	//}
 		        //Got the location!
 		    }
 		};
 		MyLocation myLocation = new MyLocation();
-		myLocation.getLocation(this, locationResult);
+		if(Const.currentLongitude == 0 && Const.currentLatitude == 0){
+			myLocation.getLocation(this, locationResult);
+		}
+		
 		
 		//Types
 		spinnerSpotType = (Spinner) findViewById(R.id.filter_spottypes);
@@ -235,7 +241,7 @@ public class NewsActivity extends Activity implements OnScrollListener {
         listNews.setOnScrollListener(this);
      // Hashmap for ListView
         outboxList = new ArrayList<HashMap<String, String>>();
-        OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+Const.spotTypePosition+"/"+currentLat+"/"+currentLng+"/"+startNew+"/"+rowNews;
+        OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+Const.spotTypePosition+"/"+Const.currentLatitude+"/"+Const.currentLongitude+"/"+startNew+"/"+rowNews;
         initialize();
 		//new LoadSpots().execute();
 		Const.v(TAG, "+ ON RESUME +"+OUTBOX_URL);
@@ -257,7 +263,7 @@ public class NewsActivity extends Activity implements OnScrollListener {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			instance.setProgressBarIndeterminateVisibility(true);
-			OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+Const.spotTypePosition+"/"+currentLat+"/"+currentLng+"/"+startNew+"/"+rowNews;
+			OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+Const.spotTypePosition+"/"+Const.currentLatitude+"/"+Const.currentLongitude+"/"+startNew+"/"+rowNews;
 			Log.d(TAG,OUTBOX_URL);
 			pDialog = new ProgressDialog(NewsActivity.instance);
 			pDialog.setMessage(instance.getString(R.string.loading_spots));
@@ -384,7 +390,7 @@ public class NewsActivity extends Activity implements OnScrollListener {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			setProgressBarIndeterminateVisibility(true);
-			OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+Const.spotTypePosition+"/"+currentLat+"/"+currentLng+"/"+startNew+"/"+rowNews;
+			OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+Const.spotTypePosition+"/"+Const.currentLatitude+"/"+Const.currentLongitude+"/"+startNew+"/"+rowNews;
 			pDialog = new ProgressDialog(NewsActivity.this);
 			pDialog.setMessage(getString(R.string.loading_spots));
 			pDialog.setIndeterminate(false);

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.spotz.LoginActivity;
 import com.spotz.frags.InfoUpdateListener;
 import com.spotz.utils.Const;
 import com.spotz.utils.Settings;
@@ -42,8 +44,9 @@ public class User {
 	
 	/** Get current Player logged in */
 	public static final User current(){
+		Log.d("USER","USERJSON"+Settings.USER_JSON);
 		if( currentU == null){
-			String playerJson = Settings.getIns(null).getPref().getString(Settings.USER_JSON, null);
+			String playerJson = Settings.getIns(LoginActivity.instance).getPref().getString(Settings.USER_JSON, null);
 			
 			if( playerJson == null)
 				currentU = new User( 1, "defaultusername", "default@default.com","de","fault");

@@ -205,6 +205,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
         	outerArray.put(user.getInnerJSONObject());
         	outerObject.put("event", "facebook_login");
 			outerObject.put("info", outerArray);
+			Log.d(TAG,"Json = "+outerObject.toString());
 			/*
 			Log.d(TAG,"Json = "+outerObject.toString());
 			Log.d(TAG,"Email = "+user.getInnerJSONObject().getString("email"));
@@ -337,7 +338,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
 		try {
 			//res = new JSONArray(json);
 			res = new JSONObject(json);
-			//Log.d("TAG","ACAAA="+res.getJSONArray("info") );
+			Log.d("TAG","ACAAA="+res.getJSONArray("info") );
 			User.current().initPlayer( res.getJSONArray("info") );
 			//Team.current().initTeam( res.getJSONObject("team") );
 		} catch (JSONException e) {
