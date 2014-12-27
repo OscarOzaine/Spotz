@@ -81,7 +81,7 @@ public class UploadSpotActivity extends Activity implements
 	// All xml labels
 	TextView txtType, txtDescription;
 	EditText editSpotName, editSpotDescription;
-	Spinner SpinnerSpotType, spinnerSpotType;
+	Spinner SpinnerSpotType;
 	ImageView spotImage;
 	String currentLat = "", currentLng = "";
 	ImageButton btn1,btn2;
@@ -128,7 +128,6 @@ public class UploadSpotActivity extends Activity implements
 		
 		//findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 		spotImage 			= (ImageView) findViewById(R.id.spotImageUpload);
-		editSpotName 		= (EditText) findViewById(R.id.editSpotName);
 		editSpotDescription = (EditText) findViewById(R.id.editSpotDescription);
 		frameLayoutVideo	= (FrameLayout) findViewById(R.id.videoSurfaceContainer);
 		
@@ -192,14 +191,14 @@ public class UploadSpotActivity extends Activity implements
 			
 		}
 		
-		spinnerSpotType = (Spinner) findViewById(R.id.spinner_spottypes);
+		SpinnerSpotType = (Spinner) findViewById(R.id.spinner_spottypes);
 		// Create an ArrayAdapter using the string array and a default spinner layout
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
 		        R.array.spottype_array, android.R.layout.simple_spinner_item);
 		// Specify the layout to use when the list of choices appears
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		// Apply the adapter to the spinner
-		spinnerSpotType.setAdapter(adapter);
+		SpinnerSpotType.setAdapter(adapter);
 		
 		
         mLocationRequest = LocationRequest.create();
@@ -468,14 +467,14 @@ public class UploadSpotActivity extends Activity implements
 	        case R.id.action_uploadspot:
 	        	//Hacer peticion de guardar
             	//Enviar imagen al servidor y registrar en la DB
-	        	final String spotName = editSpotName.getText().toString();
+	        	//final String spotName = editSpotName.getText().toString();
 	        	final String spotDescription = editSpotDescription.getText().toString();
 	        	final String spotType = SpinnerSpotType.getSelectedItem().toString();
 	        	final long spotTypeId = SpinnerSpotType.getSelectedItemId();
-	        	if(spotName != "" && spotDescription != "" && spotType != ""){
+	        	if(/*spotName != "" &&*/ spotDescription != "" && spotTypeId > 0){
 	        		Intent intentUploadService = new Intent(UploadSpotActivity.this, UploadMediaService.class);
 	        		intentUploadService.putExtra("imagepath", mediaPath);
-	        		intentUploadService.putExtra("spotname", spotName);
+	        		//intentUploadService.putExtra("spotname", spotName);
 	        		intentUploadService.putExtra("spotdescription", spotDescription);
 	        		intentUploadService.putExtra("spottypeId", ""+spotTypeId);
 	        		intentUploadService.putExtra("spottype", spotType);
@@ -766,14 +765,7 @@ public class UploadSpotActivity extends Activity implements
         if (errorDialog != null) {
 
         	Log.d(TAG,"errorDialog");
-        	/*
-            // Create a new DialogFragment in which to show the error dialog
-            ErrorDialogFragment errorFragment = new ErrorDialogFragment();
-            // Set the dialog in the DialogFragment
-            errorFragment.setDialog(errorDialog);
-            // Show the error dialog in the DialogFragment
-            errorFragment.show(getFragmentManager(), TAG);
-            */
+        	
         }
     }
 	/**
@@ -828,8 +820,6 @@ public class UploadSpotActivity extends Activity implements
 	};
     
 	VideoControllerView.MediaPlayerControl mediaPlayerControl = new VideoControllerView.MediaPlayerControl(){
-		
-		
 		
 		@Override
 		public void start() {

@@ -97,7 +97,7 @@ public class MySpotsViewAdapter extends BaseAdapter {
 		resultp = data.get(position);
 		// Locate the TextViews in listview_item.xml
 		txtid = (TextView) itemView.findViewById(R.id.uploadedspotId);
-		txtname = (TextView) itemView.findViewById(R.id.uploadedspotTitle);
+		//txtname = (TextView) itemView.findViewById(R.id.uploadedspotTitle);
 		txtDescription = (TextView) itemView.findViewById(R.id.uploadedspotDescription);
 		txtType = (TextView) itemView.findViewById(R.id.uploadedspotType);
 		txtTypeId = (TextView) itemView.findViewById(R.id.uploadedSpotTypeId);
@@ -110,7 +110,7 @@ public class MySpotsViewAdapter extends BaseAdapter {
 		imgSpot = (ImageView) itemView.findViewById(R.id.uploadedspotImage);
 		
 		txtid.setText(resultp.get(MySpotsActivity.TAG_ID));
-		txtname.setText(resultp.get(MySpotsActivity.TAG_NAME));
+		//txtname.setText(resultp.get(MySpotsActivity.TAG_NAME));
 		txtDescription.setText(resultp.get(MySpotsActivity.TAG_DESCRIPTION));
 		txtType.setText(resultp.get(MySpotsActivity.TAG_SPOTTYPE));
 		txtLatitude.setText(resultp.get(MySpotsActivity.TAG_LATITUDE));
@@ -160,7 +160,7 @@ public class MySpotsViewAdapter extends BaseAdapter {
 			            	   if(which == 0){
 			            		   Intent intentUploadService = new Intent(MySpotsActivity.instance, UploadMediaService.class);
 				   	        		intentUploadService.putExtra("imagepath", spotImage);
-				   	        		intentUploadService.putExtra("spotname", spotTitle);
+				   	        		//intentUploadService.putExtra("spotname", spotTitle);
 				   	        		intentUploadService.putExtra("spotdescription", spotDescription);
 				   	        		intentUploadService.putExtra("spottypeId", ""+spotTypeId);
 				   	        		intentUploadService.putExtra("spottype", spotType);

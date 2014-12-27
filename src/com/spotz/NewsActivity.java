@@ -89,6 +89,7 @@ public class NewsActivity extends Activity implements OnScrollListener {
 	static NewsActivity instance = null;
 	SpotsHelper db = null;
 	
+	static boolean loading = false;
 	
 	static String currentLat = ""+Const.currentLatitude;
 	static String currentLng = ""+Const.currentLongitude;
@@ -151,6 +152,7 @@ public class NewsActivity extends Activity implements OnScrollListener {
 		    	Const.currentLongitude = location.getLongitude();
 		    	Log.d(TAG,"getLocationACAs"+Const.currentLongitude+"  "+Const.currentLatitude);
 		    	//if(Const.currentLongitude != 0){
+		    	if(loading == false)
 		    		new LoadSpots().execute();
 		    	//}
 		        //Got the location!
@@ -160,7 +162,6 @@ public class NewsActivity extends Activity implements OnScrollListener {
 		if(Const.currentLongitude == 0 && Const.currentLatitude == 0){
 			myLocation.getLocation(this, locationResult);
 		}
-		
 		
 		//Types
 		spinnerSpotType = (Spinner) findViewById(R.id.filter_spottypes);
@@ -186,16 +187,15 @@ public class NewsActivity extends Activity implements OnScrollListener {
 		    	outboxList.clear();
 		    	Const.spotTypePosition 		= position;
 		        Const.spotDistancePosition 	= position;
-		    	new LoadSpots().execute();
+		        if(loading == false)
+		    		new LoadSpots().execute();
 		    	//Log.d(TAG,"onItemSelected"+position);
 		    }
 
 		    @Override
 		    public void onNothingSelected(AdapterView<?> parentView) {
 		        // your code here
-		    	
 		    }
-
 		});
 		
 		listNews	= (ListView) findViewById(R.id.list_news);
@@ -241,8 +241,8 @@ public class NewsActivity extends Activity implements OnScrollListener {
         listNews.setOnScrollListener(this);
      // Hashmap for ListView
         outboxList = new ArrayList<HashMap<String, String>>();
-        OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+Const.spotTypePosition+"/"+Const.currentLatitude+"/"+Const.currentLongitude+"/"+startNew+"/"+rowNews;
-        initialize();
+        OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+Const.spotTypePosition+"/"+Const.currentLatitude+"/"+Const.currentLongitude+"/"+Const.spotDistancePosition+"/"+startNew+"/"+rowNews;
+        
 		//new LoadSpots().execute();
 		Const.v(TAG, "+ ON RESUME +"+OUTBOX_URL);
     }
@@ -262,15 +262,15 @@ public class NewsActivity extends Activity implements OnScrollListener {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+			loading = true;
 			instance.setProgressBarIndeterminateVisibility(true);
-			OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+Const.spotTypePosition+"/"+Const.currentLatitude+"/"+Const.currentLongitude+"/"+startNew+"/"+rowNews;
+			OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+Const.spotTypePosition+"/"+Const.currentLatitude+"/"+Const.currentLongitude+"/"+Const.spotDistancePosition+"/"+startNew+"/"+rowNews;
 			Log.d(TAG,OUTBOX_URL);
 			pDialog = new ProgressDialog(NewsActivity.instance);
 			pDialog.setMessage(instance.getString(R.string.loading_spots));
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(false);
 			pDialog.show();
-			
 		}
 
 		/**
@@ -303,7 +303,7 @@ public class NewsActivity extends Activity implements OnScrollListener {
 						// Storing each json item in variable
 						String id = c.getString(TAG_ID);
 						
-						String name = c.getString(TAG_NAME);
+						//String name = c.getString(TAG_NAME);
 						String created_at = c.getString(TAG_CREATED_AT);
 						String image = c.getString(TAG_IMAGE);
 						String cityname = c.getString(TAG_CITYNAME);
@@ -328,7 +328,7 @@ public class NewsActivity extends Activity implements OnScrollListener {
 						
 						// adding each child node to HashMap key => value
 						map.put(TAG_ID, id);
-						map.put(TAG_NAME, name);
+						//map.put(TAG_NAME, name);
 						map.put(TAG_CREATED_AT, created_at);
 						
 						urlImage = "http://myhotspotz.net/public/images/spots/"+image;
@@ -377,6 +377,7 @@ public class NewsActivity extends Activity implements OnScrollListener {
 					}
 				});
 			}
+			loading = false;
 		}
 	}
 
@@ -389,8 +390,9 @@ public class NewsActivity extends Activity implements OnScrollListener {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+			loading = true;
 			setProgressBarIndeterminateVisibility(true);
-			OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+Const.spotTypePosition+"/"+Const.currentLatitude+"/"+Const.currentLongitude+"/"+startNew+"/"+rowNews;
+			OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+Const.spotTypePosition+"/"+Const.currentLatitude+"/"+Const.currentLongitude+"/"+Const.spotDistancePosition+"/"+startNew+"/"+rowNews;
 			pDialog = new ProgressDialog(NewsActivity.this);
 			pDialog.setMessage(getString(R.string.loading_spots));
 			pDialog.setIndeterminate(false);
@@ -432,7 +434,7 @@ public class NewsActivity extends Activity implements OnScrollListener {
 						// Storing each json item in variable
 						String id = c.getString(TAG_ID);
 						
-						String name = c.getString(TAG_NAME);
+						//String name = c.getString(TAG_NAME);
 						String created_at = c.getString(TAG_CREATED_AT);
 						String image = c.getString(TAG_IMAGE);
 						String cityname = c.getString(TAG_CITYNAME);
@@ -457,7 +459,7 @@ public class NewsActivity extends Activity implements OnScrollListener {
 						
 						// adding each child node to HashMap key => value
 						map.put(TAG_ID, id);
-						map.put(TAG_NAME, name);
+						//map.put(TAG_NAME, name);
 						map.put(TAG_CREATED_AT, created_at);
 						
 						urlImage = "http://myhotspotz.net/public/images/spots/"+image;
@@ -508,8 +510,10 @@ public class NewsActivity extends Activity implements OnScrollListener {
 					}
 				});
 			}
+			loading = false;
 		}
 	}
+	
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		// TODO Auto-generated method stub
@@ -538,10 +542,5 @@ public class NewsActivity extends Activity implements OnScrollListener {
 		loadNews = true;
 		listNews.setAdapter(null);
 	}
-	
-	
-
-	
-	
 	
 }

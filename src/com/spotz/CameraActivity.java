@@ -17,16 +17,10 @@ import com.spotz.camera.VideoActivity;
 import com.spotz.gen.R;
 import com.spotz.utils.Const;
 import com.spotz.utils.Settings;
-import com.spotz.utils.Utils;
-import com.spotz.utils.imaging.ImageMetadataReader;
-import com.spotz.utils.imaging.ImageProcessingException;
-import com.spotz.utils.metadata.Metadata;
 
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
@@ -131,6 +125,7 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		buttonTakeSpot.setOnClickListener(new View.OnClickListener() {
 			@SuppressWarnings("deprecation")
 			public void onClick(View v) {
+				Log.d(TAG,"CurrentCamera = "+currentCameraId);
 				camera.takePicture(null, null, mPicture);
 			}
 		});
@@ -247,6 +242,7 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 			try {
 				exif = new ExifInterface(pictureFile.getAbsolutePath());
 				exif.setAttribute(ExifInterface.TAG_ORIENTATION,Integer.toString(rotation));
+				exif.setAttribute(ExifInterface.TAG_MODEL,Integer.toString(currentCameraId));
 				exif.saveAttributes();
 				
 			} catch (IOException e1) {

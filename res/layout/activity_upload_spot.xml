@@ -48,7 +48,7 @@
 		    android:layout_height="wrap_content"
 		    android:orientation="vertical"
 		    android:layout_below="@+id/uploadLinear1" >
-
+			<!-- 
 		    <EditText
 		        android:id="@+id/editSpotName"
 		        android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
 
 		        <requestFocus />
 		    </EditText>
-
+			-->
 		    <Spinner
 		        android:id="@+id/spinner_spottypes"
 		        android:layout_width="fill_parent"
@@ -72,7 +72,10 @@
 		        android:layout_height="wrap_content"
 		        android:ems="18"
 		        android:hint="Description"
-		        android:textSize="20dp" />
+		        android:textSize="20dp" >
+		        <requestFocus />
+		    </EditText>
+		    
 		</LinearLayout>
         
     </RelativeLayout>

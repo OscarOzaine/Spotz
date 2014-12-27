@@ -42,6 +42,7 @@ public class ImageLoader {
  
     MemoryCache memoryCache = new MemoryCache();
     FileCache fileCache;
+    static String TAG = "ImageLoader";
     private Map<ImageView, String> imageViews = Collections
             .synchronizedMap(new WeakHashMap<ImageView, String>());
     ExecutorService executorService;
@@ -227,8 +228,14 @@ public class ImageLoader {
     public static Bitmap rotateBitmap(InputStream inputStream,String src, Bitmap bitmap) {
     	//Log.d("DisplayImage","src = "+src);
         try {
-            String orientation = getExifOrientation(inputStream, src);
-            //Log.d("DisplayImage","Orientation = "+orientation);
+            String[] exifArray 	= getExifArray(inputStream, src);
+            
+            Log.d("DisplayImage","Orientation = "+exifArray.toString());
+            
+            String orientation 	= exifArray[0];
+            String camera 		= exifArray[1];
+            
+            
             if (orientation.equals("1")) {
                 return bitmap;
             }
@@ -240,22 +247,33 @@ public class ImageLoader {
 			if(!Utils.isInteger(orientation))
 				return bitmap;
 			
-            switch(Integer.parseInt(orientation)) {
+			
+			
+			int rotation = Integer.parseInt(orientation);
+            switch(rotation) {
 			    case 90:
 			    	mat = new Matrix();
-			        mat.postRotate(90);
+			    	rotation = 90;
 				    //Log.d("DisplayImage","90");
 			    case 180:
 			    	mat = new Matrix();
-			        mat.postRotate(180);
+			    	rotation = 90;
 			        //Log.d("DisplayImage","180");
 			    case 270:
+			    	rotation = 270;
 			    	mat = new Matrix();
-			        mat.postRotate(270);
 			        //Log.d("DisplayImage","270");
 			    default:
 			    	//Log.d("DisplayImage","0");
 			}
+            
+            if(camera != null)
+	            if(Integer.parseInt(camera) == 0){
+					rotation+= 180;
+				}
+            
+            mat.postRotate(rotation);
+            
             if(bitmap != null){
 	        	bMapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
 		        // Get scaling factor to fit the max possible width of the ImageView
@@ -277,9 +295,10 @@ public class ImageLoader {
         return bitmap;
     }
 
-    private static String getExifOrientation(InputStream inputStream, String src) throws IOException {
-        String orientation = "0";
-        	//Log.d("DisplayImage","SRC = "+src);
+    private static String[] getExifArray(InputStream inputStream, String src) throws IOException {
+    	String[] exifArray = new String[2];
+        
+        	//Log.d("DisplayImage","getExifOrientation");
         	try {
         		//URL url = new URL(src);
 				Metadata metadata = ImageMetadataReader.readMetadata(inputStream);
@@ -289,11 +308,15 @@ public class ImageLoader {
 				*/
 				for (Directory directory : metadata.getDirectories()) {
 				    for (Tag tag : directory.getTags()) {
-				    	//Log.d("DisplayImage","Tag = "+tag.getTagName());
+				    	//Log.d("DisplayImage","TAG = "+tag.getTagName()+"TagD = "+tag.getDescription());
 				    	if(tag.getTagName().equals("Orientation")){
-				    		orientation = Utils.getMetadataParenthesis(tag.getDescription());
+				    		//Log.d(TAG,"Orientation = "+tag.getDescription());
+				    		exifArray[0] 	= ""+Utils.getMetadataParenthesis(tag.getDescription());
 				    		//Log.d("DisplayImage","ACA= "+orientation);
-				    		return orientation;
+				    	}
+				    	if(tag.getTagName().equals("Model")){
+				    		//Log.d(TAG,"Model = "+tag.getDescription());
+				    		exifArray[1] 	= tag.getDescription();
 				    	}
 				    }
 				}
@@ -307,8 +330,9 @@ public class ImageLoader {
 				e.printStackTrace();
 			}
         
-
-        return orientation;
+        //Log.d(TAG,"ReadOrientation = "+exifArray.toString());
+        return exifArray;
     }
  
+    
 }

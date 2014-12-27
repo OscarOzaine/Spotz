@@ -46,7 +46,7 @@ public class UploadMediaService extends IntentService  {
 	    //Log.d("UploadMediaService", "onStartCommand");
     	dbSpotID 		= intent.getStringExtra("dbspotid");
 	    imagePath		= intent.getStringExtra("imagepath");
-	    spotName		= intent.getStringExtra("spotname");
+	    //spotName		= intent.getStringExtra("spotname");
 	    spotDescription	= intent.getStringExtra("spotdescription");
 	    spotTypeId		= intent.getStringExtra("spottypeId");
 	    spotType		= intent.getStringExtra("spottype");

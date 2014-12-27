@@ -23,7 +23,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true" 
         android:orientation="horizontal">
-
+		<!-- 
         <TextView
             android:id="@+id/spotTitle"
             android:layout_width="match_parent"
@@ -34,7 +34,7 @@
             android:textSize="17sp"
             android:textStyle="bold"
             android:typeface="sans" />
-
+		 -->
         <ImageButton
             android:id="@+id/spot_newssettings"
             android:layout_width="wrap_content"

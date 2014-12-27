@@ -128,6 +128,7 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 			@SuppressWarnings("deprecation")
 			public void onClick(View v) {
 				if(recording){
+					//Log.d(TAG,"Recording");
 					recording = false;
 					mediaRecorder.stop();
 					mediaRecorder.release();
@@ -144,10 +145,9 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 					overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_left );
 					//finish();
 				}else{
-					if(mediaRecorder == null){
-						mediaRecorder = new MediaRecorder();
-				        initMediaRecorder();
-					}
+					//Log.d(TAG,"NOTRecording");
+					mediaRecorder = new MediaRecorder();
+			        initMediaRecorder();
 					// The following two lines should precede setAudioSource line
 					startMediaRecorder();
 					recording = true;
@@ -249,56 +249,58 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 		public void surfaceChanged(SurfaceHolder holder,
 				int format, int width,
 				int height) {
-			if (inPreview){
-				camera.stopPreview();
-	        }
-			Parameters parameters = camera.getParameters();
-	        Display display = getWindowManager().getDefaultDisplay();
-	        rotation = 0;
-			if(currentCameraId == 1){
-		        if(display.getRotation() == Surface.ROTATION_0){ 
-		        	rotation = 90;
-		            //Log.d(TAG,"ROTATION 0");
+			if(camera != null){
+				if (inPreview){
+					camera.stopPreview();
 		        }
-		        /*
-		        if(display.getRotation() == Surface.ROTATION_90){
-		        	Log.d(TAG,"ROTATION 90");
-		        }
-		        if(display.getRotation() == Surface.ROTATION_180){
-		        	Log.d(TAG,"ROTATION 180");
-		        }
-		        */
-		        if(display.getRotation() == Surface.ROTATION_270){
-		        	rotation = 180;
-		            //Log.d(TAG,"ROTATION 270");
-		        }
-			}else{
-		        if(display.getRotation() == Surface.ROTATION_0){ 
-		        	rotation = 90;
-		            //Log.d(TAG,"ROTATION 0");
-		        }
-		        /*
-		        if(display.getRotation() == Surface.ROTATION_90 ){
-		            Log.d(TAG,"ROTATION 90");
-		        }
-		        if(display.getRotation() == Surface.ROTATION_180){
-		        	Log.d(TAG,"ROTATION 180");
-		        }
-		        */
-		        if(display.getRotation() == Surface.ROTATION_270){
-		        	rotation = 180;
-		            //Log.d(TAG,"ROTATION 270");
-		        }
+				
+				Parameters parameters = camera.getParameters();
+		        Display display = getWindowManager().getDefaultDisplay();
+		        rotation = 0;
+				if(currentCameraId == 1){
+			        if(display.getRotation() == Surface.ROTATION_0){ 
+			        	rotation = 90;
+			            //Log.d(TAG,"ROTATION 0");
+			        }
+			        /*
+			        if(display.getRotation() == Surface.ROTATION_90){
+			        	Log.d(TAG,"ROTATION 90");
+			        }
+			        if(display.getRotation() == Surface.ROTATION_180){
+			        	Log.d(TAG,"ROTATION 180");
+			        }
+			        */
+			        if(display.getRotation() == Surface.ROTATION_270){
+			        	rotation = 180;
+			            //Log.d(TAG,"ROTATION 270");
+			        }
+				}else{
+			        if(display.getRotation() == Surface.ROTATION_0){ 
+			        	rotation = 90;
+			            //Log.d(TAG,"ROTATION 0");
+			        }
+			        /*
+			        if(display.getRotation() == Surface.ROTATION_90 ){
+			            Log.d(TAG,"ROTATION 90");
+			        }
+			        if(display.getRotation() == Surface.ROTATION_180){
+			        	Log.d(TAG,"ROTATION 180");
+			        }
+			        */
+			        if(display.getRotation() == Surface.ROTATION_270){
+			        	rotation = 180;
+			            //Log.d(TAG,"ROTATION 270");
+			        }
+				}
+				camera.setDisplayOrientation(rotation);
+				//parameters.setPreviewSize(height, width);
+				parameters.setRotation(rotation);
+				camera.setParameters(parameters);
+		        initPreview(width, height);
+		        previewCamera();   
 			}
-			camera.setDisplayOrientation(rotation);
-			//parameters.setPreviewSize(height, width);
-			parameters.setRotation(rotation);
-			camera.setParameters(parameters);
-	        
-	        //startPreview();
-	        initPreview(width, height);
-	        previewCamera();   
-	        Log.d(TAG,"surfaceChanged");
+			
+			Log.d(TAG,"surfaceChanged");
 		}
 
 		public void surfaceDestroyed(SurfaceHolder holder) {
@@ -310,6 +312,19 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 	@Override
 	public void onResume() {
 		super.onResume();
+		Log.d(TAG,"onResume "+recording);
+		if(currentCameraId == 1){
+			camera = Camera.open(currentCameraId);
+		}else{
+			camera=Camera.open();
+		}
+		
+		if (cameraConfigured && camera!=null) {
+			camera.startPreview();
+			inPreview=true;
+		}
+		
+		/*
 		if(currentCameraId == 1){
 			Log.d(TAG,""+findFrontFacingCamera());
 			camera = Camera.open(findFrontFacingCamera());
@@ -317,25 +332,32 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 			camera=Camera.open();
 		}
 		startPreview();
-		Log.d(TAG,"onResume "+recording);
+		
+		*/
+		
 	}
 
 	@Override
 	public void onPause() {
-		super.onPause();
 		if (inPreview) {
 			camera.stopPreview();
 		}
 		camera.release();
 		camera		= null;
 		inPreview	= false;
-		
+		super.onPause();
 	}
 
 	@Override
+    public void onStop() {
+        super.onStop();
+        Const.v(TAG, "-- ON STOP --");
+    }
+
+	@Override
     public void onDestroy() {
-		preview.destroyDrawingCache();
-        surfaceHolder.removeCallback(surfaceCallback);
+		//preview.destroyDrawingCache();
+        //surfaceHolder.removeCallback(surfaceCallback);
         
 		super.onDestroy();
         Const.v(TAG, "--- ON DESTROY ---");

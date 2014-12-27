@@ -90,8 +90,8 @@ public class NewsViewAdapter extends BaseAdapter {
 
 		// Locate the TextViews in listview_item.xml
 		txtid = (TextView) itemView.findViewById(R.id.spotId);
-		txtname = (TextView) itemView.findViewById(R.id.spotTitle);
-		txtcreated_at = (TextView) itemView.findViewById(R.id.spotCreatedat);
+		//txtname = (TextView) itemView.findViewById(R.id.spotTitle);
+		//txtcreated_at = (TextView) itemView.findViewById(R.id.spotCreatedat);
 		txtcityname = (TextView) itemView.findViewById(R.id.spotCity);
 		//txtemail = (TextView) itemView.findViewById(R.id.spotUser);
 		txtdescription = (TextView) itemView.findViewById(R.id.spotDescription);
@@ -104,7 +104,7 @@ public class NewsViewAdapter extends BaseAdapter {
 		imgSpot = (ImageView) itemView.findViewById(R.id.spotImage);
 		
 		txtid.setText(resultp.get(NewsActivity.TAG_ID));
-		txtname.setText(resultp.get(NewsActivity.TAG_NAME));
+		//txtname.setText(resultp.get(NewsActivity.TAG_NAME));
 		//txtcreated_at.setText(resultp.get(NewsActivity.TAG_CREATED_AT));
 		txtcityname.setText(resultp.get(NewsActivity.TAG_CITYNAME));
 		//txtemail.setText(resultp.get(NewsActivity.TAG_EMAIL));
@@ -132,10 +132,10 @@ public class NewsViewAdapter extends BaseAdapter {
 				// Get the position
 				resultp = data.get(position);
 				Log.d(TAG,"Position: "+position);
-				Log.d(TAG,resultp.get(NewsActivity.TAG_NAME));
+				//Log.d(TAG,resultp.get(NewsActivity.TAG_NAME));
 				Intent intent = new Intent(context, SpotActivity.class);
 				intent.putExtra("id", resultp.get(NewsActivity.TAG_ID));
-				intent.putExtra("name", resultp.get(NewsActivity.TAG_NAME));
+				//intent.putExtra("name", resultp.get(NewsActivity.TAG_NAME));
 				intent.putExtra("created_at", resultp.get(NewsActivity.TAG_CREATED_AT));
 				intent.putExtra("cityname", resultp.get(NewsActivity.TAG_CITYNAME));
 				intent.putExtra("email", resultp.get(NewsActivity.TAG_EMAIL));
@@ -166,7 +166,7 @@ public class NewsViewAdapter extends BaseAdapter {
 				       				//Log.d(TAG,resultp.get(NewsActivity.TAG_NAME));
 				       				Intent intent = new Intent(context, SpotActivity.class);
 				       				intent.putExtra("id", resultp.get(NewsActivity.TAG_ID));
-				       				intent.putExtra("name", resultp.get(NewsActivity.TAG_NAME));
+				       				//intent.putExtra("name", resultp.get(NewsActivity.TAG_NAME));
 				       				intent.putExtra("created_at", resultp.get(NewsActivity.TAG_CREATED_AT));
 				       				intent.putExtra("cityname", resultp.get(NewsActivity.TAG_CITYNAME));
 				       				intent.putExtra("email", resultp.get(NewsActivity.TAG_EMAIL));
@@ -198,7 +198,7 @@ public class NewsViewAdapter extends BaseAdapter {
 				       				//Log.d(TAG,resultp.get(NewsActivity.TAG_NAME));
 				       				Intent intent = new Intent(context, SpotActivity.class);
 				       				intent.putExtra("id", resultp.get(NewsActivity.TAG_ID));
-				       				intent.putExtra("name", resultp.get(NewsActivity.TAG_NAME));
+				       				//intent.putExtra("name", resultp.get(NewsActivity.TAG_NAME));
 				       				intent.putExtra("created_at", resultp.get(NewsActivity.TAG_CREATED_AT));
 				       				intent.putExtra("cityname", resultp.get(NewsActivity.TAG_CITYNAME));
 				       				intent.putExtra("email", resultp.get(NewsActivity.TAG_EMAIL));

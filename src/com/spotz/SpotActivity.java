@@ -103,9 +103,9 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
         actionBar.setTitle(R.string.app_name);
         actionBar.setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
 		
-		txtName			= (TextView) findViewById(R.id.spot_name);
-		txtLikes		= (TextView) findViewById(R.id.spot_likes);
-		txtDislikes		= (TextView) findViewById(R.id.spot_dislikes);
+		//txtName			= (TextView) findViewById(R.id.spot_name);
+		//txtLikes		= (TextView) findViewById(R.id.spot_likes);
+		//txtDislikes		= (TextView) findViewById(R.id.spot_dislikes);
 		txtType			= (TextView) findViewById(R.id.spot_type);
 		txtCity			= (TextView) findViewById(R.id.spot_city);
 		txtDescription	= (TextView) findViewById(R.id.spot_description);
@@ -117,7 +117,7 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
 		Intent intent = getIntent();
 		
 		spotId			= intent.getStringExtra("id");
-		spotName 		= intent.getStringExtra("name");
+		//spotName 		= intent.getStringExtra("name");
 		spotLikes 		= intent.getStringExtra("likes");
 		spotDislikes 	= intent.getStringExtra("dislikes");
 		spotType 		= intent.getStringExtra("spottype");
@@ -190,9 +190,9 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
 	        imgSpot.setImageBitmap(newBitmap);
 		}
 		
-		txtName.setText(spotName);
-		txtLikes.setText(spotLikes);
-		txtDislikes.setText(spotDislikes);
+		//txtName.setText(spotName);
+		//txtLikes.setText(spotLikes);
+		//txtDislikes.setText(spotDislikes);
 		txtType.setText(spotType);
 		txtCity.setText(spotCity);
 		txtDescription.setText(spotDescription);
@@ -288,8 +288,8 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
         	return true;
         case R.id.action_share_facebook:
         	FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this)
-            .setLink(Utils.createSpotLink(spotCity, spotName, spotId))
-            .setName(spotName)
+            .setLink(Utils.createSpotLink(spotCity, spotId))
+            //.setName(spotName)
             .setDescription(spotDescription)
             .setPicture(mediaPath)
             .setApplicationName(getString(R.string.app_name))
@@ -299,7 +299,7 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
        
         case R.id.action_mapspot:
         	Log.d(TAG,"map = "+latitude+" long = "+longitude);
-        	String uri = String.format(Locale.ENGLISH, "geo:%f,%f?q=%f,%f(%s)", Float.parseFloat(latitude), Float.parseFloat(longitude),Float.parseFloat(latitude), Float.parseFloat(longitude),spotName);
+        	String uri = String.format(Locale.ENGLISH, "geo:%f,%f?q=%f,%f(%s)", Float.parseFloat(latitude), Float.parseFloat(longitude),Float.parseFloat(latitude), Float.parseFloat(longitude),spotDescription);
         	Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
         	this.startActivity(intent);
         	//onBackPressed();
@@ -307,7 +307,7 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
         return true;
         default:
         	Log.d(TAG,"Default = "+item.getItemId());
-        	
+        	//NewsActivity.LoadSpots.execute();
         	onBackPressed();
         	
         	return super.onOptionsItemSelected(item);
@@ -375,7 +375,7 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
 						String address = spot.getString(TAG_ADDRESS);
 						
 						// Aqui se inserta la info del json en los views
-						txtName.setText(name);
+						//txtName.setText(name);
 						txtLikes.setText("2");
 						txtDislikes.setText("5");
 						txtType.setText("Social");

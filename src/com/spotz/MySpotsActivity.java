@@ -105,7 +105,7 @@ public class MySpotsActivity extends ListActivity {
 		    	AlertDialog.Builder builder = new AlertDialog.Builder(MySpotsActivity.instance);
 				// Add the buttons
 		    	txtSpotId = (TextView) arg1.findViewById(R.id.uploadedspotId);
-		    	txtSpotTitle = (TextView) arg1.findViewById(R.id.uploadedspotTitle);
+		    	//txtSpotTitle = (TextView) arg1.findViewById(R.id.uploadedspotTitle);
 		    	txtImagepath = (TextView) arg1.findViewById(R.id.uploadedspotImagePath);
 		    	txtSpotDescription = (TextView) arg1.findViewById(R.id.uploadedspotDescription);
 		    	txtSpotType = (TextView) arg1.findViewById(R.id.uploadedspotType);
@@ -114,7 +114,7 @@ public class MySpotsActivity extends ListActivity {
 		    	txtSpotLongitude = (TextView) arg1.findViewById(R.id.uploadedspotLongitude);
 		    	
 		    	spotIdHidden = txtSpotId.getText().toString();
-		     	spotTitle = txtSpotTitle.getText().toString();
+		     	//spotTitle = txtSpotTitle.getText().toString();
 		     	spotImage = txtImagepath.getText().toString();
 		     	spotDescription = txtSpotDescription.getText().toString();
 		     	spotType = txtSpotType.getText().toString();
@@ -138,7 +138,7 @@ public class MySpotsActivity extends ListActivity {
 			            	   if(which == 0){
 			            		   	Intent intentUploadService = new Intent(MySpotsActivity.this, UploadMediaService.class);
 				   	        		intentUploadService.putExtra("imagepath", spotImage);
-				   	        		intentUploadService.putExtra("spotname", spotTitle);
+				   	        		//intentUploadService.putExtra("spotname", spotTitle);
 				   	        		intentUploadService.putExtra("spotdescription", spotDescription);
 				   	        		intentUploadService.putExtra("spottypeId", ""+spotTypeId);
 				   	        		intentUploadService.putExtra("spottype", spotType);
@@ -295,7 +295,7 @@ public class MySpotsActivity extends ListActivity {
 				for (int i = 0; i < list.size(); i++) {
 					map = new HashMap<String, String>();
 					map.put(TAG_ID, ""+list.get(i).getId());
-					map.put(TAG_NAME, list.get(i).getName());
+					//map.put(TAG_NAME, list.get(i).getName());
 					map.put(TAG_IMAGE,list.get(i).getImagepath());
 					map.put(TAG_DESCRIPTION, list.get(i).getDescription());
 					map.put(TAG_SPOTTYPE, ""+list.get(i).getType());
