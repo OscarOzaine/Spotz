@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.spotz.gen"
-    android:versionCode="6"
-    android:versionName="1.2.3" >
+    android:versionCode="7"
+    android:versionName="1.2.4" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -29,25 +29,24 @@
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        >
         
         
          <!-- SearchableActivity -->
-        <activity android:name="com.spotz.SearchableActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
+        <activity 
+            android:name="com.spotz.SearchableActivity" 
+            android:configChanges="locale">
+            
+            <intent-filter> <action android:name="android.intent.action.SEARCH" /> </intent-filter>
+            <meta-data android:name="android.app.searchable" android:resource="@xml/searchable" />
         </activity>
         
         
         <!-- LoginActivity -->
         <activity
             android:name="com.spotz.LoginActivity"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="locale|orientation|keyboardHidden"
             android:noHistory="false"
             android:screenOrientation="portrait" >
         </activity>
@@ -55,7 +54,7 @@
         <!-- RegisterActivity -->
         <activity
             android:name="com.spotz.RegisterActivity"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="locale|orientation|keyboardHidden"
             android:noHistory="true"
             android:screenOrientation="portrait" >
         </activity>
@@ -64,22 +63,19 @@
         <activity
             android:theme="@style/AppTheme"
             android:name="com.spotz.MainActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="locale|keyboardHidden|orientation"
             android:label="@string/app_name"
     		android:screenOrientation="portrait"
              >
-
             <!-- enable the search dialog to send searches to SearchableActivity -->
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value="com.example.androidhive.SearchableActivity" />
+            <meta-data android:name="android.app.default_searchable" android:value="com.example.androidhive.SearchableActivity" />
         </activity>
         
 		<!-- CameraActivity -->
         <activity
             android:name="com.spotz.CameraActivity"
             android:launchMode="singleTask" 
-            android:configChanges="orientation"
+            android:configChanges="locale|orientation"
     		android:screenOrientation="portrait"
     		>
         </activity>
@@ -88,103 +84,85 @@
         <activity
             android:name="com.spotz.camera.VideoActivity"
             android:launchMode="singleTask"
-            android:configChanges="orientation"
+            android:configChanges="locale|orientation"
     		android:screenOrientation="portrait" >
         </activity>
 		
         
         <!-- UserSettingsActivity -->
-        <activity android:name="com.spotz.users.UserSettingsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.spotz.MainActivity" />
+        <activity 
+            android:name="com.spotz.users.UserSettingsActivity"
+            android:configChanges="locale">
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.spotz.MainActivity" />
         </activity>
         
         <!-- NewsActivity -->
-        <activity android:name="com.spotz.NewsActivity"
-            android:configChanges="orientation"
+        <activity 
+            android:name="com.spotz.NewsActivity"
+            android:configChanges="locale|orientation"
     		android:screenOrientation="portrait" >
 
             <!-- enable the search dialog to send searches to SearchableActivity -->
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value="com.example.androidhive.SearchableActivity" />
+            <meta-data android:name="android.app.default_searchable" android:value="com.example.androidhive.SearchableActivity" />
         </activity>
 
         
         <!-- Profile Activity -->
         <activity android:name="com.spotz.ProfileActivity" 
-            android:configChanges="orientation"
+            android:configChanges="locale|orientation"
     		android:screenOrientation="portrait">
-
-            <!-- enable the search dialog to send searches to SearchableActivity -->
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value="com.example.androidhive.SearchableActivity" />
+            
+            <meta-data android:name="android.app.default_searchable" android:value="com.example.androidhive.SearchableActivity" />
         </activity>
 
         
         <!-- Spot Activity -->
         <activity android:name="com.spotz.SpotActivity" 
-            android:configChanges="orientation"
+            android:configChanges="locale|orientation"
     		android:screenOrientation="portrait">
 
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.spotz.MainActivity" />
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.spotz.MainActivity" />
         </activity>
         
         
-        <activity android:name="com.spotz.LoadingActivity" />
-        <activity android:name="com.spotz.UploadSpotActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.spotz.CameraActivity" />
+        <activity android:name="com.spotz.LoadingActivity"
+            android:configChanges = "locale" />
+        
+        <activity android:name="com.spotz.UploadSpotActivity"
+            android:configChanges = "locale" >
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.spotz.CameraActivity" />
         </activity>
         
         <activity
             android:name="com.spotz.SplashScreenActivity"
             android:label="@string/app_name"
-            android:configChanges="orientation"
+            android:configChanges="locale|orientation"
     		android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         
         <activity android:name="com.spotz.MySpotsActivity" 
-            android:configChanges="orientation"
+            android:configChanges="locale|orientation"
     		android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.spotz.MainActivity" />
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.spotz.MainActivity" />
         </activity>
         
         <activity
             android:name="com.facebook.LoginActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="locale" />
 
         <service android:name="com.spotz.services.UploadMediaService" />
         <service android:name="com.spotz.services.LoginService" />
         <service android:name="com.spotz.services.UploadProfilePicService" />
 		<service android:name="com.spotz.services.DeleteSpotService" />
 		
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyA9RzTH-oHSXG77UZ_FkNBRZloipMOGmxg" />
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="6171000" />
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
-
-        <activity
-            android:name=".AndroidVideoCapture"
-            android:label="@string/title_activity_android_video_capture" >
-        </activity>
+        <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyA9RzTH-oHSXG77UZ_FkNBRZloipMOGmxg" />
+        <meta-data android:name="com.google.android.gms.version" android:value="6171000" />
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id" />
         
     </application>
 

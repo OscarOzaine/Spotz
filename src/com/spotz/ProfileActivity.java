@@ -12,6 +12,8 @@ import com.spotz.gen.R;
 import com.spotz.services.UploadProfilePicService;
 import com.spotz.users.User;
 import com.spotz.utils.JSONParser;
+import com.spotz.utils.Utils;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -144,6 +146,7 @@ public class ProfileActivity extends Activity  {
 	@Override
 	public void onResume() {
 		super.onResume();
+		Utils.setCurrentLocale(this);
 	    // Loading Profile in Background Thread
 		new LoadProfile().execute();
 		

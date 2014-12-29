@@ -232,6 +232,7 @@ public class MySpotsActivity extends ListActivity {
 	@Override
     public synchronized void onResume() {
         super.onResume();
+        Utils.setCurrentLocale(this);
      // Hashmap for ListView
         outboxList = new ArrayList<HashMap<String, String>>();
         

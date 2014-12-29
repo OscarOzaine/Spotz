@@ -231,6 +231,7 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
 	@Override
 	protected void onResume() {
 	    super.onResume();
+	    Utils.setCurrentLocale(this);
 	    uiHelper.onResume();
 	}
 

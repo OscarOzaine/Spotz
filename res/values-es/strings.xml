@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="facebook_title">Facebook</string>
+	<string name="twitter_title">Twitter</string>
+	<string name="myspots">Mis Spotz</string>
+	<string name="loading_spots">Cargando Spotz ...</string>
+	
+	<string-array name="share_spinner">
+	    <item>Facebook</item>
+	 	<!--  <item>Twitter</item>
+	 	<item>Valor 3</item>-->	
+	 </string-array>
+
+	<string name="description">Descripcion:</string>
+    <string name="usersettings">Configuraciones de Usuario</string>
+    <string name="spottype">Tipo de Spot:</string>
+    <string name="city">Ciudad:</string>
+    <string name="user">Usuario:</string>
+    <string name="followers">Seguidores:</string>
+    <string name="type">Tipo:</string>
+    
+    <string name="language">Lenguaje:</string>
+    <string name="first_name">Nombre:</string>
+    <string name="last_name">Apellido:</string>
+    <string name="inputvalue">Input value:</string>
+    <string name="infomessage">Mensaje</string>
+    
+    
+    <string name="dislikes">No me gusta:</string>
+    <string name="likes">Me gusta:</string>
+    <string name="like_example">0</string>
+    <string name="change_media_camera">Change video to image and viceversa</string>
+    <string name="change_camera">Cambia de camara</string>
+    <string name="facebook_app_id">843086735711329</string>
+    <string name="settings">Configuraciones</string>
+    <string name="refresh">Refrescar</string>
+    <string name="hello">Hola Mundo!</string>
+    <string name="app_name">Spotz</string>
+    <string name="search_hint">Ciudades, Usuarios...</string>
+    <string name="action_settings">Configuraciones</string>
+    <string name="title_activity_browse">title activity browse</string>
+    <string name="latitude_longitude">LatitudeandLongitude</string>
+    <string name="invalid_email">Correo electronico es invalido</string>
+    <string name="connection_error_misconfigured">Wrong configuration</string>
+    <string name="connection_error_internal">Internal error</string>
+    <string name="connection_error_invalid_account">Invalid Account</string>
+    <string name="connection_error_license_check_failed">Licence check failed</string>
+    <string name="connection_error_network">Network error</string>
+    <string name="connection_error_needs_resolution">Needs resolution error</string>
+    <string name="connection_error_outdated">Error outdated connection</string>
+    <string name="connection_error_disabled">Deshabilitado</string>
+    <string name="connection_error_invalid">Invalido</string>
+    <string name="connection_error_missing">Faltante</string>
+    <string name="connection_error_sign_in_required">Inicio de sesion es requerido</string>
+    <string name="connection_error_unknown">Error desconocido</string>
+    <string name="resolved">Resuelto</string>
+    <string name="no_resolution">Sin resolucion</string>
+    <string name="unknown_activity_request_code">Peticion de codigo de actividad desconocida</string>
+    <string name="play_services_available">Servicios de Play disponibles</string>
+    <string name="location_updates_stopped">Actualizaciones de ubicacion se detuvieron</string>
+    <string name="connected">Conectado</string>
+    <string name="disconnected">Desconectado</string>
+    <string name="location_updated">Ubicacion actualizada</string>
+    <string name="server_address">Direccion del servidor</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancelar</string>
+    <string name="changeValues">Los valores se cambiaron</string>
+    <string name="confUpdated">La configuracion se actualizo</string>
+    <string name="login_success">Inicio de sesion exitoso</string>
+    <string name="server_down">El servidor esta caido</string>
+    <string name="usernameoremail">Correo electronico o nombre de usuario</string>
+    <string name="username">Nombre de usuario</string>
+    <string name="email">Correo Electronico</string>
+    <string name="password">Contraseña</string>
+    <string name="repeatpassword">Repetir contraseña</string>
+    <string name="login">Iniciar Sesion</string>
+    <string name="register">Registrar</string>
+    <string name="register_success">Se registro exitosamente</string>
+    <string name="please_input">Porfavor ingresa</string>
+    <string name="not_connected">No esta conectado</string>
+    <string name="not_json_checkdata">Verifica tu informacion e intenta de nuevo</string>
+    <string name="username_length">El tamano del username debe ser minimo de 6 caracteres</string>
+    <string name="connection_problem">Problemas de conexion, verifica tu conexion a internet</string>
+    <string name="logout">Cerrar sesion</string>
+    <string name="profile_options">Opciones de Perfil</string>
+	<string name="options">Opciones</string>
+	
+    <string-array name="profile_options_array">
+        <item>Cambiar foto de perfil</item>
+    </string-array>
+    
+    <string-array name="myspots_options_array">
+        <item>Volver a intentar subir</item>
+        <item>Borrar spot</item>
+    </string-array>
+    
+    <string-array name="news_options_array">
+        <item>View</item>
+    </string-array>
+    
+    <string-array name="mynews_options_array">
+        <item>View</item>
+        <item>Delete</item>
+    </string-array>
+    
+    <string-array name="spottype_array">
+        <item>Tipo(Todos)</item>
+        <item>Social</item>
+        <item>Cultural</item>
+        <item>Musical</item>
+        <item>Robo</item>
+        <item>Retenes</item>
+        <item>Accidentes</item>
+        <item>Protestas</item>
+        <item>Vandalismo</item>
+        <item>Baches</item>
+        <item>Asaltos</item>
+        <item>Deporte</item>
+    </string-array>
+    
+    <string-array name="spotdistance_array">
+        <item>Ciudad</item>
+    </string-array>
+    
+    <string-array name="pais">
+      <item>España</item>
+      <item>Francia</item>
+      <item>Alemania</item>
+   </string-array>
+   <string-array name="codigopais">
+      <item>ESP</item>
+      <item>FRA</item>
+      <item>ALE</item>
+   </string-array>
+   
+   
+   <string name="inputEmail">Correo Electronico</string>
+   <string name="inputFirstName">Ingresa tu nombre</string>
+   <string name="inputLastName">Ingresa tu Apellido</string>
+   <string name="selectlanguage">Selecciona el lenguaje</string>
+  
+   <string-array name="listentries">
+        <item>Ingles</item>
+        <item>Español</item>
+    </string-array>
+    
+    <string-array name="listvalues">
+        <item>1</item>
+        <item>2</item>
+    </string-array>    
+    
+
+</resources>

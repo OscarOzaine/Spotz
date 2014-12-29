@@ -18,9 +18,13 @@
     <string name="city">City:</string>
     <string name="user">User:</string>
     <string name="followers">Followers:</string>
+    <string name="type">Type:</string>
+    
+    <string name="language">Language:</string>
     <string name="first_name">First Name:</string>
     <string name="last_name">Last Name:</string>
     <string name="inputvalue">Input value:</string>
+    <string name="infomessage">Message</string>
     
     <string name="dislikes">Dislikes:</string>
     <string name="likes">Likes:</string>
@@ -119,7 +123,7 @@
     </string-array>
     
     <string-array name="pais">
-      <item>España</item>
+      <item>España</item>W
       <item>Francia</item>
       <item>Alemania</item>
    </string-array>
@@ -129,8 +133,21 @@
       <item>ALE</item>
    </string-array>
    
+   <string name="inputEmail">Email</string>
+   <string name="inputFirstName">Input your name</string>
+   <string name="inputLastName">Input your last name</string>
+   <string name="selectlanguage">Select the language</string>
+  
+   <string-array name="listentries">
+        <item>English</item>
+        <item>Spanish</item>
+    </string-array>
+    
+    <string-array name="listvalues">
+        <item>1</item>
+        <item>2</item>
+    </string-array>    
+    
    
-    <string name="title_activity_android_video_capture">AndroidVideoCapture</string>
-    <string name="hello_world">Hello world!</string>
-
+   
 </resources>

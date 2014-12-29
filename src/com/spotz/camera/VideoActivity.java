@@ -11,6 +11,7 @@ import com.spotz.MainActivity;
 import com.spotz.UploadSpotActivity;
 import com.spotz.gen.R;
 import com.spotz.utils.Const;
+import com.spotz.utils.Utils;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -314,6 +315,7 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 	@Override
 	public void onResume() {
 		super.onResume();
+		Utils.setCurrentLocale(this);
 		Log.d(TAG,"onResume "+recording);
 		if(currentCameraId == 1){
 			camera = Camera.open(currentCameraId);

@@ -192,6 +192,9 @@ public class UploadSpotActivity extends Activity implements
 			bitmap = ImageLoader.rotateBitmap(imageStream, mediaPath, bitmap);
 			spotImage.setImageBitmap(bitmap);
 			
+			
+			
+			
 		}
 		
 		SpinnerSpotType = (Spinner) findViewById(R.id.spinner_spottypes);
@@ -272,7 +275,7 @@ public class UploadSpotActivity extends Activity implements
     @Override
     public void onResume() {
         super.onResume();
-
+        Utils.setCurrentLocale(this);
         // If the app already has a setting for getting location updates, get it
         if (mPrefs.contains(LocationUtils.KEY_UPDATES_REQUESTED)) {
             mUpdatesRequested = mPrefs.getBoolean(LocationUtils.KEY_UPDATES_REQUESTED, false);

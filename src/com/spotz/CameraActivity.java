@@ -17,6 +17,7 @@ import com.spotz.camera.VideoActivity;
 import com.spotz.gen.R;
 import com.spotz.utils.Const;
 import com.spotz.utils.Settings;
+import com.spotz.utils.Utils;
 
 
 import android.app.ActionBar;
@@ -292,7 +293,7 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 	public void onResume() {
 		super.onResume();
 		Log.d(TAG,"onResume");
-		
+		Utils.setCurrentLocale(this);
 		if(currentCameraId == 1){
 			camera = Camera.open(currentCameraId);
 		}else{

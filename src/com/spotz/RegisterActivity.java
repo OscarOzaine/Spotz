@@ -146,6 +146,7 @@ public class RegisterActivity extends Activity implements OnRegisterListener{
     @Override
     public synchronized void onResume() {
         super.onResume();
+        Utils.setCurrentLocale(this);
         Const.v(TAG, "+ ON RESUME +");
     }
 

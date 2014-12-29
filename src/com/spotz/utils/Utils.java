@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,6 +16,8 @@ import com.spotz.CameraActivity;
 import com.spotz.gen.R;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,6 +27,7 @@ import android.media.ExifInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.content.CursorLoader;
 import android.view.animation.Animation;
@@ -138,5 +142,24 @@ public class Utils {
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
+
+	public static void setCurrentLocale(Context context) {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		String value = prefs.getString("keyLanguage", "");
+		Locale locale = null;
+		switch(Integer.parseInt(value)){
+			case 1:
+				locale = new Locale( "en" );
+				break;
+			case 2:
+				locale = new Locale( "es" );
+				break;
+		}
+		
+	    Locale.setDefault( locale );
+	    Configuration config = new Configuration();
+	    config.locale = locale;
+	    context.getResources().updateConfiguration( config, context.getResources().getDisplayMetrics() );
+	}
     
 }

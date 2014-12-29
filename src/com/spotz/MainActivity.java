@@ -1,6 +1,7 @@
 package com.spotz;
 
 import java.util.List;
+import java.util.Locale;
 
 import com.facebook.Session;
 import com.spotz.NewsActivity;
@@ -9,6 +10,7 @@ import com.spotz.database.SpotsHelper;
 import com.spotz.gen.R;
 import com.spotz.services.UploadMediaService;
 import com.spotz.users.UserSettingsActivity;
+import com.spotz.utils.Utils;
 import com.spotz.NewsActivity.*;
 
 import android.app.ActionBar;
@@ -18,6 +20,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -100,6 +103,8 @@ public class MainActivity extends TabActivity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.main);
         
+        
+        
         ActionBar actionBar = getActionBar();
         actionBar.setTitle(R.string.app_name);
         actionBar.setIcon(android.R.color.transparent);
@@ -179,6 +184,7 @@ public class MainActivity extends TabActivity {
     @Override
     protected void onResume() {
       super.onResume();
+      Utils.setCurrentLocale(this);
       TabHost tabhost = getTabHost();
       TabWidget widget = tabhost.getTabWidget();
       for(int i=0;i<tabhost.getTabWidget().getChildCount();i++) {

@@ -15,6 +15,8 @@ import com.spotz.services.UploadProfilePicService;
 import com.spotz.users.OnLoginListener;
 import com.spotz.users.User;
 import com.spotz.utils.Const;
+import com.spotz.utils.Utils;
+
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
@@ -285,6 +287,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
     @Override
     public synchronized void onResume() {
         super.onResume();
+        Utils.setCurrentLocale(this);
         Const.v(TAG, "+ ON RESUME +");
         uiHelper.onResume();
         AppEventsLogger.activateApp(this);

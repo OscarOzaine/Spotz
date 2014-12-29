@@ -96,7 +96,7 @@
 	        android:text="@string/register" />
 	    
 	    <TextView android:id="@+id/reg_infomessage" 
-	            android:text="aca"
+	            android:text="@string/infomessage"
 	            android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:layout_weight="1"

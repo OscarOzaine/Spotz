@@ -20,6 +20,7 @@ import com.spotz.location.MyLocation.LocationResult;
 import com.spotz.services.UploadMediaService;
 import com.spotz.utils.Const;
 import com.spotz.utils.JSONParser;
+import com.spotz.utils.Utils;
 
 import android.app.Activity;
 import android.app.ListActivity;
@@ -163,20 +164,9 @@ public class NewsActivity extends Activity implements OnScrollListener {
 			myLocation.getLocation(this, locationResult);
 		}
 		
-		//Types
+		
 		spinnerSpotType = (Spinner) findViewById(R.id.filter_spottypes);
-		ArrayAdapter<CharSequence> adapterTypes = ArrayAdapter.createFromResource(this,
-		        R.array.spottype_array, android.R.layout.simple_spinner_item);
-		adapterTypes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinnerSpotType.setAdapter(adapterTypes);
-		
-		// Distance
 		spinnerSpotDistance = (Spinner) findViewById(R.id.filter_spotdistance);
-		ArrayAdapter<CharSequence> adapterDistance = ArrayAdapter.createFromResource(this,
-		        R.array.spotdistance_array, android.R.layout.simple_spinner_item);
-		adapterDistance.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinnerSpotDistance.setAdapter(adapterDistance);
-		
 		spinnerSpotType.setOnItemSelectedListener(
 				new OnItemSelectedListener() {
 		    @Override
@@ -235,6 +225,17 @@ public class NewsActivity extends Activity implements OnScrollListener {
 	@Override
     public synchronized void onResume() {
         super.onResume();
+        Utils.setCurrentLocale(this);
+        
+  		ArrayAdapter<CharSequence> adapterTypes = ArrayAdapter.createFromResource(this,
+  		        R.array.spottype_array, android.R.layout.simple_spinner_item);
+  		adapterTypes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+  		spinnerSpotType.setAdapter(adapterTypes);
+  		
+  		ArrayAdapter<CharSequence> adapterDistance = ArrayAdapter.createFromResource(this,
+  		        R.array.spotdistance_array, android.R.layout.simple_spinner_item);
+  		adapterDistance.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+  		spinnerSpotDistance.setAdapter(adapterDistance);
         spinnerSpotType.setSelection(Const.spotTypePosition);
         spinnerSpotDistance.setSelection(Const.spotDistancePosition);
         registerReceiver(receiver, new IntentFilter(UploadMediaService.NOTIFICATION));

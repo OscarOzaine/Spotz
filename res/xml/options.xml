@@ -2,21 +2,29 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
     
-    <PreferenceCategory android:title="@string/usersettings">
+    <PreferenceCategory 
+        android:title="@string/usersettings">
         <EditTextPreference
             android:key="keyEmail"
             android:title="@string/email"
-            android:dialogTitle="@string/inputvalue" />
+            android:dialogTitle="@string/inputEmail" />
         
         <EditTextPreference
             android:key="keyFirstName"
             android:title="@string/first_name"
-            android:dialogTitle="@string/inputvalue" />
+            android:dialogTitle="@string/inputFirstName" />
         
         <EditTextPreference
             android:key="keyLastName"
             android:title="@string/last_name"
-            android:dialogTitle="@string/inputvalue" />
+            android:dialogTitle="@string/inputLastName" />
+        
+        <ListPreference
+            android:key="keyLanguage"
+            android:title="@string/language"
+            android:entries="@array/listentries"
+            android:entryValues="@array/listvalues" />
+        
         
     </PreferenceCategory>
    

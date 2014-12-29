@@ -86,7 +86,7 @@
                 android:id="@+id/TextView01"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Type:"
+                android:text="@string/type"
                 android:textColor="@color/black" />
 
             <TextView
@@ -94,7 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Tipo de Spot"
+                android:text="@string/spottype"
                 android:textColor="#757575" />
         </LinearLayout>
 
@@ -111,7 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                android:text="City:"
+                android:text="@string/city"
                 android:textColor="@color/black" />
 
             <TextView
@@ -119,7 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Ciudad"
+                android:text="@string/city"
                 android:textColor="#757575"
                  />
         </LinearLayout>
@@ -142,7 +142,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.41"
-            android:text="Descripcion"
+            android:text="@string/description"
             android:textColor="#757575"
             android:textSize="16sp"
             android:typeface="sans" />
