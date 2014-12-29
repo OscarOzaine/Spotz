@@ -3817,6 +3817,7 @@ containing a value of this type.
         public static final int email=0x7f07008c;
         public static final int facebook_app_id=0x7f070065;
         public static final int facebook_title=0x7f070050;
+        public static final int failed_upload_spot=0x7f0700a1;
         public static final int first_name=0x7f07005c;
         public static final int followers=0x7f070059;
         public static final int hello=0x7f070068;
@@ -3838,6 +3839,7 @@ containing a value of this type.
         public static final int login_success=0x7f070088;
         public static final int logout=0x7f070097;
         public static final int myspots=0x7f070052;
+        public static final int no_internet=0x7f07009f;
         public static final int no_resolution=0x7f07007c;
         public static final int not_connected=0x7f070093;
         public static final int not_json_checkdata=0x7f070094;
@@ -3857,9 +3859,11 @@ containing a value of this type.
         public static final int server_address=0x7f070083;
         public static final int server_down=0x7f070089;
         public static final int settings=0x7f070066;
+        public static final int spot_deleted_succesfull=0x7f0700a0;
         public static final int spottype=0x7f070056;
         public static final int store_picture_message=0x7f070001;
         public static final int store_picture_title=0x7f070000;
+        public static final int sucessfull_upload=0x7f07009e;
         public static final int title_activity_browse=0x7f07006c;
         public static final int twitter_title=0x7f070051;
         public static final int type=0x7f07005a;

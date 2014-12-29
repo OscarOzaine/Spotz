@@ -103,12 +103,13 @@ public class NewsActivity extends Activity implements OnScrollListener {
 	    public void onReceive(Context context, Intent intent) {
 	      Bundle bundle = intent.getExtras();
 	      if (bundle != null) {
+	    	  
 	        int resultCode = bundle.getInt("result");
 	        String dbspotId = bundle.getString("dbspotid");
 	        Log.d(TAG,"RESULTCODE = "+resultCode+ " spot "+dbspotId);
 	        if (resultCode == 1) {
 	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
-	        	Toast.makeText(NewsActivity.this, "Successfully uploaded spot",Toast.LENGTH_LONG).show();
+	        	Toast.makeText(NewsActivity.this, getString(R.string.sucessfull_upload),Toast.LENGTH_LONG).show();
 	        	db = new SpotsHelper(NewsActivity.this);
 	        	List<Spot> list = db.getAllSpots();
 				for (int i = 0; i < list.size(); i++) {
@@ -122,16 +123,16 @@ public class NewsActivity extends Activity implements OnScrollListener {
 	        } 
 	        else if(resultCode == 2){
 	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
-	        	Toast.makeText(NewsActivity.this, "No internet connection",Toast.LENGTH_LONG).show();
+	        	Toast.makeText(NewsActivity.this, getString(R.string.no_internet),Toast.LENGTH_LONG).show();
 	        }
 	        else if(resultCode == 3){
 	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
-	        	Toast.makeText(NewsActivity.this, "Spot deleted successfully",Toast.LENGTH_LONG).show();
-	        	//new LoadSpots().execute();
+	        	Toast.makeText(NewsActivity.this, getString(R.string.spot_deleted_succesfull),Toast.LENGTH_LONG).show();
+	        	findViewById(R.id.action_refresh).performClick();
 	        }
 	        else if(resultCode < 0) {
 	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
-	        	Toast.makeText(NewsActivity.this, "Failed, try again later", Toast.LENGTH_LONG).show();
+	        	Toast.makeText(NewsActivity.this, getString(R.string.failed_upload_spot), Toast.LENGTH_LONG).show();
 	        }
 	      }
 	    }
@@ -209,8 +210,14 @@ public class NewsActivity extends Activity implements OnScrollListener {
 		);
 		
 		
-		
-		
+		/*
+		new ShowcaseView.Builder(this)
+		    .setTarget(new ActionViewTarget(this, ActionViewTarget.Type.HOME))
+		    .setContentTitle("ShowcaseView")
+		    .setContentText("This is highlighting the Home button")
+		    .hideOnTouchOutside()
+		    .build();
+		*/
 	}
 
 	@Override

@@ -139,7 +139,11 @@
    <string name="inputFirstName">Ingresa tu nombre</string>
    <string name="inputLastName">Ingresa tu Apellido</string>
    <string name="selectlanguage">Selecciona el lenguaje</string>
-  
+   <string name="sucessfull_upload">Spot Subido exitosamente</string>
+   <string name="no_internet">Sin conexion a internet</string>
+   <string name="spot_deleted_succesfull">El spot se borro correctamente</string>
+   <string name="failed_upload_spot">Subir spot fallo</string>
+   
    <string-array name="listentries">
         <item>Ingles</item>
         <item>Español</item>
@@ -151,4 +155,5 @@
     </string-array>    
     
 
+    
 </resources>

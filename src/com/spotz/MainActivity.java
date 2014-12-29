@@ -66,7 +66,7 @@ public class MainActivity extends TabActivity {
 	        Log.d(TAG,"RESULTCODE = "+resultCode+ " spot "+dbspotId);
 	        if (resultCode == 1) {
 	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
-	        	Toast.makeText(MainActivity.this, "Successfully uploaded spot",Toast.LENGTH_LONG).show();
+	        	Toast.makeText(MainActivity.this, getString(R.string.sucessfull_upload),Toast.LENGTH_LONG).show();
 	        	db = new SpotsHelper(MainActivity.this);
 	        	List<Spot> list = db.getAllSpots();
 				for (int i = 0; i < list.size(); i++) {
@@ -80,16 +80,16 @@ public class MainActivity extends TabActivity {
 	        } 
 	        else if(resultCode == 2){
 	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
-	        	Toast.makeText(MainActivity.this, "No internet connection",Toast.LENGTH_LONG).show();
+	        	Toast.makeText(MainActivity.this, getString(R.string.no_internet),Toast.LENGTH_LONG).show();
 	        }
 	        else if(resultCode == 3){
 	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
-	        	Toast.makeText(MainActivity.this, "Spot deleted successfully",Toast.LENGTH_LONG).show();
+	        	Toast.makeText(MainActivity.this, getString(R.string.spot_deleted_succesfull),Toast.LENGTH_LONG).show();
 	        	findViewById(R.id.action_refresh).performClick();
 	        }
 	        else if(resultCode < 0) {
 	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
-	        	Toast.makeText(MainActivity.this, "Failed to upload spot", Toast.LENGTH_LONG).show();
+	        	Toast.makeText(MainActivity.this, getString(R.string.failed_upload_spot), Toast.LENGTH_LONG).show();
 	        }
 	      }
 	    }
@@ -102,7 +102,6 @@ public class MainActivity extends TabActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.main);
-        
         
         
         ActionBar actionBar = getActionBar();

@@ -4,6 +4,7 @@
     
     <PreferenceCategory 
         android:title="@string/usersettings">
+        <!-- 
         <EditTextPreference
             android:key="keyEmail"
             android:title="@string/email"
@@ -18,7 +19,7 @@
             android:key="keyLastName"
             android:title="@string/last_name"
             android:dialogTitle="@string/inputLastName" />
-        
+        -->
         <ListPreference
             android:key="keyLanguage"
             android:title="@string/language"

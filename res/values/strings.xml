@@ -137,7 +137,13 @@
    <string name="inputFirstName">Input your name</string>
    <string name="inputLastName">Input your last name</string>
    <string name="selectlanguage">Select the language</string>
-  
+   <string name="sucessfull_upload">Spot uploaded successfully</string>
+   <string name="no_internet">No internet connection</string>
+   <string name="spot_deleted_succesfull">Spot deleted successfully</string>
+   <string name="failed_upload_spot">Failed to upload spot</string>
+   
+   
+   
    <string-array name="listentries">
         <item>English</item>
         <item>Spanish</item>
