@@ -250,14 +250,12 @@ public class NewsActivity extends Activity implements OnScrollListener {
      // Hashmap for ListView
         outboxList = new ArrayList<HashMap<String, String>>();
         OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+Const.spotTypePosition+"/"+Const.currentLatitude+"/"+Const.currentLongitude+"/"+Const.spotDistancePosition+"/"+startNew+"/"+rowNews;
-        
 		//new LoadSpots().execute();
 		Const.v(TAG, "+ ON RESUME +"+OUTBOX_URL);
     }
 	
 	public static final String SHOWITEMINTENT_EXTRA_FETCHROWID = "fetchRow";
     public static final int ACTIVITY_SHOWITEM = 0; /*Intent request user index*/
-
     
     /**
 	 * Background Async Task to Load all OUTBOX messages by making HTTP Request

@@ -22,6 +22,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
@@ -109,7 +110,10 @@ public class NewsViewAdapter extends BaseAdapter {
 		txtcityname.setText(resultp.get(NewsActivity.TAG_CITYNAME));
 		//txtemail.setText(resultp.get(NewsActivity.TAG_EMAIL));
 		txtdescription.setText(resultp.get(NewsActivity.TAG_DESCRIPTION));
-		txtspottype.setText(resultp.get(NewsActivity.TAG_SPOTTYPE));
+		
+		String[] spottype = NewsActivity.instance.getResources().getStringArray(R.array.spottype_array);
+		
+		txtspottype.setText(spottype[Integer.parseInt(resultp.get(NewsActivity.TAG_SPOTTYPE))]);
 		//txtlikes.setText(resultp.get(NewsActivity.TAG_LIKES));
 		//txtdislikes.setText(resultp.get(NewsActivity.TAG_DISLIKES));
 		
