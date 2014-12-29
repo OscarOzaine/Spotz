@@ -19,6 +19,7 @@ import com.spotz.utils.Const;
 import com.spotz.utils.Settings;
 
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -102,10 +103,11 @@ public class CameraActivity extends FragmentActivity implements ViewManager{
 		
 		currentCameraId = getIntent().getIntExtra("orientation", Camera.CameraInfo.CAMERA_FACING_BACK);
         
-		getActionBar().setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
-		getActionBar().setDisplayShowTitleEnabled(false);
-		getActionBar().setDisplayShowTitleEnabled(true);
-		getActionBar().hide();
+		ActionBar actionBar = getActionBar();
+		//actionBar.setBackgroundDrawable(new ColorDrawable(this.getResources().getColor(R.color.my_action_bar_color)));
+		//actionBar.setDisplayShowTitleEnabled(false);
+		//actionBar.setDisplayShowTitleEnabled(true);
+		actionBar.hide();
 		
 		preview=(SurfaceView)findViewById(R.id.camera_preview);
 		previewHolder=preview.getHolder();

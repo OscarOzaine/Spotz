@@ -101,7 +101,9 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.app_name);
-        actionBar.setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
+        actionBar.setIcon(android.R.color.transparent);
+        
+        //actionBar.setBackgroundDrawable(new ColorDrawable(this.getResources().getColor(R.color.my_action_bar_color)));
 		
 		//txtName			= (TextView) findViewById(R.id.spot_name);
 		//txtLikes		= (TextView) findViewById(R.id.spot_likes);

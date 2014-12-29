@@ -12,6 +12,7 @@ import com.spotz.UploadSpotActivity;
 import com.spotz.gen.R;
 import com.spotz.utils.Const;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -78,10 +79,11 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
         currentCameraId = getIntent().getIntExtra("orientation", Camera.CameraInfo.CAMERA_FACING_BACK);
         
         recording = false;
-        getActionBar().setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
-		getActionBar().setDisplayShowTitleEnabled(false);
-		getActionBar().setDisplayShowTitleEnabled(true);
-		getActionBar().hide();
+        ActionBar actionBar = getActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(this.getResources().getColor(R.color.my_action_bar_color)));
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.hide();
+        
         setContentView(R.layout.spot_camera);
         preview 		= (SurfaceView)findViewById(R.id.camera_preview);
         surfaceHolder	= preview.getHolder();

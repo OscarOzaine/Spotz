@@ -3,13 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SplashScreenActivity" >
+    tools:context=".SplashScreenActivity" 
+    android:background="@color/white">
  
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="@string/app_name"
         android:scaleType="center"
-        android:src="@drawable/spotz" />
+        android:src="@drawable/spotz"
+         />
  
 </RelativeLayout>

@@ -20,7 +20,7 @@ public class UserSettingsActivity extends PreferenceActivity {
         ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.app_name);
-        actionBar.setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
+        actionBar.setBackgroundDrawable(new ColorDrawable(this.getResources().getColor(R.color.my_action_bar_color)));
 
         addPreferencesFromResource(R.xml.options);
     }

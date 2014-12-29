@@ -102,9 +102,9 @@ public class MainActivity extends TabActivity {
         
         ActionBar actionBar = getActionBar();
         actionBar.setTitle(R.string.app_name);
+        actionBar.setIcon(android.R.color.transparent);
+        
         //actionBar.setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
-        
-        
         //actionBar.setDisplayHomeAsUpEnabled(true);
         //actionBar.setHomeButtonEnabled(true);
         
@@ -120,11 +120,10 @@ public class MainActivity extends TabActivity {
         
         // Inbox Tab
         TabSpec inboxSpec = tabHost.newTabSpec(INBOX_SPEC);
-        // Tab Icon
         inboxSpec.setIndicator(INBOX_SPEC, getResources().getDrawable(R.drawable.ic_camera));
-        Intent loadingIntent = new Intent(this, LoadingActivity.class);
-        // Tab Content
-        inboxSpec.setContent(loadingIntent);
+        Intent cameraIntent = new Intent(this, LoadingActivity.class);
+        
+        inboxSpec.setContent(cameraIntent);
         //inboxSpec.set
         // Outbox Tab
         TabSpec outboxSpec = tabHost.newTabSpec(OUTBOX_SPEC);
@@ -187,7 +186,7 @@ public class MainActivity extends TabActivity {
     	  v.setBackgroundResource(R.drawable.custom_tab_selector);
     	  //tabhost.getTabWidget().getChildAt(i).findViewById(android.R.id.`)
           TextView tv = (TextView) tabhost.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
-          tv.setTextColor(Color.parseColor("#1f8b1f"));
+          tv.setTextColor(Color.parseColor("#cc181e"));
       } 
       invalidateOptionsMenu();
       registerReceiver(receiver, new IntentFilter(UploadMediaService.NOTIFICATION));

@@ -121,10 +121,13 @@ public class UploadSpotActivity extends Activity implements
 		Log.d(TAG,"onCreate");
 		setContentView(R.layout.activity_upload_spot);
 		
+		
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.app_name);
-        actionBar.setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
+        actionBar.setIcon(android.R.color.transparent);
+        
+        //actionBar.setBackgroundDrawable(new ColorDrawable(this.getResources().getColor(R.color.my_action_bar_color)));
 		
 		//findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 		spotImage 			= (ImageView) findViewById(R.id.spotImageUpload);

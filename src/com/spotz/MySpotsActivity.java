@@ -213,6 +213,8 @@ public class MySpotsActivity extends ListActivity {
 		
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setIcon(android.R.color.transparent);
+        
 		// get all spots
 		//Spot uno = new Spot();
 		
