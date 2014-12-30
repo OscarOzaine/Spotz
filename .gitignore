@@ -27,3 +27,13 @@ proguard/
 
 # Log Files
 *.log
+
+# This libs are not needed because there are some projects which already include them
+# so this becomes redundant, if you still need it is because your project(s) is(are) misconfigured
+libs/android-support-v4.jar
+libs/bolts-android-1.1.2.jar
+libs/google-play-services.jar
+
+# This prevents having trouble with OZ because he need these libs even though there
+# are other projects added as libs already exporting this jars
+.classpath
