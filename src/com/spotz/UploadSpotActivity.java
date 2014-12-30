@@ -14,14 +14,17 @@ import java.net.URL;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationRequest;
+import com.spotz.NewsActivity.LoadSpots;
 import com.spotz.camera.ImageLoader;
 import com.spotz.camera.VideoControllerView;
 import com.spotz.gen.R;
 import com.spotz.location.LocationUtils;
+import com.spotz.location.MyLocation;
+import com.spotz.location.MyLocation.LocationResult;
 import com.spotz.services.UploadMediaService;
 import com.spotz.users.User;
+import com.spotz.utils.Const;
 import com.spotz.utils.Utils;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -66,18 +69,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class UploadSpotActivity extends Activity implements
-			LocationListener,
-			GooglePlayServicesClient.ConnectionCallbacks,
-			GooglePlayServicesClient.OnConnectionFailedListener, 
-			com.google.android.gms.location.LocationListener,
+public class UploadSpotActivity extends Activity implements			
 			MediaPlayer.OnPreparedListener{
 
-	// A request to connect to Location Services
-	private LocationRequest mLocationRequest;
-	// Stores the current instantiation of the location client in this object
-	private LocationClient mLocationClient;
-	
+
 	// All xml labels
 	TextView txtType, txtDescription;
 	EditText editSpotName, editSpotDescription;
@@ -207,14 +202,21 @@ public class UploadSpotActivity extends Activity implements
 		SpinnerSpotType.setAdapter(adapter);
 		
 		
-        mLocationRequest = LocationRequest.create();
-        mLocationRequest.setInterval(LocationUtils.UPDATE_INTERVAL_IN_MILLISECONDS);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setFastestInterval(LocationUtils.FAST_INTERVAL_CEILING_IN_MILLISECONDS);
         mUpdatesRequested = false;
         mPrefs = getSharedPreferences(LocationUtils.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         mEditor = mPrefs.edit();
-        mLocationClient = new LocationClient(this, this, this);
+        LocationResult locationResult = new LocationResult(){
+		    @Override
+		    public void gotLocation(Location location){
+		    	Const.currentLatitude = location.getLatitude();
+		    	Const.currentLongitude = location.getLongitude();
+		    	Log.d(TAG,"getLocationACAs"+Const.currentLongitude+"  "+Const.currentLatitude);
+		    }
+		};
+		MyLocation myLocation = new MyLocation();
+		if(Const.currentLongitude == 0 && Const.currentLatitude == 0){
+			myLocation.getLocation(this, locationResult);
+		}
         
 	}
 	
@@ -226,14 +228,7 @@ public class UploadSpotActivity extends Activity implements
     @Override
     public void onStop() {
     	super.onStop();
-    	// If the client is connected
-        if (mLocationClient.isConnected()) {
-            stopPeriodicUpdates();
-        }
-        // After disconnect() is called, the client is considered "dead".
-        mLocationClient.disconnect();
-        //bitmap.recycle();
-        
+    	
     }
 	
     /*
@@ -266,7 +261,7 @@ public class UploadSpotActivity extends Activity implements
          * Connect the client. Don't re-start any requests here;
          * instead, wait for onResume()
          */
-        mLocationClient.connect();
+        
     }
     
     /*
@@ -358,113 +353,6 @@ public class UploadSpotActivity extends Activity implements
                break;
         }
     }
-    
-    /**
-     * Verify that Google Play services is available before making a request.
-     *
-     * @return true if Google Play services is available, otherwise false
-     */
-    private boolean servicesConnected() {
-
-        // Check that Google Play services is available
-        int resultCode =
-                GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-
-        // If Google Play services is available
-        if (ConnectionResult.SUCCESS == resultCode) {
-            // In debug mode, log the status
-            Log.d(TAG, getString(R.string.play_services_available));
-
-            // Continue
-            return true;
-        // Google Play services was not available for some reason
-        } else {
-            // Display an error dialog
-            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode, this, 0);
-            if (dialog != null) {
-            	Log.d(TAG,"ErrorDialog");
-            	/*
-                ErrorDialogFragment errorFragment = new ErrorDialogFragment();
-                errorFragment.setDialog(dialog);
-                errorFragment.show(getFragmentManager(), TAG);
-                */
-            }
-            return false;
-        }
-    }
-
-    /**
-     * Invoked by the "Get Location" button.
-     *
-     * Calls getLastLocation() to get the current location
-     *
-     * @param v The view object associated with this method, in this case a Button.
-     */
-    public void getLocation(View v) {
-
-        // If Google Play Services is available
-        if (servicesConnected()) {
-
-            // Get the current location
-            //Location currentLocation = mLocationClient.getLastLocation();
-
-            // Display the current location in the UI
-            //Log.d(TAG,"Location = "+LocationUtils.getLatLng(this, currentLocation));
-            //mLatLng.setText(LocationUtils.getLatLng(this, currentLocation));
-        }
-    }
-
-    /**
-     * Invoked by the "Start Updates" button
-     * Sends a request to start location updates
-     *
-     * @param v The view object associated with this method, in this case a Button.
-     */
-    public void startUpdates(View v) {
-        mUpdatesRequested = true;
-
-        if (servicesConnected()) {
-            startPeriodicUpdates();
-        }
-    }
-
-    /**
-     * Invoked by the "Stop Updates" button
-     * Sends a request to remove location updates
-     * request them.
-     *
-     * @param v The view object associated with this method, in this case a Button.
-     */
-    public void stopUpdates(View v) {
-        mUpdatesRequested = false;
-
-        if (servicesConnected()) {
-            stopPeriodicUpdates();
-        }
-    }
-    
-    /**
-     * In response to a request to start updates, send a request
-     * to Location Services
-     */
-    private void startPeriodicUpdates() {
-
-        mLocationClient.requestLocationUpdates(mLocationRequest, this);
-        //mConnectionState.setText(R.string.location_requested);
-    }
-
-    /**
-     * In response to a request to stop updates, send a request to
-     * Location Services
-     */
-    private void stopPeriodicUpdates() {
-        mLocationClient.removeLocationUpdates(this);
-        
-        Log.d(TAG,getString(R.string.location_updates_stopped));
-        
-        //mConnectionState.setText(R.string.location_updates_stopped);
-    }
-
     
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -655,103 +543,6 @@ public class UploadSpotActivity extends Activity implements
         } // End else block 
     }
 
-	/*
-     * Called by Location Services if the attempt to
-     * Location Services fails.
-     */
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-        /*
-         * Google Play services can resolve some errors it detects.
-         * If the error has a resolution, try sending an Intent to
-         * start a Google Play services activity that can resolve
-         * error.
-         */
-        if (connectionResult.hasResolution()) {
-            try {
-
-                // Start an Activity that tries to resolve the error
-                connectionResult.startResolutionForResult(
-                        this,
-                        LocationUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
-
-                /*
-                * Thrown if Google Play services canceled the original
-                * PendingIntent
-                */
-
-            } catch (IntentSender.SendIntentException e) {
-
-                // Log the error
-                e.printStackTrace();
-            }
-        } else {
-
-            // If no resolution is available, display a dialog to the user with the error.
-            showErrorDialog(connectionResult.getErrorCode());
-        }
-    }
-    
-	@Override
-	public void onConnected(Bundle arg0) {
-		Log.d(TAG,getString(R.string.connected));
-		//mConnectionStatus.setText(R.string.connected);
-		
-        if (mUpdatesRequested) {
-            startPeriodicUpdates();
-        }
-        
-        // Get the current location
-        Location currentLocation = mLocationClient.getLastLocation();
-
-        currentLat = LocationUtils.getLat(this, currentLocation);
-        currentLng = LocationUtils.getLng(this, currentLocation);
-        
-        // Display the current location in the UI
-        //Log.d(TAG,"Location = "+LocationUtils.getLatLng(this, currentLocation));
-        //mLatLng.setText(LocationUtils.getLatLng(this, currentLocation));
-	}
-
-	@Override
-	public void onDisconnected() {
-		// TODO Auto-generated method stub
-		Log.d(TAG,getString(R.string.disconnected));
-		//mConnectionStatus.setText(R.string.disconnected);
-	}
-
-	@Override
-	public void onLocationChanged(Location location) {
-		// Report to the UI that the location was updated
-        
-		currentLat = LocationUtils.getLat(this, location);
-        currentLng = LocationUtils.getLng(this, location);
-        
-		Log.d(TAG,getString(R.string.location_updated));
-        //mConnectionStatus.setText(R.string.location_updated);
-
-        //Log.d(TAG,LocationUtils.getLatLng(this, location));
-        // In the UI, set the latitude and longitude to the value received
-        //mLatLng.setText(LocationUtils.getLatLng(this, location));
-	}
-
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
-		
-	} 
 	
 	/**
      * Show a dialog returned by Google Play services for the

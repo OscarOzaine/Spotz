@@ -145,7 +145,7 @@ public class Utils {
 
 	public static void setCurrentLocale(Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		String value = prefs.getString("keyLanguage", "");
+		String value = prefs.getString("keyLanguage", "1");
 		Locale locale = null;
 		switch(Integer.parseInt(value)){
 			case 1:

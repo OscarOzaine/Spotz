@@ -287,7 +287,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
     @Override
     public synchronized void onResume() {
         super.onResume();
-        Utils.setCurrentLocale(this);
+        //Utils.setCurrentLocale(this);
         Const.v(TAG, "+ ON RESUME +");
         uiHelper.onResume();
         AppEventsLogger.activateApp(this);
