@@ -205,16 +205,18 @@ public class UploadSpotActivity extends Activity implements
         mUpdatesRequested = false;
         mPrefs = getSharedPreferences(LocationUtils.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         mEditor = mPrefs.edit();
+        final Const constants = new Const();
         LocationResult locationResult = new LocationResult(){
 		    @Override
 		    public void gotLocation(Location location){
-		    	Const.currentLatitude = location.getLatitude();
-		    	Const.currentLongitude = location.getLongitude();
-		    	Log.d(TAG,"getLocationACAs"+Const.currentLongitude+"  "+Const.currentLatitude);
+		    	constants.setLatitude(location.getLatitude());
+		    	constants.setLatitude(location.getLongitude());
+
+		    	Log.d(TAG,"getLocationACAs"+constants.getLatitude()+"  "+constants.getLongitude());
 		    }
 		};
 		MyLocation myLocation = new MyLocation();
-		if(Const.currentLongitude == 0 && Const.currentLatitude == 0){
+		if(constants.getLatitude() == 0 && constants.getLongitude() == 0){
 			myLocation.getLocation(this, locationResult);
 		}
         
@@ -373,8 +375,8 @@ public class UploadSpotActivity extends Activity implements
 	        		intentUploadService.putExtra("spottypeId", ""+spotTypeId);
 	        		intentUploadService.putExtra("spottype", spotType);
 	        		intentUploadService.putExtra("userid", ""+User.current().getID());
-	        		intentUploadService.putExtra("latitude", currentLat);
-	        		intentUploadService.putExtra("longitude", currentLng);
+	        		intentUploadService.putExtra("latitude", Const.currentLatitude);
+	        		intentUploadService.putExtra("longitude", Const.currentLongitude);
 	        		startService(intentUploadService);
 	        		
 	        		Intent intent = new Intent(UploadSpotActivity.this, MainActivity.class);

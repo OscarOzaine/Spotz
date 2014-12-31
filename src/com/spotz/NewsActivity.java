@@ -118,7 +118,8 @@ public class NewsActivity extends Activity implements OnScrollListener {
 	        else if(resultCode == 3){
 	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
 	        	Toast.makeText(NewsActivity.this, getString(R.string.spot_deleted_succesfull),Toast.LENGTH_LONG).show();
-	        	findViewById(R.id.action_refresh).performClick();
+	        	//adapter.notifyDataSetChanged();
+	        	MainActivity.instance.findViewById(R.id.action_refresh_home).performClick();
 	        }
 	        else if(resultCode < 0) {
 	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
@@ -137,21 +138,18 @@ public class NewsActivity extends Activity implements OnScrollListener {
 		setContentView(R.layout.news_list);
 		OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots";
 		instance = this;
-		LocationResult locationResult = new LocationResult(){
+		final Const constants = new Const();
+        LocationResult locationResult = new LocationResult(){
 		    @Override
 		    public void gotLocation(Location location){
-		    	Const.currentLatitude = location.getLatitude();
-		    	Const.currentLongitude = location.getLongitude();
+		    	constants.setLatitude(location.getLatitude());
+		    	constants.setLatitude(location.getLongitude());
+
 		    	Log.d(TAG,"getLocationACAs"+Const.currentLongitude+"  "+Const.currentLatitude);
-		    	//if(Const.currentLongitude != 0){
-		    	if(loading == false)
-		    		new LoadSpots().execute();
-		    	//}
-		        //Got the location!
 		    }
 		};
 		MyLocation myLocation = new MyLocation();
-		if(Const.currentLongitude == 0 && Const.currentLatitude == 0){
+		if(constants.getLatitude() == 0 && constants.getLongitude() == 0){
 			myLocation.getLocation(this, locationResult);
 		}
 		

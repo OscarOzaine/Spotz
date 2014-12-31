@@ -12,8 +12,8 @@ public class Const {
 	public static int width = 0;
 	public static int height = 0;
 	
-	public static double currentLatitude = 0.0;
-	public static double currentLongitude = 0.0;
+	public static double currentLatitude = 0;
+	public static double currentLongitude = 0;
 	
 	public static int spotTypePosition 		= 0;
 	public static int spotDistancePosition 	= 0;
@@ -39,6 +39,23 @@ public class Const {
     
     public static void e(String tag, String msg){
     	if(D)Log.e(tag, msg);
+    }
+    
+    
+    public double getLatitude(){
+    	return currentLatitude;
+    }
+    
+    public double getLongitude(){
+    	return currentLongitude;
+    }
+    
+    public void setLatitude(double latitude){
+    	currentLatitude = latitude;
+    }
+    
+    public void setLongitude(double longitude){
+    	currentLongitude = longitude;
     }
     
 }

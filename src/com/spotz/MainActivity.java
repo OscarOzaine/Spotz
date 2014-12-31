@@ -86,7 +86,7 @@ public class MainActivity extends TabActivity {
 	        else if(resultCode == 3){
 	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
 	        	Toast.makeText(MainActivity.this, getString(R.string.spot_deleted_succesfull),Toast.LENGTH_LONG).show();
-	        	findViewById(R.id.action_refresh).performClick();
+	        	findViewById(R.id.action_refresh_home).performClick();
 	        }
 	        else if(resultCode < 0) {
 	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
@@ -284,8 +284,8 @@ public class MainActivity extends TabActivity {
             overridePendingTransition( R.anim.slide_out_up, R.anim.slide_in_up );
     		finish();  
         	break;
+        case R.id.action_refresh_home:
         case R.id.action_refresh:
-        	
         	NewsActivity.initialize();
         	new LoadSpots().execute();
         	//NewsActivity.LoadOutbox().execute();

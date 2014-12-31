@@ -94,6 +94,7 @@ public class UploadMediaService extends IntentService  {
         {
         	if(internetConection){
         		try { 
+        			Const constants = new Const();
                     // open a URL connection to the Servlet
                     FileInputStream fileInputStream = new FileInputStream(sourceFile);
                     URL url = new URL(upLoadServerUri);
@@ -111,8 +112,8 @@ public class UploadMediaService extends IntentService  {
                     conn.setRequestProperty("name", spotname);
                     conn.setRequestProperty("description", spotdescription );
                     conn.setRequestProperty("type", ""+spottypeid);
-                    conn.setRequestProperty("latitude", ""+latitude);
-                    conn.setRequestProperty("longitude", ""+longitude);
+                    conn.setRequestProperty("latitude", ""+constants.getLatitude());
+                    conn.setRequestProperty("longitude", ""+constants.getLongitude());
                     conn.setRequestProperty("userid", ""+userid);
                     
                     dos = new DataOutputStream(conn.getOutputStream());
