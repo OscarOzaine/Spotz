@@ -9,5 +9,6 @@
 	<classpathentry exported="true" kind="lib" path="libs/xmpcore-5.1.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/junit-4.11.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/junit-4.11-src.jar"/>
+	<classpathentry kind="lib" path="libs/twitter4j-core-4.0.2.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
