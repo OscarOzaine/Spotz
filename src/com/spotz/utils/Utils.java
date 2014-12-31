@@ -114,7 +114,7 @@ public class Utils {
     
     
     public static String createSpotLink(String cityName, String spotId){
-    	return "http://myhotspotz.net/spots/"+cityName+"-"+Integer.toHexString(Integer.parseInt(spotId));
+    	return ("http://myhotspotz.net/spots/"+cityName+"-"+Integer.toHexString(Integer.parseInt(spotId))).replaceAll("\\s+","");
     }
     
     public static String getMetadataParenthesis(String metadata){

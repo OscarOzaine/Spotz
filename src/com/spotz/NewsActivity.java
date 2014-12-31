@@ -168,8 +168,11 @@ public class NewsActivity extends Activity implements OnScrollListener {
 		    	outboxList.clear();
 		    	Const.spotTypePosition 		= position;
 		        Const.spotDistancePosition 	= position;
-		        if(loading == false)
-		    		new LoadSpots().execute();
+		        if(loading == false){
+		        	new LoadSpots().execute();
+		        	Log.d(TAG,"EXECUTEDACA");
+		        }
+		    		
 		    	//Log.d(TAG,"onItemSelected"+position);
 		    }
 

@@ -18,8 +18,6 @@ import com.spotz.gen.R;
 import com.spotz.utils.Const;
 import com.spotz.utils.Settings;
 import com.spotz.utils.Utils;
-
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;

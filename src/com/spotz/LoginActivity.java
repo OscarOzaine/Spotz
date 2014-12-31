@@ -49,7 +49,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
     
     //Login Layout InnerViews
     TextView txtUser, txtPass;
-    Button 	login_btn, register_btn;
+    Button 	login_btn, register_btn, skip_button;
     ProgressBar	progbar;
     
     String mUsername, mPassword;
@@ -156,23 +156,24 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
         
         //give functionality to second button
         login_btn = (Button) findViewById(R.id.login_btn);
+        
         login_btn.setOnClickListener(new OnClickListener() {
-            @Override
-                public void onClick(View v) {
-            		Const.i(TAG,"Change - CANCEL");
-           	 		tryLogin();
-                }
-            });
+        @Override
+            public void onClick(View v) {
+        		Const.i(TAG,"Change - CANCEL");
+       	 		tryLogin();
+            }
+        });
         
         register_btn = (Button) findViewById(R.id.login_register_btn);
         register_btn.setOnClickListener(new OnClickListener() {
-            @Override
-                public void onClick(View v) {
-	            	Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-	    			startActivity(registerIntent);
-	    			overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
-                }
-            });
+        @Override
+            public void onClick(View v) {
+            	Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+    			startActivity(registerIntent);
+    			overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
+            }
+        });
         
         
         loginButton = (LoginButton) findViewById(R.id.fb_login_button);
@@ -188,6 +189,18 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
                             Toast.LENGTH_SHORT).show();
             		*/
             	}
+            }
+        });
+        
+        skip_button = (Button) findViewById(R.id.login_skip);
+        skip_button.setOnClickListener(new OnClickListener() {
+        @Override
+            public void onClick(View v) {
+	        	Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+	        	mainIntent.putExtra("skipped",true);
+	            startActivity(mainIntent);
+	            overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
+	            finish();
             }
         });
     }    

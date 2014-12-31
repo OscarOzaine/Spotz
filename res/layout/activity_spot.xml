@@ -199,7 +199,7 @@
                     android:layout_marginBottom="15dp"
                     android:textColor="@color/black"
                     />
-
+				<!--
                 <TextView
                     android:id="@+id/TextView08"
                     android:layout_width="wrap_content"
@@ -208,7 +208,7 @@
                     android:layout_marginBottom="15dp"
                     android:textColor="@color/black"
                      />
-
+				-->
             </LinearLayout>
 
             <LinearLayout
@@ -222,14 +222,14 @@
                     android:layout_height="wrap_content"
                     android:textColor="#757575"
                      />
-
+				<!--
                 <TextView
                     android:id="@+id/spot_followers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#757575"
                      />
-
+				-->
             </LinearLayout>
         </LinearLayout>
 

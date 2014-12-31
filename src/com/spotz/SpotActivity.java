@@ -9,6 +9,14 @@ import org.apache.http.NameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
+import twitter4j.conf.ConfigurationBuilder;
+
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
 import com.spotz.camera.ImageLoader;
@@ -195,7 +203,10 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
 		//txtName.setText(spotName);
 		//txtLikes.setText(spotLikes);
 		//txtDislikes.setText(spotDislikes);
-		txtType.setText(spotType);
+		String[] spottype = NewsActivity.instance.getResources().getStringArray(R.array.spottype_array);
+		
+		txtType.setText(spottype[Integer.parseInt(spotType)]);
+		
 		txtCity.setText(spotCity);
 		txtDescription.setText(spotDescription);
 		//txtCreatedat.setText("");
@@ -288,7 +299,14 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
 		
         switch (item.getItemId()) {
         case R.id.action_sharespot:
+        	Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, spotDescription);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, Utils.createSpotLink(spotCity, spotId));
+            startActivity(Intent.createChooser(shareIntent, "Share your thoughts"));
         	return true;
+        	/*
         case R.id.action_share_facebook:
         	FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this)
             .setLink(Utils.createSpotLink(spotCity, spotId))
@@ -299,7 +317,9 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
             .build();
     	uiHelper.trackPendingDialogCall(shareDialog.present());
         	return true;
-       
+        case R.id.action_share_twitter:
+        	return true;
+        */
         case R.id.action_mapspot:
         	Log.d(TAG,"map = "+latitude+" long = "+longitude);
         	String uri = String.format(Locale.ENGLISH, "geo:%f,%f?q=%f,%f(%s)", Float.parseFloat(latitude), Float.parseFloat(longitude),Float.parseFloat(latitude), Float.parseFloat(longitude),spotDescription);

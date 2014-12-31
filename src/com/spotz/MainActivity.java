@@ -44,8 +44,9 @@ import android.widget.Toast;
 
 public class MainActivity extends TabActivity {
 	// TabSpec Names
-	private static final String INBOX_SPEC = "Camera";
-	private static final String OUTBOX_SPEC = "News";
+	private static final String CAMERA_SPEC = "Camera";
+	private static final String NEWS_SPEC = "News";
+	private static final String MAP_SPEC = "Map";
 	private static final String PROFILE_SPEC = "Profile";
 	static String TAG = "MainActivity";
 	//this activity Instance
@@ -54,7 +55,7 @@ public class MainActivity extends TabActivity {
 	
 	private int loading = 0;
 	SpotsHelper db = null;
-	
+	boolean skipped = false;
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 	    @Override
 	    public void onReceive(Context context, Intent intent) {
@@ -103,18 +104,17 @@ public class MainActivity extends TabActivity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.main);
         
+        skipped		= getIntent().getBooleanExtra("skipped", false);
         
         ActionBar actionBar = getActionBar();
         actionBar.setTitle(R.string.app_name);
         actionBar.setIcon(android.R.color.transparent);
-        
-        //actionBar.setBackgroundDrawable(new ColorDrawable(0xff1f8b1f));
-        //actionBar.setDisplayHomeAsUpEnabled(true);
-        //actionBar.setHomeButtonEnabled(true);
-        
-        // And when you want to turn it off
-        
         instance = this;
+        
+        
+        
+        
+        
         
         loading = getIntent().getIntExtra("loading",-1);
         if(loading == 1){
@@ -122,60 +122,80 @@ public class MainActivity extends TabActivity {
         }
         final TabHost tabHost = getTabHost();
         
-        // Inbox Tab
-        TabSpec inboxSpec = tabHost.newTabSpec(INBOX_SPEC);
-        inboxSpec.setIndicator(INBOX_SPEC, getResources().getDrawable(R.drawable.ic_camera));
-        Intent cameraIntent = new Intent(this, LoadingActivity.class);
         
-        inboxSpec.setContent(cameraIntent);
-        //inboxSpec.set
-        // Outbox Tab
-        TabSpec outboxSpec = tabHost.newTabSpec(OUTBOX_SPEC);
-        outboxSpec.setIndicator(OUTBOX_SPEC, getResources().getDrawable(R.drawable.ic_newsfeed));
-        Intent outboxIntent = new Intent(this, NewsActivity.class);
-        outboxSpec.setContent(outboxIntent);
-        
-        // Profile Tab
-        TabSpec profileSpec = tabHost.newTabSpec(PROFILE_SPEC);
-        profileSpec.setIndicator(PROFILE_SPEC, getResources().getDrawable(R.drawable.profile));
-        Intent profileIntent = new Intent(this, ProfileActivity.class);
-        profileSpec.setContent(profileIntent);
-        
-        // Adding all TabSpec to TabHost
-        tabHost.addTab(inboxSpec); // Adding Inbox tab
-        tabHost.addTab(outboxSpec); // Adding Outbox tab
-        tabHost.addTab(profileSpec); // Adding Profile tab
-        
-        
-        tabHost.setCurrentTab(1);
-        tabHost.setOnTabChangedListener(new OnTabChangeListener() {
+        if(skipped){
+        	TabSpec newSpec = tabHost.newTabSpec(NEWS_SPEC);
+            newSpec.setIndicator(NEWS_SPEC, getResources().getDrawable(R.drawable.ic_newsfeed));
+            Intent newsIntent = new Intent(this, NewsActivity.class);
+            newSpec.setContent(newsIntent);
+            
+            TabSpec mapSpec = tabHost.newTabSpec(MAP_SPEC);
+            mapSpec.setIndicator(MAP_SPEC, getResources().getDrawable(R.drawable.ic_camera));
+            Intent mapIntent = new Intent(this, MapsActivity.class);
+            mapSpec.setContent(mapIntent);
+            
+            tabHost.addTab(newSpec);
+            tabHost.addTab(mapSpec);
+        }else{
+            TabSpec cameraSpec = tabHost.newTabSpec(CAMERA_SPEC);
+            cameraSpec.setIndicator(CAMERA_SPEC, getResources().getDrawable(R.drawable.ic_camera));
+            Intent cameraIntent = new Intent(this, LoadingActivity.class);
+            cameraSpec.setContent(cameraIntent);
+            
+            TabSpec newSpec = tabHost.newTabSpec(NEWS_SPEC);
+            newSpec.setIndicator(NEWS_SPEC, getResources().getDrawable(R.drawable.ic_newsfeed));
+            Intent newsIntent = new Intent(this, NewsActivity.class);
+            newSpec.setContent(newsIntent);
+            
+            TabSpec mapSpec = tabHost.newTabSpec(MAP_SPEC);
+            mapSpec.setIndicator(MAP_SPEC, getResources().getDrawable(R.drawable.ic_camera));
+            Intent mapIntent = new Intent(this, MapsActivity.class);
+            mapSpec.setContent(mapIntent);
+            
+            TabSpec profileSpec = tabHost.newTabSpec(PROFILE_SPEC);
+            profileSpec.setIndicator(PROFILE_SPEC, getResources().getDrawable(R.drawable.profile));
+            Intent profileIntent = new Intent(this, ProfileActivity.class);
+            profileSpec.setContent(profileIntent);
+            
+            tabHost.addTab(cameraSpec); 
+            tabHost.addTab(newSpec); 
+            tabHost.addTab(mapSpec);
+            tabHost.addTab(profileSpec);
+            
+            
+            tabHost.setCurrentTab(1);
+            tabHost.setOnTabChangedListener(new OnTabChangeListener() {
 
-            public void onTabChanged(String tabId) {
-                //Log.d(TAG , "onTabChanged: tab number=" + tabHost.getCurrentTab());
+                public void onTabChanged(String tabId) {
+                    //Log.d(TAG , "onTabChanged: tab number=" + tabHost.getCurrentTab());
 
-                switch (tabHost.getCurrentTab()) {
-                case 0:
-                	//tabHost.getContext();
-                	Intent cameraIntent= new Intent(MainActivity.this, CameraActivity.class);
-                	cameraIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                	overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_left );
-                	//openMainActivity.setFlags(Intent.);
-                    startActivity(cameraIntent);
-                    //do what you want when tab 0 is selected
-                    break;
-                case 1:
-                    //do what you want when tab 1 is selected
-                    break;
-                case 2:
-                    //do what you want when tab 2 is selected
-                    break;
+                    switch (tabHost.getCurrentTab()) {
+                    case 0:
+                    	//tabHost.getContext();
+                    	Intent cameraIntent= new Intent(MainActivity.this, CameraActivity.class);
+                    	cameraIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    	overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_left );
+                    	//openMainActivity.setFlags(Intent.);
+                        startActivity(cameraIntent);
+                        //do what you want when tab 0 is selected
+                        break;
+                    case 1:
+                        //do what you want when tab 1 is selected
+                        break;
+                    case 2:
+                        //do what you want when tab 2 is selected
+                        break;
 
-                default:
+                    default:
 
-                    break;
+                        break;
+                    }
                 }
-            }
-        });
+            });
+        }
+        
+        
+        
         
         
     }

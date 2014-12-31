@@ -8,6 +8,8 @@
         android:icon="@android:drawable/ic_menu_share"
         android:title="Share"
         android:showAsAction="ifRoom">
+            
+            <!-- 
             <menu>
                 <group 
                     android:id="@+id/menu_nav_group">
@@ -15,13 +17,15 @@
                             android:id="@+id/action_share_facebook"
                             android:icon="@drawable/ic_facebook"
                             android:title="@string/facebook_title"/>
-                        <!-- 
+                        
                         <item 
                             android:id="@+id/action_share_twitter"
-                            android:title="@string/twitter_title"/>
-                       -->
+                            android:title="@string/twitter_title"
+                            android:icon="@drawable/ic_twitter"/>
+                       
                 </group>
             </menu>
+            -->
   	</item>   
     
     <item 

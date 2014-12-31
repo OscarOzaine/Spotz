@@ -92,8 +92,8 @@ public class ProfileActivity extends Activity  {
 		//txtUsername 	= (TextView) findViewById(R.id.profile_email);
 		txtEmail 		= (TextView) findViewById(R.id.profile_email);
 		//txtCreated_at 	= (TextView) findViewById(R.id.profile_created_at);
-		txtPlus 		= (TextView) findViewById(R.id.profile_repplus);
-		txtMinus 		= (TextView) findViewById(R.id.profile_repminus);
+		//txtPlus 		= (TextView) findViewById(R.id.profile_repplus);
+		//txtMinus 		= (TextView) findViewById(R.id.profile_repminus);
 		//txtSuspended 	= (TextView) findViewById(R.id.profile_suspended);
 		//txtConfirmed 	= (TextView) findViewById(R.id.profile_confirmed);
 		//txtFirstname 	= (TextView) findViewById(R.id.profile_first_name);
@@ -216,8 +216,8 @@ public class ProfileActivity extends Activity  {
 							//txtUsername 	= (TextView) findViewById(R.id.profile_email);
 							txtEmail 		= (TextView) findViewById(R.id.profile_email);
 							//txtCreated_at 	= (TextView) findViewById(R.id.profile_created_at);
-							txtPlus 		= (TextView) findViewById(R.id.profile_repplus);
-							txtMinus 		= (TextView) findViewById(R.id.profile_repminus);
+							//txtPlus 		= (TextView) findViewById(R.id.profile_repplus);
+							//txtMinus 		= (TextView) findViewById(R.id.profile_repminus);
 							//txtSuspended 	= (TextView) findViewById(R.id.profile_suspended);
 							//txtConfirmed 	= (TextView) findViewById(R.id.profile_confirmed);
 							//txtFirstname 	= (TextView) findViewById(R.id.profile_first_name);
@@ -249,8 +249,8 @@ public class ProfileActivity extends Activity  {
 							// displaying all data in textview
 							//txtName.setText(name);
 							txtEmail.setText(email);
-							txtPlus.setText(plus);
-							txtMinus.setText(minus);
+							//txtPlus.setText(plus);
+							//txtMinus.setText(minus);
 							txtFollowers.setText(followers);
 							
 							ImageLoader imageLoader = new ImageLoader(getBaseContext());

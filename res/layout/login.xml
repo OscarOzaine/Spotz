@@ -89,6 +89,15 @@
 				facebook:fetch_user_info="true"
 	        />
 	    
+	    <Button
+	        android:id="@+id/login_skip"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:layout_marginTop="2dp"
+	        android:layout_gravity="center"
+	        android:text="@string/jump_to_news" />
+	    
 	    <ProgressBar
 	        android:id="@+id/login_progressbar"
 	        android:layout_width="wrap_content"

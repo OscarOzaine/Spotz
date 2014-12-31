@@ -58,6 +58,7 @@
             android:textSize="20dip" />
     </LinearLayout>
 
+    <!--
     <LinearLayout
         android:id="@+id/linearLayout4"
         android:layout_width="wrap_content"
@@ -120,6 +121,6 @@
         </LinearLayout>
 
     </LinearLayout>
-
+	-->
    
 </RelativeLayout>
