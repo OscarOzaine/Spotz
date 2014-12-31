@@ -31,9 +31,23 @@ public class MapsActivity extends FragmentActivity
 	@Override
 	public void onMapReady(GoogleMap map) {
 		map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Const.currentLatitude, Const.currentLongitude), 11));
-		map.addMarker(new MarkerOptions()
-        .position(new LatLng(0, 0))
-        .title("Marker"));
+		
+		int size = NewsActivity.outboxList.size();
+
+		String[] spottype = NewsActivity.instance.getResources().getStringArray(R.array.spottype_array);
+		
+		for(int j = 0; j < size; j++) {
+		    map.addMarker(new MarkerOptions()
+	        .position(
+	        		new LatLng(
+	        				Double.parseDouble(NewsActivity.outboxList.get(j).get("latitude")), 
+	        				Double.parseDouble(NewsActivity.outboxList.get(j).get("longitude"))))
+	        				
+	        .title(spottype[Integer.parseInt(NewsActivity.outboxList.get(j).get("spottype"))])
+	        );
+		    //userdate obj=datalist.get(i).;
+		}
+		
 	}
 
 }

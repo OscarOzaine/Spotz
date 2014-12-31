@@ -55,7 +55,7 @@ public class MainActivity extends TabActivity {
 	
 	private int loading = 0;
 	SpotsHelper db = null;
-	boolean skipped = false;
+	boolean skip_login = false;
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 	    @Override
 	    public void onReceive(Context context, Intent intent) {
@@ -104,16 +104,12 @@ public class MainActivity extends TabActivity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.main);
         
-        skipped		= getIntent().getBooleanExtra("skipped", false);
+        skip_login		= getIntent().getBooleanExtra("skipped", false);
         
         ActionBar actionBar = getActionBar();
         actionBar.setTitle(R.string.app_name);
         actionBar.setIcon(android.R.color.transparent);
         instance = this;
-        
-        
-        
-        
         
         
         loading = getIntent().getIntExtra("loading",-1);
@@ -123,7 +119,13 @@ public class MainActivity extends TabActivity {
         final TabHost tabHost = getTabHost();
         
         
-        if(skipped){
+        if(skip_login){
+        	/*
+        	Intent newsIntent = new Intent(MainActivity.this, NewsActivity.class);
+        	overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_left );
+            startActivity(newsIntent);
+            */
+            
         	TabSpec newSpec = tabHost.newTabSpec(NEWS_SPEC);
             newSpec.setIndicator(NEWS_SPEC, getResources().getDrawable(R.drawable.ic_newsfeed));
             Intent newsIntent = new Intent(this, NewsActivity.class);
@@ -136,6 +138,7 @@ public class MainActivity extends TabActivity {
             
             tabHost.addTab(newSpec);
             tabHost.addTab(mapSpec);
+            
         }else{
             TabSpec cameraSpec = tabHost.newTabSpec(CAMERA_SPEC);
             cameraSpec.setIndicator(CAMERA_SPEC, getResources().getDrawable(R.drawable.ic_camera));
@@ -228,12 +231,17 @@ public class MainActivity extends TabActivity {
     	db = new SpotsHelper(this);
     	List<Spot> list = db.getAllSpots();
     	//Log.d(TAG,"LIST SIZE = "+list.size());
-    	
-    	if(list.size() > 0){
-    		getMenuInflater().inflate(R.menu.home_myspots, menu);
+    	if(skip_login){
+    		getMenuInflater().inflate(R.menu.home_skip_login, menu);
     	}else{
-    		getMenuInflater().inflate(R.menu.home, menu);
+    		if(list.size() > 0){
+        		getMenuInflater().inflate(R.menu.home_myspots, menu);
+        	}else{
+        		getMenuInflater().inflate(R.menu.home, menu);
+        	}
     	}
+    	
+    	
         
         /*
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -283,6 +291,11 @@ public class MainActivity extends TabActivity {
         	//NewsActivity.LoadOutbox().execute();
         	//getTabHost().setCurrentTab(2);
         	//getTabHost().setCurrentTab(1);
+        	break;
+        case R.id.action_login:
+        	Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent); 
+            overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
         	break;
         case R.id.action_settings:
         	Intent userSettingsIntent = new Intent(this, UserSettingsActivity.class);

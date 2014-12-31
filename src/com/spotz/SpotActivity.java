@@ -155,10 +155,8 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
         		return true; 
             }
         });
-		
-		//Log.d(TAG,"imagepath = "+mediaPath);
-		if(Utils.isVideo(mediaPath)){
-
+        
+        if(Utils.isVideo(mediaPath)){
 			imgSpot.setVisibility(View.GONE);
 			//frameLayoutVideo.setRotation(270);
 			//frameLayoutVideo.refreshDrawableState();
@@ -254,11 +252,12 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
 
 	@Override
 	public void onPause() {
+		/*
 		if(mediaPlayer != null){
 			mediaPlayer.stop();
 			mediaPlayer.release();
 		}
-			
+		*/
 	    super.onPause();
 	    uiHelper.onPause();
 	}
