@@ -420,6 +420,7 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
 	SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
 		public void surfaceCreated(SurfaceHolder holder) {
 			// TODO Auto-generated method stub
+			mediaPlayer.setDisplay(videoSurface.getHolder());
 		}
 
 		public void surfaceChanged(SurfaceHolder holder,
@@ -535,7 +536,8 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
 		
 		//videoSurface.getHolder().setType(SurfaceHolder.SURFACE_TYPE_NORMAL);
 		//videoSurface.getHolder().lockCanvas().rotate(90);
-		mediaPlayer.setDisplay(videoSurface.getHolder());
+		
+		
 		
     	//mediaPlayer.
 		controller.setMediaPlayer(mediaPlayerControl);

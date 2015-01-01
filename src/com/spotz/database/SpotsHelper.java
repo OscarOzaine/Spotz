@@ -129,7 +129,7 @@ public class SpotsHelper extends SQLiteOpenHelper {
         spot.setImagepath(cursor.getString(8));
         
 		Log.d("getSpot("+id+")", spot.toString());
-
+		cursor.close();
         // 5. return book
         return spot;
 	}
@@ -163,7 +163,7 @@ public class SpotsHelper extends SQLiteOpenHelper {
             	spots.add(spot);
             } while (cursor.moveToNext());
         }
-        
+        cursor.close();
 		Log.d("getAllSpots()", spots.toString());
 
         // return books
@@ -216,6 +216,7 @@ public class SpotsHelper extends SQLiteOpenHelper {
             	return Integer.parseInt(cursor.getString(0));
             } while (cursor.moveToNext());
         }
+        cursor.close();
 		return 0;
     }
     

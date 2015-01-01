@@ -143,7 +143,7 @@
    <string name="no_internet">Sin conexion a internet</string>
    <string name="spot_deleted_succesfull">El spot se borro correctamente</string>
    <string name="failed_upload_spot">Subir spot fallo</string>
-   <string name="jump_to_news">Saltar</string>
+   <string name="jump_to_news">Ver Spotz</string>
    <string-array name="listentries">
         <item>Ingles</item>
         <item>Español</item>
