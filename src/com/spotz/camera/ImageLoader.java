@@ -58,7 +58,6 @@ public class ImageLoader {
     final int stub_id = R.drawable.solidred;
  
     public Bitmap DisplayImage(String url, ImageView imageView) {
-    	//Log.d("DisplayImage","mediaPath2 = "+url);
         imageViews.put(imageView, url);
         Bitmap bitmap = memoryCache.get(url);
         
@@ -102,7 +101,6 @@ public class ImageLoader {
             conn.disconnect();
 	        //bitmap = BitmapFactory.decodeFile(path, options);
 	        bitmap = decodeFile(f,url);
-            //Log.d("DisplayImage","getBitmap");
             return rotateBitmap(is,url,bitmap);
         } catch (Throwable ex) {
             ex.printStackTrace();
@@ -114,7 +112,6 @@ public class ImageLoader {
  
     // Decodes image and scales it to reduce memory consumption
     private Bitmap decodeFile(File f, String url) {
-    	//Log.d("DisplayImage","decodeFile"+url);
         try {
             // Decode image size
             BitmapFactory.Options o = new BitmapFactory.Options();
@@ -144,7 +141,6 @@ public class ImageLoader {
             o2.inSampleSize = scale;
             FileInputStream stream2 = new FileInputStream(f);
             Bitmap bitmap = BitmapFactory.decodeStream(stream2, null, o2);
-            //Log.d("DisplayImage","decodeFile");
             InputStream inStream = new FileInputStream(f);
             bitmap = rotateBitmap(inStream,url,bitmap);
             stream2.close();
@@ -226,15 +222,20 @@ public class ImageLoader {
     }
     
     public static Bitmap rotateBitmap(InputStream inputStream,String src, Bitmap bitmap) {
-    	//Log.d("DisplayImage","src = "+src);
         try {
             String[] exifArray 	= getExifArray(inputStream, src);
             
-            Log.d("DisplayImage","Orientation = "+exifArray.toString());
+            if(exifArray == null)
+            	return bitmap;
+            
+            if(Const.D) Log.d("DisplayImage","Orientation = "+exifArray.toString());
             
             String orientation 	= exifArray[0];
             String camera 		= exifArray[1];
             
+            if(exifArray[0]==null){
+            	return bitmap;
+            }
             
             if (orientation.equals("1")) {
                 return bitmap;
@@ -281,10 +282,8 @@ public class ImageLoader {
 		        // Create a new bitmap with the scaling factor
 		        newBitmap = Utils.ScaleBitmap(bMapRotate, scalingFactor);
 		        //spotImage.setImageBitmap(newBitmap);
-		        //Log.d("DisplayImage","90");
 		        return newBitmap;
 	        }else{
-	        	//Log.d("DisplayImage","90");
 		        return bitmap;
 	        }
             
@@ -297,8 +296,6 @@ public class ImageLoader {
 
     private static String[] getExifArray(InputStream inputStream, String src) throws IOException {
     	String[] exifArray = new String[2];
-        
-        	//Log.d("DisplayImage","getExifOrientation");
         	try {
         		//URL url = new URL(src);
 				Metadata metadata = ImageMetadataReader.readMetadata(inputStream);
@@ -310,7 +307,6 @@ public class ImageLoader {
 				    for (Tag tag : directory.getTags()) {
 				    	//Log.d("DisplayImage","TAG = "+tag.getTagName()+"TagD = "+tag.getDescription());
 				    	if(tag.getTagName().equals("Orientation")){
-				    		//Log.d(TAG,"Orientation = "+tag.getDescription());
 				    		exifArray[0] 	= ""+Utils.getMetadataParenthesis(tag.getDescription());
 				    		//Log.d("DisplayImage","ACA= "+orientation);
 				    	}
@@ -329,8 +325,6 @@ public class ImageLoader {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-        
-        //Log.d(TAG,"ReadOrientation = "+exifArray.toString());
         return exifArray;
     }
  

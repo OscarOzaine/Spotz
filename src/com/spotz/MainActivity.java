@@ -10,6 +10,7 @@ import com.spotz.database.SpotsHelper;
 import com.spotz.gen.R;
 import com.spotz.services.UploadMediaService;
 import com.spotz.users.UserSettingsActivity;
+import com.spotz.utils.Const;
 import com.spotz.utils.Utils;
 import com.spotz.NewsActivity.*;
 
@@ -44,10 +45,11 @@ import android.widget.Toast;
 
 public class MainActivity extends TabActivity {
 	// TabSpec Names
-	private static final String CAMERA_SPEC = "Camera";
-	private static final String NEWS_SPEC = "News";
-	private static final String MAP_SPEC = "Map";
-	private static final String PROFILE_SPEC = "Profile";
+	private static final String CAMERA_SPEC 	= "Camara";
+	private static final String NEWS_SPEC 		= "Eventos";
+	private static final String MAP_SPEC 		= "Mapa";
+	private static final String PROFILE_SPEC	= "Perfil";
+	
 	static String TAG = "MainActivity";
 	//this activity Instance
 	public static MainActivity instance;
@@ -56,6 +58,7 @@ public class MainActivity extends TabActivity {
 	private int loading = 0;
 	SpotsHelper db = null;
 	boolean skip_login = false;
+	
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 	    @Override
 	    public void onReceive(Context context, Intent intent) {
@@ -64,14 +67,14 @@ public class MainActivity extends TabActivity {
 	    	  
 	        int resultCode = bundle.getInt("result");
 	        String dbspotId = bundle.getString("dbspotid");
-	        Log.d(TAG,"RESULTCODE = "+resultCode+ " spot "+dbspotId);
+	        if(Const.D) Log.d(TAG,"RESULTCODE = "+resultCode+ " spot "+dbspotId);
 	        if (resultCode == 1) {
 	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
 	        	Toast.makeText(MainActivity.this, getString(R.string.sucessfull_upload),Toast.LENGTH_LONG).show();
 	        	db = new SpotsHelper(MainActivity.this);
 	        	List<Spot> list = db.getAllSpots();
 				for (int i = 0; i < list.size(); i++) {
-					Log.d(TAG,dbspotId+" - "+list.get(i).getId());
+					if(Const.D) Log.d(TAG,dbspotId+" - "+list.get(i).getId());
 					if(Integer.parseInt(dbspotId) == list.get(i).getId()){
 						Log.d(TAG,"LIST="+list.get(i));
 						db.deleteSpot(list.get(i));

@@ -4,6 +4,9 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import com.spotz.utils.Const;
+
 import android.graphics.Bitmap;
 import android.util.Log;
  
@@ -28,7 +31,7 @@ public class MemoryCache {
  
     public void setLimit(long new_limit) {
         limit = new_limit;
-        Log.i(TAG, "MemoryCache will use up to " + limit / 1024. / 1024. + "MB");
+        if(Const.D) Log.i(TAG, "MemoryCache will use up to " + limit / 1024. / 1024. + "MB");
     }
  
     public Bitmap get(String id) {
@@ -55,7 +58,7 @@ public class MemoryCache {
     }
  
     private void checkSize() {
-        Log.i(TAG, "cache size=" + size + " length=" + cache.size());
+    	if(Const.D) Log.i(TAG, "cache size=" + size + " length=" + cache.size());
         if (size > limit) {
             // Least recently accessed item will be the first one iterated
             Iterator<Entry<String, Bitmap>> iter = cache.entrySet().iterator();
@@ -66,7 +69,7 @@ public class MemoryCache {
                 if (size <= limit)
                     break;
             }
-            Log.i(TAG, "Clean cache. New size " + cache.size());
+            if(Const.D) Log.i(TAG, "Clean cache. New size " + cache.size());
         }
     }
  

@@ -43,7 +43,7 @@ public class MapsActivity extends FragmentActivity
 	        				Double.parseDouble(NewsActivity.outboxList.get(j).get("latitude")), 
 	        				Double.parseDouble(NewsActivity.outboxList.get(j).get("longitude"))))
 	        				
-	        .title(spottype[Integer.parseInt(NewsActivity.outboxList.get(j).get("spottype"))])
+	        .title(spottype[Integer.parseInt(NewsActivity.outboxList.get(j).get("spottype")) - 1])
 	        );
 		    //userdate obj=datalist.get(i).;
 		}

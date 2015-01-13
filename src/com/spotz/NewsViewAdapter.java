@@ -14,6 +14,7 @@ import com.spotz.utils.Utils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -112,8 +113,13 @@ public class NewsViewAdapter extends BaseAdapter {
 		txtdescription.setText(resultp.get(NewsActivity.TAG_DESCRIPTION));
 		
 		String[] spottype = NewsActivity.instance.getResources().getStringArray(R.array.spottype_array);
+		Log.d(TAG,""+Arrays.toString(spottype));
 		
-		txtspottype.setText(spottype[Integer.parseInt(resultp.get(NewsActivity.TAG_SPOTTYPE))]);
+		int intspottype = Integer.parseInt(resultp.get(NewsActivity.TAG_SPOTTYPE)); 
+		if(intspottype > 6){
+			intspottype -= 1;
+		}
+		txtspottype.setText(spottype[intspottype]);
 		//txtlikes.setText(resultp.get(NewsActivity.TAG_LIKES));
 		//txtdislikes.setText(resultp.get(NewsActivity.TAG_DISLIKES));
 		

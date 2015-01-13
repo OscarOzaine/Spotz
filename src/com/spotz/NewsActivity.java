@@ -96,16 +96,16 @@ public class NewsActivity extends Activity implements OnScrollListener {
 	    	  
 	        int resultCode = bundle.getInt("result");
 	        String dbspotId = bundle.getString("dbspotid");
-	        Log.d(TAG,"RESULTCODE = "+resultCode+ " spot "+dbspotId);
+	        if(Const.D) Log.d(TAG,"RESULTCODE = "+resultCode+ " spot "+dbspotId);
 	        if (resultCode == 1) {
 	        	MainActivity.instance.setProgressBarIndeterminateVisibility(false);
 	        	Toast.makeText(NewsActivity.this, getString(R.string.sucessfull_upload),Toast.LENGTH_LONG).show();
 	        	db = new SpotsHelper(NewsActivity.this);
 	        	List<Spot> list = db.getAllSpots();
 				for (int i = 0; i < list.size(); i++) {
-					Log.d(TAG,dbspotId+" - "+list.get(i).getId());
+					if(Const.D) Log.d(TAG,dbspotId+" - "+list.get(i).getId());
 					if(Integer.parseInt(dbspotId) == list.get(i).getId()){
-						Log.d(TAG,"LIST="+list.get(i));
+						if(Const.D) Log.d(TAG,"LIST="+list.get(i));
 						db.deleteSpot(list.get(i));
 						//new LoadSpots().execute();
 					}
@@ -145,7 +145,7 @@ public class NewsActivity extends Activity implements OnScrollListener {
 		    	constants.setLatitude(location.getLatitude());
 		    	constants.setLatitude(location.getLongitude());
 
-		    	Log.d(TAG,"getLocationACAs"+Const.currentLongitude+"  "+Const.currentLatitude);
+		    	if(Const.D) Log.d(TAG,"getLocationACAs"+Const.currentLongitude+"  "+Const.currentLatitude);
 		    }
 		};
 		MyLocation myLocation = new MyLocation();
@@ -226,7 +226,7 @@ public class NewsActivity extends Activity implements OnScrollListener {
         Utils.setCurrentLocale(this);
         
   		ArrayAdapter<CharSequence> adapterTypes = ArrayAdapter.createFromResource(this,
-  		        R.array.spottype_array, android.R.layout.simple_spinner_item);
+  		        R.array.spottype_upload, android.R.layout.simple_spinner_item);
   		adapterTypes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
   		spinnerSpotType.setAdapter(adapterTypes);
   		
@@ -242,7 +242,7 @@ public class NewsActivity extends Activity implements OnScrollListener {
         outboxList = new ArrayList<HashMap<String, String>>();
         OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+Const.spotTypePosition+"/"+Const.currentLatitude+"/"+Const.currentLongitude+"/"+Const.spotDistancePosition+"/"+startNew+"/"+rowNews;
 		//new LoadSpots().execute();
-		Const.v(TAG, "+ ON RESUME +"+OUTBOX_URL);
+        if(Const.D) Const.v(TAG, "+ ON RESUME +"+OUTBOX_URL);
     }
 	
 	public static final String SHOWITEMINTENT_EXTRA_FETCHROWID = "fetchRow";
@@ -260,14 +260,14 @@ public class NewsActivity extends Activity implements OnScrollListener {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			loading = true;
-			instance.setProgressBarIndeterminateVisibility(true);
+			MainActivity.instance.setProgressBarIndeterminateVisibility(true);
 			OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+Const.spotTypePosition+"/"+Const.currentLatitude+"/"+Const.currentLongitude+"/"+Const.spotDistancePosition+"/"+startNew+"/"+rowNews;
-			Log.d(TAG,OUTBOX_URL);
-			pDialog = new ProgressDialog(NewsActivity.instance);
-			pDialog.setMessage(instance.getString(R.string.loading_spots));
-			pDialog.setIndeterminate(false);
-			pDialog.setCancelable(false);
-			pDialog.show();
+			if(Const.D) Log.d(TAG,OUTBOX_URL);
+			//pDialog = new ProgressDialog(NewsActivity.instance);
+			//pDialog.setMessage(instance.getString(R.string.loading_spots));
+			//pDialog.setIndeterminate(false);
+			//pDialog.setCancelable(false);
+			//pDialog.show();
 		}
 
 		/**
@@ -282,7 +282,7 @@ public class NewsActivity extends Activity implements OnScrollListener {
 				// getting JSON string from URL
 				JSONObject json = jsonParser.makeHttpRequest(OUTBOX_URL, "GET",
 						params);
-				Log.d(TAG,"HTTP="+OUTBOX_URL);
+				if(Const.D) Log.d(TAG,"HTTP="+OUTBOX_URL);
 				if(json == null){
 					loadNews = false;
 					Log.d(TAG,"JSONNULL");
@@ -363,8 +363,8 @@ public class NewsActivity extends Activity implements OnScrollListener {
 		 * After completing background task Dismiss the progress dialog
 		 * **/
 		protected void onPostExecute(String file_url) {
-			pDialog.dismiss();
-			instance.setProgressBarIndeterminateVisibility(false);
+			//pDialog.dismiss();
+			MainActivity.instance.setProgressBarIndeterminateVisibility(false);
 			// updating UI from Background Thread
 			if(loadNews){
 				instance.runOnUiThread(new Runnable() {
@@ -388,13 +388,13 @@ public class NewsActivity extends Activity implements OnScrollListener {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			loading = true;
-			setProgressBarIndeterminateVisibility(true);
+			MainActivity.instance.setProgressBarIndeterminateVisibility(true);
 			OUTBOX_URL = "http://api.myhotspotz.net/app/getlatestspots/"+Const.spotTypePosition+"/"+Const.currentLatitude+"/"+Const.currentLongitude+"/"+Const.spotDistancePosition+"/"+startNew+"/"+rowNews;
-			pDialog = new ProgressDialog(NewsActivity.this);
-			pDialog.setMessage(getString(R.string.loading_spots));
-			pDialog.setIndeterminate(false);
-			pDialog.setCancelable(false);
-			pDialog.show();
+			//pDialog = new ProgressDialog(NewsActivity.this);
+			//pDialog.setMessage(getString(R.string.loading_spots));
+			//pDialog.setIndeterminate(false);
+			//pDialog.setCancelable(false);
+			//pDialog.show();
 		}
 
 		/**
@@ -418,7 +418,7 @@ public class NewsActivity extends Activity implements OnScrollListener {
 					loadNews = true;
 					//Log.d(TAG,"LoadEm"+json.toString());
 					
-					Log.d(TAG,"MOREHTTP="+OUTBOX_URL);
+					if(Const.D) Log.d(TAG,"MOREHTTP="+OUTBOX_URL);
 					startNew+=4; 
 					
 					String urlImage = "";
@@ -494,13 +494,13 @@ public class NewsActivity extends Activity implements OnScrollListener {
 		 * After completing background task Dismiss the progress dialog
 		 * **/
 		protected void onPostExecute(String file_url) {
-			pDialog.dismiss();
-			setProgressBarIndeterminateVisibility(false);
+			//pDialog.dismiss();
+			MainActivity.instance.setProgressBarIndeterminateVisibility(false);
 			// updating UI from Background Thread
 			if(loadNews){
 				runOnUiThread(new Runnable() {
 					public void run() {
-						Log.d(TAG,"notify changes");
+						if(Const.D) Log.d(TAG,"notify changes");
 						adapter.notifyDataSetChanged();
 						flag_loading = false;
 						

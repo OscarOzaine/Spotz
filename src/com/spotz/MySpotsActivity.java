@@ -257,7 +257,7 @@ public class MySpotsActivity extends ListActivity {
         startActivity(spotIntent);
         overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
         
-        Log.d(TAG,""+spotIdHidden);
+        if(Const.D) Log.d(TAG,""+spotIdHidden);
         //Intent tmpIntent = new Intent(this, YourActivityForShowingItem.class);
        // tmpIntent.putExtra(SHOWITEMINTENT_EXTRA_FETCHROWID, position);
         //startActivityForResult(tmpIntent, ACTIVITY_SHOWITEM);

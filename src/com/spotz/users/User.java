@@ -44,7 +44,7 @@ public class User {
 	
 	/** Get current Player logged in */
 	public static final User current(){
-		Log.d("USER","USERJSON"+Settings.USER_JSON);
+		if(Const.D) Log.d("USER","USERJSON"+Settings.USER_JSON);
 		if( currentU == null){
 			String playerJson = Settings.getIns(LoginActivity.instance).getPref().getString(Settings.USER_JSON, null);
 			
@@ -53,7 +53,7 @@ public class User {
 			else
 				currentU = new User(playerJson);
 		}
-		Log.d(Const.TAG,"currentuser "+currentU.getID());
+		if(Const.D) Log.d(Const.TAG,"currentuser "+currentU.getID());
 		return  currentU;
 	}
 	
@@ -88,7 +88,7 @@ public class User {
 		try {
 			JSONArray res;
 			res = new JSONArray(playerJSON);
-			Log.d(Const.TAG,"inittaca"+res);
+			if(Const.D) Log.d(Const.TAG,"inittaca"+res);
 			initPlayer(res);
 		} catch (JSONException e) {	if(Const.D) e.printStackTrace();	} 
 	}
@@ -104,7 +104,6 @@ public class User {
 	/** we initialize the player's  basic parameters from a json.
 	 * @param res the servers response with current player profile*/
 	public void initPlayer(JSONArray res){
-		Log.v(Const.TAG, "PlayerInit");
 		try {
 			// extract jsonObejct from JsonArray
 			JSONObject infoJson = res.getJSONObject(0); 
@@ -132,7 +131,7 @@ public class User {
 		if(Const.D){
 			Log.v(Const.TAG, "PlayerInitComplete");
 		}
-		Log.d(Const.TAG,"userjson = "+Settings.getIns(null).getPref().getString(Settings.USER_JSON, null));
+		if(Const.D) Log.d(Const.TAG,"userjson = "+Settings.getIns(null).getPref().getString(Settings.USER_JSON, null));
 		notifyListener();
 	}	
 	
@@ -221,7 +220,7 @@ public class User {
 	
 	/** Notify the listeners so it will refresh it's UI */
 	public void notifyListener(){
-		Log.d(Const.TAG,"notifyListener");
+		if(Const.D) Log.d(Const.TAG,"notifyListener");
 		if ( infoListeners.size() > 0)
 			if(Const.D)
 				Log.i(Const.TAG,"notifying infoListeners, total: "+ infoListeners.size());

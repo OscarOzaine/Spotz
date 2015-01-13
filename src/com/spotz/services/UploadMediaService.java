@@ -85,9 +85,9 @@ public class UploadMediaService extends IntentService  {
         BufferedReader reader = null;
         
         File sourceFile = new File(sourceFileUri); 
-        Log.e(Const.TAG,sourceFileUri);
+        if(Const.D) Log.e(Const.TAG,sourceFileUri);
         if (!sourceFile.isFile()) {
-        	Log.e(Const.TAG, "Source File not exist :" +imagePath);
+        	if(Const.D) Log.e(Const.TAG, "Source File not exist :" +imagePath);
             return 0;
         }
         else
@@ -116,6 +116,7 @@ public class UploadMediaService extends IntentService  {
                     conn.setRequestProperty("longitude", ""+constants.getLongitude());
                     conn.setRequestProperty("userid", ""+userid);
                     
+                    Log.d("UploadMediaService","spottype"+spottypeid);
                     dos = new DataOutputStream(conn.getOutputStream());
 
                     dos.writeBytes(twoHyphens + boundary + lineEnd); 
@@ -148,7 +149,7 @@ public class UploadMediaService extends IntentService  {
                     serverResponseCode = conn.getResponseCode();
                     String serverResponseMessage = conn.getResponseMessage();
                     
-                    Log.i(Const.TAG, "HTTP Response is : "+ serverResponseMessage + ": " + serverResponseCode);
+                    if(Const.D) Log.i(Const.TAG, "HTTP Response is : "+ serverResponseMessage + ": " + serverResponseCode);
 
                     
                     reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -160,7 +161,7 @@ public class UploadMediaService extends IntentService  {
                     }
                     
                     if(serverResponseCode == 200){
-                    	Log.d(Const.TAG,"File Upload Complete.");
+                    	if(Const.D) Log.d(Const.TAG,"File Upload Complete.");
                     }
                     
                     //close the streams //
@@ -170,20 +171,20 @@ public class UploadMediaService extends IntentService  {
                 } catch (MalformedURLException ex) {
 
                 	ex.printStackTrace();
-                	Log.d(Const.TAG,"MalformedURLException");
-                    Log.e(Const.TAG, "error: " + ex.getMessage(), ex);  
+                	if(Const.D) Log.d(Const.TAG,"MalformedURLException");
+                	if(Const.D) Log.e(Const.TAG, "error: " + ex.getMessage(), ex);  
                 } catch (Exception e) {
                 	e.printStackTrace();
 
-                	Log.d(Const.TAG,"Got Exception : see logcat");
-                    Log.e(Const.TAG, "Exception : "+ e.getMessage(), e); 
+                	if(Const.D) Log.d(Const.TAG,"Got Exception : see logcat");
+                	if(Const.D) Log.e(Const.TAG, "Exception : "+ e.getMessage(), e); 
                 }
-                Log.d(Const.TAG, "READ "+serverResponse);
+        		if(Const.D) Log.d(Const.TAG, "READ "+serverResponse);
                 
                 if(Utils.isNumeric(serverResponse.toString())){
                 	return Integer.parseInt(serverResponse.toString());
                 }else{
-                	Log.d(Const.TAG,"Error: "+serverResponse.toString());
+                	if(Const.D) Log.d(Const.TAG,"Error: "+serverResponse.toString());
                 	return Integer.parseInt(serverResponse.toString()); 
                 }
         	}
@@ -201,7 +202,7 @@ public class UploadMediaService extends IntentService  {
 	    Intent intent = new Intent(NOTIFICATION);
 	    intent.putExtra("result", result);
 	    intent.putExtra("dbspotid", dbSpotId);
-	    Log.d("UploadMediaaaa","dbspot = " + dbSpotId);
+	    if(Const.D) Log.d("UploadMediaaaa","dbspot = " + dbSpotId);
 	    sendBroadcast(intent);
 	  }
 }

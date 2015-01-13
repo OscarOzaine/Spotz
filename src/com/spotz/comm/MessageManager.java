@@ -49,7 +49,7 @@ public class MessageManager {
 			return;
 		
 		if(Const.D){
-			Log.d(TAG, "SRVR response: " + responseCode + " - "+ response);
+			if(Const.D) Log.d(TAG, "SRVR response: " + responseCode + " - "+ response);
 		}
 		
 		//mUIsend(response,true);
@@ -76,7 +76,7 @@ public class MessageManager {
 						
 					}
 				} catch (JSONException e) {
-					Log.e(TAG, e.getLocalizedMessage());
+					if(Const.D) Log.e(TAG, e.getLocalizedMessage());
 					//mUIsend("Response not parceable",false);
 					if( mLoginListener != null) //in case LoginListener is waiting for a response
 						mLoginListener.onLoginError(response);
@@ -99,7 +99,7 @@ public class MessageManager {
 					}
 					
 				} catch (JSONException e) {
-					Log.e(TAG, e.getLocalizedMessage());
+					if(Const.D) Log.e(TAG, e.getLocalizedMessage());
 					//mUIsend("Response not parceable",false);
 					if( mLoginListener != null) //in case LoginListener is waiting for a response
 						mLoginListener.onLoginError(response);
@@ -127,12 +127,12 @@ public class MessageManager {
 				try {
 					
 					// Connect To Server
-					Log.d(TAG,Settings.getRegEventAdd()+ query);
+					if(Const.D) Log.d(TAG,Settings.getRegEventAdd()+ query);
 					HttpURLConnection con = ServerConn.Connect(ServerConn.metPOST, Settings.getRegEventAdd(), query, optionparams);
 					// getResponse & process it
 					
 					SRVreceived = ServerConn.getResponse(con);
-					Log.d(TAG,"SRVreceived "+ SRVreceived);
+					if(Const.D) Log.d(TAG,"SRVreceived "+ SRVreceived);
 					if(SRVreceived.equals("")){
 						JSONObject error = new JSONObject();
 						try {
@@ -143,7 +143,7 @@ public class MessageManager {
 						mInternetReceived(error.toString(), 400);
 						return;
 					}
-					Log.d(TAG,"casc"+SRVreceived);
+					if(Const.D) Log.d(TAG,"casc"+SRVreceived);
 					mInternetReceived(SRVreceived,con.getResponseCode());
 				} catch (Exception e1) {
 					if (Const.D);
@@ -154,7 +154,7 @@ public class MessageManager {
 						error.put("error", "" + e1.getMessage());
 						error.put("event", event);
 						mInternetReceived(error.toString(), 400);
-						Log.d(TAG,"Double Try");
+						if(Const.D) Log.d(TAG,"Double Try");
 					} catch (JSONException e) {	Log.e(TAG, " INNER TRY - " + e.getMessage());}
 				}
 			}
@@ -223,13 +223,13 @@ public class MessageManager {
 		        { "link", link},
 		        { "token", token}
 		    };
-		Log.d(TAG,email);
-		Log.d(TAG,gender);
-		Log.d(TAG,first_name);
-		Log.d(TAG,last_name);
-		Log.d(TAG,id);
-		Log.d(TAG,link);
-		Log.d(TAG,token);
+		if(Const.D) Log.d(TAG,email);
+		if(Const.D) Log.d(TAG,gender);
+		if(Const.D) Log.d(TAG,first_name);
+		if(Const.D) Log.d(TAG,last_name);
+		if(Const.D) Log.d(TAG,id);
+		if(Const.D) Log.d(TAG,link);
+		if(Const.D) Log.d(TAG,token);
 		boolean ret = mInternetSend(query, Events.FACEBOOK_LOGIN,optionparams);
 		if( !ret && mLoginListener != null)
 			mLoginListener.onLoginError(MainActivity.instance.getString(R.string.not_connected));

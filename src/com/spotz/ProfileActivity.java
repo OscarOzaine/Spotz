@@ -110,34 +110,26 @@ public class ProfileActivity extends Activity  {
 		MYPROFILE_URL = PROFILE_URL + User.current().getID();
 		Log.d(TAG,"onCreate" + MYPROFILE_URL);
 		imageProfile = (ImageView) findViewById(R.id.profile_image);
-
+		/*
 		imageProfile.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
-				// Add the buttons
-				
 				builder.setTitle(R.string.profile_options)
 			           .setItems(R.array.profile_options_array, new DialogInterface.OnClickListener() {
 			               public void onClick(DialogInterface dialog, int which) {
-			               // The 'which' argument contains the index position
-			               // of the selected item
 			            	   Log.d(TAG,"user= "+User.current().getID());
 			            	   Intent intent = new Intent();
 			            	   intent.setType("image/*");
 			            	   intent.setAction(Intent.ACTION_GET_CONTENT);
-			            	   
 			            	   startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
 			               }
 			           	});
-				// Create the AlertDialog
 				AlertDialog dialog = builder.create();
 				dialog.show();
 			} 
-
 		});
-    
+		*/
 		//init();
 		//popupInit();
 		//showDialog(ProfileActivity.this, "Tiutle", "Message");

@@ -102,22 +102,16 @@ public class VideoControllerView extends FrameLayout {
         mContext = context;
         mUseFastForward = true;
         mFromXml = true;
-        
-        Log.i(TAG, TAG);
     }
 
     public VideoControllerView(Context context, boolean useFastForward) {
         super(context);
         mContext = context;
         mUseFastForward = useFastForward;
-        
-        Log.i(TAG, TAG);
     }
 
     public VideoControllerView(Context context) {
         this(context, true);
-
-        Log.i(TAG, TAG);
     }
 
     @Override
@@ -127,7 +121,6 @@ public class VideoControllerView extends FrameLayout {
     }
     
     public void setMediaPlayer(MediaPlayerControl player) {
-    	Log.d(TAG,"setMediaPlayer");
         mPlayer = player;
         updatePausePlay();
         updateFullScreen();

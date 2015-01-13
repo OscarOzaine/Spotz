@@ -203,7 +203,11 @@ public class SpotActivity extends Activity implements MediaPlayer.OnPreparedList
 		//txtDislikes.setText(spotDislikes);
 		String[] spottype = NewsActivity.instance.getResources().getStringArray(R.array.spottype_array);
 		
-		txtType.setText(spottype[Integer.parseInt(spotType)]);
+		int intspottype = Integer.parseInt(spotType); 
+		if(intspottype > 6){
+			intspottype -= 1;
+		}
+		txtType.setText(spottype[intspottype]);
 		
 		txtCity.setText(spotCity);
 		txtDescription.setText(spotDescription);

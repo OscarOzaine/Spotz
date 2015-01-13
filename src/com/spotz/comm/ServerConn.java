@@ -117,7 +117,7 @@ public class ServerConn{
 			conn.setConnectTimeout(defConTimeout);
 			break;
 		case metPOST:
-			Log.d(TAG,"HTTP1 = "+mUrl);
+			if(Const.D) Log.d(TAG,"HTTP1 = "+mUrl);
 			conn = (HttpURLConnection) new URL(mUrl).openConnection();
 			conn.setRequestMethod("POST");
 			conn.setDoOutput(true); // this set POST method
@@ -137,7 +137,7 @@ public class ServerConn{
 			writer.close();
 			os.close();
 
-			Log.d(TAG,"HTTP = "+mUrl);
+			if(Const.D) Log.d(TAG,"HTTP = "+mUrl);
 			break;
 		default:
 			conn = (HttpURLConnection) new URL(mUrl).openConnection();
@@ -182,7 +182,7 @@ public class ServerConn{
 		while (reader.hasNextLine()) {
 			result.append(reader.nextLine());
 		}
-		Log.d(TAG,"ACAAA="+result.toString());
+		if(Const.D) Log.d(TAG,"ACAAA="+result.toString());
 		reader.close();
 		conn.disconnect();
 		conn = null;
@@ -257,7 +257,7 @@ public class ServerConn{
 					String respStr = EntityUtils.toString(resp.getEntity());
 					return respStr;
 				}
-				catch(Exception ex){Log.e("ServicioRest","Error!", ex);	}
+				catch(Exception ex){if(Const.D) Log.e("ServicioRest","Error!", ex);	}
 				break;
 			case 1:
 				HttpPut put = new HttpPut("http://10.0.2.2:2731/Api/Clientes/Cliente");
@@ -274,7 +274,7 @@ public class ServerConn{
 					String respStr = EntityUtils.toString(resp.getEntity());
 					return respStr;
 				}
-				catch(Exception ex){Log.e("ServicioRest","Error!", ex);	}
+				catch(Exception ex){if(Const.D) Log.e("ServicioRest","Error!", ex);	}
 				break;
 			case 2:
 				 
@@ -285,7 +285,7 @@ public class ServerConn{
 				   String respStr = EntityUtils.toString(resp.getEntity());
 				   return respStr;
 				}
-				catch(Exception ex){Log.e("ServicioRest","Error!", ex);	}
+				catch(Exception ex){if(Const.D) Log.e("ServicioRest","Error!", ex);	}
 				break;
 				
 			case 3:
@@ -299,7 +299,7 @@ public class ServerConn{
 			        String nombCli = respJSON.getString("Nombre");
 			        int telefCli = respJSON.getInt("Telefono");
 			 	}
-				catch(Exception ex){   Log.e("ServicioRest","Error!", ex);	}
+				catch(Exception ex){if(Const.D) Log.e("ServicioRest","Error!", ex);	}
 			break;
 		}
 		return null;

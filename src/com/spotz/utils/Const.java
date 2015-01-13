@@ -3,7 +3,7 @@ import android.util.Log;
 /** Class containing constants and static methods accessible across the app*/ 
 public class Const {
 	//Debug variable
-	public final static boolean D = true;
+	public final static boolean D = false;
 	public final static boolean CHEATS = D && true;
 	// Intent request codes
     public static final int	REQUEST_LOGIN = 4;

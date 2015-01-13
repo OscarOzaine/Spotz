@@ -27,15 +27,18 @@ public class UploadProfilePicService extends IntentService  {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-	    Log.d(TAG, "onStartCommand");
+		if(Const.D) Log.d(TAG, "onStartCommand");
 	    imagePath		= intent.getStringExtra("imagepath");
 	    userId			= intent.getStringExtra("userid");
 	    userName		= intent.getStringExtra("username");
 	    created_at		= intent.getStringExtra("createdat");
-	    Log.d(TAG,"image = "+imagePath);
-	    Log.d(TAG,"userId = "+userId);
-	    Log.d(TAG,"userName = "+userName);
-	    Log.d(TAG,"created_at = "+created_at);
+	    if(Const.D) {
+	    	Log.d(TAG,"image = "+imagePath);
+		    Log.d(TAG,"userId = "+userId);
+		    Log.d(TAG,"userName = "+userName);
+		    Log.d(TAG,"created_at = "+created_at);
+	    }
+	    
 	    return super.onStartCommand(intent,flags,startId);
 	}
 	
@@ -72,7 +75,7 @@ public class UploadProfilePicService extends IntentService  {
         BufferedReader reader = null;
         
         File sourceFile = new File(sourceFileUri); 
-        Log.e(Const.TAG,sourceFileUri);
+        if(Const.D) Log.e(Const.TAG,sourceFileUri);
         if (!sourceFile.isFile()) {
         	Log.e(Const.TAG, "Source File not exist :" +imagePath);
             return 0;
@@ -98,9 +101,9 @@ public class UploadProfilePicService extends IntentService  {
                 conn.setRequestProperty("createdat", ""+created_at);
                 
                 dos = new DataOutputStream(conn.getOutputStream());
-                Log.d(Const.TAG, "after dos");
+                if(Const.D) Log.d(Const.TAG, "after dos");
                 dos.writeBytes(twoHyphens + boundary + lineEnd); 
-                Log.d("Filename",fileName);
+                if(Const.D) Log.d("Filename",fileName);
                 dos.writeBytes("Content-Disposition: form-data; name=\"mediafile\";filename="+ fileName + "" + lineEnd);
                 dos.writeBytes(lineEnd);
 
@@ -121,7 +124,7 @@ public class UploadProfilePicService extends IntentService  {
                     bytesRead = fileInputStream.read(buffer, 0, bufferSize);   
 
                 }
-                Log.d(Const.TAG, "afterafetr dos");
+                if(Const.D) Log.d(Const.TAG, "afterafetr dos");
                 // send multipart form data necesssary after file data...
                 dos.writeBytes(lineEnd);
                 dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
@@ -130,8 +133,7 @@ public class UploadProfilePicService extends IntentService  {
                 serverResponseCode = conn.getResponseCode();
                 String serverResponseMessage = conn.getResponseMessage();
                 
-                Log.d(Const.TAG, "HTTP Response is : "+ serverResponseMessage + ": " + serverResponseCode);
-
+                if(Const.D) Log.d(Const.TAG, "HTTP Response is : "+ serverResponseMessage + ": " + serverResponseCode);
                 
                 reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 serverResponse = new StringBuilder();
@@ -159,7 +161,7 @@ public class UploadProfilePicService extends IntentService  {
             	Log.d(Const.TAG,"Got Exception : see logcat");
                 Log.e(Const.TAG, "Exception : "+ e.getMessage(), e); 
             }
-            Log.i(Const.TAG, "READ "+serverResponse);
+            if(Const.D) Log.i(Const.TAG, "READ "+serverResponse);
             
             return Integer.parseInt(serverResponse.toString()); 
         } // End else block 

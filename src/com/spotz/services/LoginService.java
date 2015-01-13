@@ -31,7 +31,7 @@ public class LoginService extends IntentService  {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-	    Log.d(TAG, "onStartCommand");
+		if(Const.D) Log.d(TAG, "onStartCommand");
 	    
 	    try {
 			json			= new JSONObject(intent.getStringExtra("json"));
@@ -41,8 +41,8 @@ public class LoginService extends IntentService  {
 		}
 	    accesstoken		= intent.getStringExtra("accesstoken");
 	    
-	    Log.d(TAG,"json = "+json);
-	    Log.d(TAG,"accesstoken = "+accesstoken);
+	    if(Const.D) Log.d(TAG,"json = "+json);
+	    if(Const.D) Log.d(TAG,"accesstoken = "+accesstoken);
 	    
 	    return super.onStartCommand(intent,flags,startId);
 	}

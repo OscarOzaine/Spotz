@@ -103,7 +103,7 @@
         <item>Delete</item>
     </string-array>
     
-    <string-array name="spottype_array">
+    <string-array name="spottype_upload">
         <item>Type(All)</item>
         <item>Social</item>
         <item>Cultural</item>
@@ -118,6 +118,21 @@
         <item>Sport</item>
     </string-array>
     
+    <string-array name="spottype_array">
+        <item>Other</item>
+        <item>Social</item>
+        <item>Cultural</item>
+        <item>Musical</item>
+        <item>Theft</item>
+        <item>Roadblock</item>
+        <item>Accident</item>
+        <item>Protest</item>
+        <item>Vandalism</item>
+        <item>Bump</item>
+        <item>Assault</item>
+        <item>Sport</item>
+    </string-array>
+
     <string-array name="spotdistance_array">
         <item>City</item>
     </string-array>

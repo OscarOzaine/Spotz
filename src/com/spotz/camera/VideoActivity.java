@@ -74,9 +74,8 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG,"onCreate");
+        if(Const.D) Log.d(TAG,"onCreate");
         
-        //Log.d(TAG,"Video = "+getIntent().getIntExtra("orientation", Camera.CameraInfo.CAMERA_FACING_BACK));
         currentCameraId = getIntent().getIntExtra("orientation", Camera.CameraInfo.CAMERA_FACING_BACK);
         
         recording = false;
@@ -118,7 +117,7 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
         buttonChangeMedia.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent uploadSpotIntent = new Intent(VideoActivity.this, CameraActivity.class);
-				Log.d(TAG,"Camera = "+currentCameraId);
+				if(Const.D) Log.d(TAG,"Camera = "+currentCameraId);
 				uploadSpotIntent.putExtra("orientation",currentCameraId);
 				startActivity(uploadSpotIntent);
 				overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
@@ -131,7 +130,6 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 			@SuppressWarnings("deprecation")
 			public void onClick(View v) {
 				if(recording){
-					//Log.d(TAG,"Recording");
 					recording = false;
 					mediaRecorder.stop();
 					mediaRecorder.release();
@@ -148,7 +146,6 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 					overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_left );
 					//finish();
 				}else{
-					//Log.d(TAG,"NOTRecording");
 					mediaRecorder = new MediaRecorder();
 			        initMediaRecorder();
 					// The following two lines should precede setAudioSource line
@@ -303,12 +300,12 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 		        previewCamera();   
 			}
 			
-			Log.d(TAG,"surfaceChanged");
+			if(Const.D) Log.d(TAG,"surfaceChanged");
 		}
 
 		public void surfaceDestroyed(SurfaceHolder holder) {
 			// no-op
-			Log.d(TAG,"surfaceDestroyed");
+			if(Const.D) Log.d(TAG,"surfaceDestroyed");
 		}
 	};
 	
@@ -316,7 +313,7 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 	public void onResume() {
 		super.onResume();
 		Utils.setCurrentLocale(this);
-		Log.d(TAG,"onResume "+recording);
+		if(Const.D) Log.d(TAG,"onResume "+recording);
 		if(currentCameraId == 1){
 			camera = Camera.open(currentCameraId);
 		}else{
@@ -355,7 +352,7 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 	@Override
     public void onStop() {
         super.onStop();
-        Const.v(TAG, "-- ON STOP --");
+        if(Const.D) Const.v(TAG, "-- ON STOP --");
     }
 
 	@Override
@@ -396,7 +393,7 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 				camera.setPreviewDisplay(surfaceHolder);
 			}
 			catch (Throwable t) {
-				Log.e("PreviewDemo-surfaceCallback",
+				if(Const.D) Log.e("PreviewDemo-surfaceCallback",
 						"Exception in setPreviewDisplay()", t);
 				Toast
 				.makeText(VideoActivity.this, t.getMessage(), Toast.LENGTH_LONG)
@@ -432,7 +429,7 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 	        inPreview = true;
 	    }
 	    catch(Exception e){
-	        Log.d(TAG, "Cannot start preview", e);    
+	    	if(Const.D) Log.d(TAG, "Cannot start preview", e);    
 	    }
 	}
 	
@@ -485,19 +482,19 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
         mediaRecorder.reset();
         mediaRecorder.release();
         */
-        Log.d(TAG,"Stopped");
+		if(Const.D) Log.d(TAG,"Stopped");
 	}
 	
 	 public class stopRecording implements Runnable {
 		 private MediaRecorder recorder ;
 		 
 		 public stopRecording(MediaRecorder mediaRecorder) {
-			 Log.i("Media", "Stop in Cos");
+			 if(Const.D) Log.i("Media", "Stop in Cos");
 			 
 		     try {
 		    	 recorder = mediaRecorder; }
 		     catch ( Exception e ){       
-		         Log.i("Media", "Stop out  Cos" + e.getMessage()) ;
+		    	 if(Const.D) Log.i("Media", "Stop out  Cos" + e.getMessage()) ;
 		     }
 		}
 
@@ -531,12 +528,12 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 
 		//swap the id of the camera to be used
 		if(currentCameraId == Camera.CameraInfo.CAMERA_FACING_BACK){
-			Log.d(TAG,"Front");
+			if(Const.D) Log.d(TAG,"Front");
 			
 		    currentCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
 		}
 		else {
-			Log.d(TAG,"Back");
+			if(Const.D) Log.d(TAG,"Back");
 		    currentCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
 		}
 		camera = Camera.open(currentCameraId);
@@ -558,7 +555,7 @@ public class VideoActivity extends FragmentActivity implements ViewManager{
 	      CameraInfo info = new CameraInfo();
 	      Camera.getCameraInfo(i, info);
 	      if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
-	        Log.d(TAG, "Camera found"+i);
+	    	  if(Const.D) Log.d(TAG, "Camera found"+i);
 	        cameraId = i;
 	        break;
 	      }

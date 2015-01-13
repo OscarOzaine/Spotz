@@ -38,6 +38,7 @@ public class Utils {
 	
 	public static String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
 	static Context mContext;
+	public final static boolean D = true;
 	
 	public Utils(Context mContext){
 		this.mContext = mContext;

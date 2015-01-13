@@ -348,13 +348,13 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
 		*/
 		buttonVisibility(true);
 		/// PROCESS JSON
-		Log.d(TAG,"LoginSuccess = "+json);
+		if(Const.D) Log.d(TAG,"LoginSuccess = "+json);
 		JSONObject res;
 		
 		try {
 			//res = new JSONArray(json);
 			res = new JSONObject(json);
-			Log.d("TAG","ACAAA="+res.getJSONArray("info") );
+			if(Const.D) Log.d("TAG","ACAAA="+res.getJSONArray("info") );
 			User.current().initPlayer( res.getJSONArray("info") );
 			//Team.current().initTeam( res.getJSONObject("team") );
 		} catch (JSONException e) {
@@ -395,7 +395,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
 		
 		Account[] acs = AccountManager.get(this).getAccounts();
         for (Account a: acs)
-			Log.d(TAG,a.name+" - "+a.type+" * ");
+        	if(Const.D) Log.d(TAG,a.name+" - "+a.type+" * ");
         
         Const.v(TAG,"********* Adding new account **************");
         //final Account account = new Account(mUsername, credential_type);
@@ -406,7 +406,6 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
 	@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG,"activityResult");
         uiHelper.onActivityResult(requestCode, resultCode, data, dialogCallback);
     }
 	

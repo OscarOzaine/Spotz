@@ -2,6 +2,9 @@ package com.spotz.database;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import com.spotz.utils.Const;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -71,7 +74,6 @@ public class SpotsHelper extends SQLiteOpenHelper {
     										KEY_USERID, KEY_IMAGEPATH};
     
 	public void addSpot(Spot spot){
-		Log.d("addBook", spot.toString());
 		// 1. get reference to writable DB
 		SQLiteDatabase db = this.getWritableDatabase();
 		 
@@ -128,7 +130,7 @@ public class SpotsHelper extends SQLiteOpenHelper {
         spot.setUserid(cursor.getString(7));
         spot.setImagepath(cursor.getString(8));
         
-		Log.d("getSpot("+id+")", spot.toString());
+        if(Const.D) Log.d("getSpot("+id+")", spot.toString());
 		cursor.close();
         // 5. return book
         return spot;
@@ -164,7 +166,7 @@ public class SpotsHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         cursor.close();
-		Log.d("getAllSpots()", spots.toString());
+        if(Const.D) Log.d("getAllSpots()", spots.toString());
 
         // return books
         return spots;
@@ -203,7 +205,7 @@ public class SpotsHelper extends SQLiteOpenHelper {
                 new String[] { String.valueOf(spot.getId()) });
         // 3. close
         db.close();
-		Log.d("deleteBook", spot.toString());
+        if(Const.D) Log.d("deleteBook", spot.toString());
     }
     
     public int getLastSpotId() {

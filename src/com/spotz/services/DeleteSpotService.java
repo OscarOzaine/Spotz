@@ -28,7 +28,7 @@ public class DeleteSpotService extends IntentService  {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-	    Log.d(TAG, "onStartCommand");
+		if(Const.D) Log.d(TAG, "onStartCommand");
 	    spotId		= intent.getStringExtra("spotid");
 	    return super.onStartCommand(intent,flags,startId);
 	}
@@ -39,16 +39,11 @@ public class DeleteSpotService extends IntentService  {
 		// Normally we would do some work here, like download a file.
 	      // For our sample, we just sleep for 5 seconds.
 		
-		
 		if(deleteSpot(spotId) == 1){
 			publishResults(3);
 		}else{
 			publishResults(-3);
 		}
-		
-		
-		
-	      
 	}
 
 	
@@ -92,7 +87,7 @@ public class DeleteSpotService extends IntentService  {
             serverResponseCode = conn.getResponseCode();
             String serverResponseMessage = conn.getResponseMessage();
             
-            Log.d(Const.TAG, "HTTP Response is : "+ serverResponseMessage + ": " + serverResponseCode);
+            if(Const.D) Log.d(Const.TAG, "HTTP Response is : "+ serverResponseMessage + ": " + serverResponseCode);
 
             
             reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -104,7 +99,7 @@ public class DeleteSpotService extends IntentService  {
             }
             
             if(serverResponseCode == 200){
-            	Log.d(Const.TAG,"Spot deleted successfully.");
+            	if(Const.D) Log.d(Const.TAG,"Spot deleted successfully.");
             }
             
             dos.flush();
@@ -112,15 +107,15 @@ public class DeleteSpotService extends IntentService  {
         } catch (MalformedURLException ex) {
 
         	ex.printStackTrace();
-        	Log.d(Const.TAG,"MalformedURLException");
-            Log.e(Const.TAG, "error: " + ex.getMessage(), ex);  
+        	if(Const.D) Log.d(Const.TAG,"MalformedURLException");
+        	if(Const.D)  Log.e(Const.TAG, "error: " + ex.getMessage(), ex);  
         } catch (Exception e) {
         	e.printStackTrace();
 
-        	Log.d(Const.TAG,"Got Exception : see logcat");
-            Log.e(Const.TAG, "Exception : "+ e.getMessage(), e); 
+        	if(Const.D) Log.d(Const.TAG,"Got Exception : see logcat");
+        	if(Const.D) Log.e(Const.TAG, "Exception : "+ e.getMessage(), e); 
         }
-        Log.i(Const.TAG, "READ "+serverResponse);
+        if(Const.D) Log.i(Const.TAG, "READ "+serverResponse);
         
         return Integer.parseInt(serverResponse.toString()); 
     }
