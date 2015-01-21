@@ -11,11 +11,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
+
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.location.LocationRequest;
-import com.spotz.NewsActivity.LoadSpots;
 import com.spotz.camera.ImageLoader;
 import com.spotz.camera.VideoControllerView;
 import com.spotz.gen.R;
@@ -26,6 +23,7 @@ import com.spotz.services.UploadMediaService;
 import com.spotz.users.User;
 import com.spotz.utils.Const;
 import com.spotz.utils.Utils;
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
@@ -33,27 +31,20 @@ import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.ColorDrawable;
-import android.hardware.Camera.Parameters;
 import android.location.Location;
-import android.location.LocationListener;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -110,6 +101,8 @@ public class UploadSpotActivity extends Activity implements
     
     int position;
     
+	@SuppressWarnings("deprecation")
+	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -186,10 +179,6 @@ public class UploadSpotActivity extends Activity implements
 			}
 			bitmap = ImageLoader.rotateBitmap(imageStream, mediaPath, bitmap);
 			spotImage.setImageBitmap(bitmap);
-			
-			
-			
-			
 		}
 		
 		SpinnerSpotType = (Spinner) findViewById(R.id.spinner_spottypes);
@@ -286,7 +275,8 @@ public class UploadSpotActivity extends Activity implements
     }
     
   
-    private float getBitmapScalingFactor(Bitmap bm) {
+    @SuppressWarnings({ "unused", "deprecation" })
+	private float getBitmapScalingFactor(Bitmap bm) {
         // Get display width from device
         int displayWidth = getWindowManager().getDefaultDisplay().getWidth();
 
@@ -552,7 +542,8 @@ public class UploadSpotActivity extends Activity implements
      *
      * @param errorCode An error code returned from onConnectionFailed
      */
-    private void showErrorDialog(int errorCode) {
+    @SuppressWarnings("unused")
+	private void showErrorDialog(final int errorCode) {
 
         // Get the error dialog from Google Play services
         Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(

@@ -39,7 +39,8 @@ import java.io.RandomAccessFile;
  */
 public class TiffMetadataReader
 {
-    @NotNull
+    @SuppressWarnings("deprecation")
+	@NotNull
     public static Metadata readMetadata(@NotNull File file) throws IOException
     {
         Metadata metadata = new Metadata();
@@ -54,7 +55,8 @@ public class TiffMetadataReader
         return metadata;
     }
 
-    @NotNull
+    @SuppressWarnings("deprecation")
+	@NotNull
     public static Metadata readMetadata(@NotNull InputStream inputStream)
     {
         // TIFF processing requires random access, as directories can be scattered throughout the byte sequence.
