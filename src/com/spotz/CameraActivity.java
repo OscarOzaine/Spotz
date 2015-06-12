@@ -51,7 +51,6 @@ import android.widget.Toast;
 
 
 public class CameraActivity extends FragmentActivity implements ViewManager{
-
 	
 	// Intent request codes
     public static final int REQUEST_LOGIN = 4;

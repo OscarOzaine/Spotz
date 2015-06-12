@@ -135,6 +135,10 @@
 
     <string-array name="spotdistance_array">
         <item>City</item>
+        <item>5 KM</item>
+        <item>15 KM</item>
+        <item>50 KM</item>
+        <item>100 KM</item>
     </string-array>
     
     <string-array name="pais">

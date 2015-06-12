@@ -143,7 +143,7 @@ public class NewsActivity extends Activity implements OnScrollListener {
 		    @Override
 		    public void gotLocation(Location location){
 		    	constants.setLatitude(location.getLatitude());
-		    	constants.setLatitude(location.getLongitude());
+		    	constants.setLongitude(location.getLongitude());
 
 		    	if(Const.D) Log.d(TAG,"getLocationACAs"+Const.currentLongitude+"  "+Const.currentLatitude);
 		    }
@@ -179,6 +179,30 @@ public class NewsActivity extends Activity implements OnScrollListener {
 		        // your code here
 		    }
 		});
+		
+		spinnerSpotDistance.setOnItemSelectedListener(
+				new OnItemSelectedListener() {
+		    @Override
+		    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+		        // your code here
+		    	listNews.setAdapter(null);
+		    	startNew = 0;
+		    	outboxList.clear();
+		    	Const.spotDistancePosition = spinnerSpotDistance.getSelectedItemPosition();
+		        if(loading == false){
+		        	new LoadSpots().execute();
+		        	Log.d(TAG,"EXECUTEDACA");
+		        }
+		    		
+		    	Log.d(TAG,"onItemSelected"+Const.spotDistancePosition);
+		    }
+
+		    @Override
+		    public void onNothingSelected(AdapterView<?> parentView) {
+		        // your code here
+		    }
+		});
+		
 		
 		listNews	= (ListView) findViewById(R.id.list_news);
 		listNews.setOnItemClickListener(
