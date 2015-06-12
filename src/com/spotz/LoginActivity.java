@@ -59,6 +59,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
     private GraphUser user;
     private PendingAction pendingAction = PendingAction.NONE;
     private UiLifecycleHelper uiHelper;
+    
     private enum PendingAction {
         NONE,
         POST_PHOTO,
@@ -174,7 +175,6 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
     			overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
             }
         });
-        
         
         loginButton = (LoginButton) findViewById(R.id.fb_login_button);
         loginButton.setReadPermissions(Arrays.asList("public_profile", "email","user_friends"));
@@ -409,6 +409,4 @@ public class LoginActivity extends AccountAuthenticatorActivity implements OnLog
         uiHelper.onActivityResult(requestCode, resultCode, data, dialogCallback);
     }
 	
-
-
 }
