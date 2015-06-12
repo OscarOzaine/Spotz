@@ -40,17 +40,22 @@ public class Utils {
 	static Context mContext;
 	public final static boolean D = true;
 	
-	public Utils(Context mContext){
+	public Utils(Context mContext) {
 		this.mContext = mContext;
 	}
 	
+	/**
+     * Copies stream
+     * @param input
+     * @param output
+     */
     public static void CopyStream(InputStream is, OutputStream os){
         final int buffer_size=1024;
         try{
             byte[] bytes=new byte[buffer_size];
             for(;;){
               int count=is.read(bytes, 0, buffer_size);
-              if(count==-1)
+              if (count==-1)
                   break;
               os.write(bytes, 0, count);
             }
@@ -58,6 +63,10 @@ public class Utils {
         catch(Exception ex){}
     }
     
+    /**
+     * Checks if the json is valid
+     * @param string
+     */
     public static boolean isJSONValid(String test) {
 	    try {
 	        new JSONObject(test);
@@ -73,6 +82,11 @@ public class Utils {
 	    return true;
 	}
     
+    /**
+     * Scales an image
+     * @param bitmap
+     * @param scaling factor
+     */
     public static Bitmap ScaleBitmap(Bitmap bm, float scalingFactor) {
         int scaleHeight = (int) (bm.getHeight() * scalingFactor);
         int scaleWidth = (int) (bm.getWidth() * scalingFactor);
@@ -80,53 +94,74 @@ public class Utils {
         return Bitmap.createScaledBitmap(bm, scaleWidth, scaleHeight, true);
     }
     
-    public static boolean isNumeric(String str)  
-    {  
-      try  
-      {  
-        double d = Double.parseDouble(str);  
+    /**
+     * Checks if a string is double
+     * @param string
+     */
+    public static boolean isNumeric(String str) {
+      try {
+    	  double d = Double.parseDouble(str);  
       }  
-      catch(NumberFormatException nfe)  
-      {  
-        return false;  
+      catch(NumberFormatException nfe) {
+    	  return false;
       }  
       return true;  
     }
     
+    /**
+     * rotates image
+     * @param bitmap
+     * @param degree
+     */
     public static Bitmap rotateImage(Bitmap bitmap, int degree) {
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();
-
+        
         Matrix mtx = new Matrix();
         mtx.postRotate(degree);
-
+        
         return Bitmap.createBitmap(bitmap, 0, 0, w, h, mtx, true);
     }
     
+    /**
+     * Checks if a file is a video
+     * @param string
+     */
     public static boolean isVideo(String mediaName){
     	String[] mediaStrs = mediaName.split("\\.(?=[^\\.]+$)");
-    	if(mediaStrs[1].equals("mp4") || mediaStrs[1].equals("3gp")){
+    	if (mediaStrs[1].equals("mp4") || mediaStrs[1].equals("3gp")) {
     		return true;
     	}
-    	else{
+    	else {
     		return false;
     	}
     }
     
-    
+    /**
+     * creates the URL Address of the spot in the website
+     * @param metadata
+     */
     public static String createSpotLink(String cityName, String spotId){
     	return ("http://myhotspotz.net/spots/"+cityName+"-"+Integer.toHexString(Integer.parseInt(spotId))).replaceAll("\\s+","");
     }
     
+    /**
+     * Gets the metadata of a file
+     * @param metadata
+     */
     public static String getMetadataParenthesis(String metadata){
     	Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(metadata);
         while(m.find()) {
         	return m.group(1);
-          //System.out.println(m.group(1));    
+        	//System.out.println(m.group(1));    
         }
 		return "-1";
     }
     
+    /**
+     * Checks if a string is integer
+     * @param string
+     */
     public static boolean isInteger(String s) {
         try { 
             Integer.parseInt(s); 
@@ -137,6 +172,10 @@ public class Utils {
         return true;
     }
     
+    
+    /**
+     * Checks if the device is online
+     */
     public static boolean isOnline() {
     	ConnectivityManager cm =
             (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -144,11 +183,16 @@ public class Utils {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+    /**
+     * Changes the language inside the app
+     * @param context
+     */
 	public static void setCurrentLocale(Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		String value = prefs.getString("keyLanguage", "1");
 		Locale locale = null;
-		switch(Integer.parseInt(value)){
+		
+		switch(Integer.parseInt(value)) {
 			case 1:
 				locale = new Locale( "en" );
 				break;
