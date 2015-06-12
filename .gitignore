@@ -29,5 +29,9 @@ proguard/
 # Log Files
 *.log
 
+MyKeyStore
+project.properties
+
 ### Android Patch ###
 gen-external-apklibs
+
