@@ -64,7 +64,7 @@ public class Utils {
     }
     
     /**
-     * Checks if the json is valid
+     * checks if a string has a valid json format
      * @param string
      */
     public static boolean isJSONValid(String test) {
@@ -151,11 +151,11 @@ public class Utils {
      */
     public static String getMetadataParenthesis(String metadata){
     	Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(metadata);
-        while(m.find()) {
-        	return m.group(1);
-        	//System.out.println(m.group(1));    
-        }
-		return "-1";
+    	while(m.find()) {
+    		return m.group(1);
+    		//System.out.println(m.group(1));    
+    	}
+    	return "-1";
     }
     
     /**
@@ -189,19 +189,10 @@ public class Utils {
      */
 	public static void setCurrentLocale(Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		String value = prefs.getString("keyLanguage", "1");
-		Locale locale = null;
-		
-		switch(Integer.parseInt(value)) {
-			case 1:
-				locale = new Locale( "en" );
-				break;
-			case 2:
-				locale = new Locale( "es" );
-				break;
-		}
-		
+		String value = prefs.getString("keyLanguage", "en");
+		Locale locale = new Locale(value);
 	    Locale.setDefault( locale );
+	    
 	    Configuration config = new Configuration();
 	    config.locale = locale;
 	    context.getResources().updateConfiguration( config, context.getResources().getDisplayMetrics() );
