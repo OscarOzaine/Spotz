@@ -119,8 +119,6 @@
         <item>Deporte</item>
     </string-array>
     
-    
-    
     <string-array name="spottype_array">
         <item>Otros</item>
         <item>Social</item>
@@ -136,9 +134,12 @@
         <item>Sport</item>
     </string-array>
     
-    
     <string-array name="spotdistance_array">
         <item>Ciudad</item>
+        <item>5 KM</item>
+        <item>15 KM</item>
+        <item>50 KM</item>
+        <item>100 KM</item>
     </string-array>
     
     <string-array name="pais">
@@ -146,12 +147,12 @@
       <item>Francia</item>
       <item>Alemania</item>
    </string-array>
+   
    <string-array name="codigopais">
       <item>ESP</item>
       <item>FRA</item>
       <item>ALE</item>
    </string-array>
-   
    
    <string name="inputEmail">Correo Electronico</string>
    <string name="inputFirstName">Ingresa tu nombre</string>
@@ -162,6 +163,7 @@
    <string name="spot_deleted_succesfull">El spot se borro correctamente</string>
    <string name="failed_upload_spot">Subir spot fallo</string>
    <string name="jump_to_news">Ver Spotz</string>
+   
    <string-array name="listentries">
         <item>Ingles</item>
         <item>Español</item>
@@ -172,6 +174,9 @@
         <item>2</item>
     </string-array>    
     
-
+    <string name="camera_string">Camara</string>
+    <string name="events_string">Eventos</string>
+    <string name="map_string">Mapa</string>
+    <string name="profile_string">Perfil</string>
     
 </resources>

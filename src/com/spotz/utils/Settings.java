@@ -69,7 +69,6 @@ public class Settings {
 		return SRVaddress;
 	}
 	
-
 	/**Change server address
 	 * @param sIP the new server address */
 	public void setSRVads(String sIP){
@@ -79,7 +78,6 @@ public class Settings {
         	prefsEditor.commit();
 		}
 	}
-	
 	
 	public Dialog createMenuDialog(Context context){
 		

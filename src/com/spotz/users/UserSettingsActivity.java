@@ -77,19 +77,10 @@ public class UserSettingsActivity extends PreferenceActivity implements
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		
-		if(key.equals("keyLanguage")){
-			if(prefs.getString(key, "").equals("1")){
-				setLocale("en");
-			}
-			else if(prefs.getString(key, "").equals("2")){
-				setLocale("es");
-			}
-		}
-		//value = prefs.getString(key, "");
-		//Log.d(TAG,""+value);
-		// TODO Auto-generated method stub
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		setLocale(prefs.getString("keyLanguage", "en"));
+		
 	}
 	
 	private void setLocale( String newLocale ){

@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string name="facebook_title">Facebook</string>
-	<string name="twitter_title">Twitter</string>
-	<string name="myspots">My Spotz</string>
-	<string name="loading_spots">Loading Spots ...</string>
-	
-	<string-array name="share_spinner">
-	    <item>Facebook</item>
-	 	<!--  <item>Twitter</item>
-	 	<item>Valor 3</item>-->	
-	 </string-array>
+    <string name="facebook_title">Facebook</string>
+    <string name="twitter_title">Twitter</string>
+    <string name="myspots">My Spotz</string>
+    <string name="loading_spots">Loading Spots ...</string>
 
-	<string name="description">Description:</string>
+    <string-array name="share_spinner">
+        <item>Facebook</item>
+        <!--
+         <item>Twitter</item>
+	 	<item>Valor 3</item>
+        -->
+    </string-array>
+
+    <string name="description">Description:</string>
     <string name="usersettings">User Settings</string>
     <string name="spottype">Spot Type:</string>
     <string name="city">City:</string>
     <string name="user">User:</string>
     <string name="followers">Followers:</string>
     <string name="type">Type:</string>
-    
     <string name="language">Language:</string>
     <string name="first_name">First Name:</string>
     <string name="last_name">Last Name:</string>
     <string name="inputvalue">Input value:</string>
     <string name="infomessage">Message</string>
-    
     <string name="dislikes">Dislikes:</string>
     <string name="likes">Likes:</string>
     <string name="like_example">0</string>
@@ -83,8 +83,8 @@
     <string name="connection_problem">Connection problems, verify your internet conection</string>
     <string name="logout">Logout</string>
     <string name="profile_options">Profile Options</string>
-	<string name="options">Options</string>
-	
+    <string name="options">Options</string>
+
     <string-array name="profile_options_array">
         <item>Change Profile Picture</item>
     </string-array>
@@ -132,7 +132,7 @@
         <item>Assault</item>
         <item>Sport</item>
     </string-array>
-
+    
     <string-array name="spotdistance_array">
         <item>City</item>
         <item>5 KM</item>
@@ -142,38 +142,41 @@
     </string-array>
     
     <string-array name="pais">
-      <item>España</item>W
-      <item>Francia</item>
-      <item>Alemania</item>
-   </string-array>
-   <string-array name="codigopais">
-      <item>ESP</item>
-      <item>FRA</item>
-      <item>ALE</item>
-   </string-array>
-   
-   <string name="inputEmail">Email</string>
-   <string name="inputFirstName">Input your name</string>
-   <string name="inputLastName">Input your last name</string>
-   <string name="selectlanguage">Select the language</string>
-   <string name="sucessfull_upload">Spot uploaded successfully</string>
-   <string name="no_internet">No internet connection</string>
-   <string name="spot_deleted_succesfull">Spot deleted successfully</string>
-   <string name="failed_upload_spot">Failed to upload spot</string>
-   <string name="jump_to_news">Watch Spotz</string>
-   
-   
-   
-   <string-array name="listentries">
+        <item>España</item>        <item>Francia</item>
+        <item>Alemania</item>
+    </string-array>
+    
+    <string-array name="codigopais">
+        <item>ESP</item>
+        <item>FRA</item>
+        <item>ALE</item>
+    </string-array>
+
+    <string name="inputEmail">Email</string>
+    <string name="inputFirstName">Input your name</string>
+    <string name="inputLastName">Input your last name</string>
+    <string name="selectlanguage">Select the language</string>
+    <string name="sucessfull_upload">Spot uploaded successfully</string>
+    <string name="no_internet">No internet connection</string>
+    <string name="spot_deleted_succesfull">Spot deleted successfully</string>
+    <string name="failed_upload_spot">Failed to upload spot</string>
+    <string name="jump_to_news">Watch Spotz</string>
+
+    <string-array name="listentries">
         <item>English</item>
         <item>Spanish</item>
     </string-array>
     
     <string-array name="listvalues">
-        <item>1</item>
-        <item>2</item>
-    </string-array>    
-    
-   
-   
+        <item>en</item>
+        <item>es</item>
+    </string-array>
+
+    <string name="camera_string">Camera</string>
+    <string name="events_string">Events</string>
+    <string name="map_string">Map</string>
+    <string name="profile_string">Profile</string>
+    <string name="title_activity_logged_out">LoggedOutActivity</string>
+    <string name="hello_world">Hello world!</string>
+
 </resources>

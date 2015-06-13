@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -45,10 +46,10 @@ import android.widget.Toast;
 
 public class MainActivity extends TabActivity {
 	// TabSpec Names
-	private static final String CAMERA_SPEC 	= "Camara";
-	private static final String NEWS_SPEC 		= "Eventos";
-	private static final String MAP_SPEC 		= "Mapa";
-	private static final String PROFILE_SPEC	= "Perfil";
+	private static String CAMERA_SPEC 	= "Camara";
+	private static String NEWS_SPEC 		= "Eventos";
+	private static String MAP_SPEC 		= "Mapa";
+	private static String PROFILE_SPEC	= "Perfil";
 	
 	static String TAG = "MainActivity";
 	//this activity Instance
@@ -58,6 +59,11 @@ public class MainActivity extends TabActivity {
 	private int loading = 0;
 	SpotsHelper db = null;
 	boolean skip_login = false;
+	
+	TabSpec cameraSpec = null;
+	TabSpec newSpec = null;
+	TabSpec mapSpec = null;
+	TabSpec profileSpec = null;
 	
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 	    @Override
@@ -120,8 +126,7 @@ public class MainActivity extends TabActivity {
         	setProgressBarIndeterminateVisibility(true);
         }
         final TabHost tabHost = getTabHost();
-        
-        
+    	
         if(skip_login){
         	/*
         	Intent newsIntent = new Intent(MainActivity.this, NewsActivity.class);
@@ -129,37 +134,39 @@ public class MainActivity extends TabActivity {
             startActivity(newsIntent);
             */
             
-        	TabSpec newSpec = tabHost.newTabSpec(NEWS_SPEC);
-            newSpec.setIndicator(NEWS_SPEC, getResources().getDrawable(R.drawable.ic_newsfeed));
+        	newSpec = tabHost.newTabSpec(NEWS_SPEC);
+            newSpec.setIndicator(null, getResources().getDrawable(R.drawable.ic_newsfeed));
             Intent newsIntent = new Intent(this, NewsActivity.class);
             newSpec.setContent(newsIntent);
             
-            TabSpec mapSpec = tabHost.newTabSpec(MAP_SPEC);
-            mapSpec.setIndicator(MAP_SPEC, getResources().getDrawable(R.drawable.ic_camera));
+            mapSpec = tabHost.newTabSpec(MAP_SPEC);
+            mapSpec.setIndicator(null, getResources().getDrawable(R.drawable.ic_map));
             Intent mapIntent = new Intent(this, MapsActivity.class);
             mapSpec.setContent(mapIntent);
-            
+           
             tabHost.addTab(newSpec);
             tabHost.addTab(mapSpec);
             
         }else{
-            TabSpec cameraSpec = tabHost.newTabSpec(CAMERA_SPEC);
-            cameraSpec.setIndicator(CAMERA_SPEC, getResources().getDrawable(R.drawable.ic_camera));
+            cameraSpec = tabHost.newTabSpec(CAMERA_SPEC);
+            
+            cameraSpec.setIndicator(null, getResources().getDrawable(R.drawable.ic_camera));
             Intent cameraIntent = new Intent(this, LoadingActivity.class);
             cameraSpec.setContent(cameraIntent);
-            
-            TabSpec newSpec = tabHost.newTabSpec(NEWS_SPEC);
-            newSpec.setIndicator(NEWS_SPEC, getResources().getDrawable(R.drawable.ic_newsfeed));
+       
+            newSpec = tabHost.newTabSpec(NEWS_SPEC);
+            newSpec.setIndicator(null, getResources().getDrawable(R.drawable.ic_newsfeed));
             Intent newsIntent = new Intent(this, NewsActivity.class);
             newSpec.setContent(newsIntent);
             
-            TabSpec mapSpec = tabHost.newTabSpec(MAP_SPEC);
-            mapSpec.setIndicator(MAP_SPEC, getResources().getDrawable(R.drawable.ic_camera));
+            mapSpec = tabHost.newTabSpec(MAP_SPEC);
+            
+            mapSpec.setIndicator(null, getResources().getDrawable(R.drawable.ic_map));
             Intent mapIntent = new Intent(this, MapsActivity.class);
             mapSpec.setContent(mapIntent);
             
-            TabSpec profileSpec = tabHost.newTabSpec(PROFILE_SPEC);
-            profileSpec.setIndicator(PROFILE_SPEC, getResources().getDrawable(R.drawable.profile));
+            profileSpec = tabHost.newTabSpec(PROFILE_SPEC);
+            profileSpec.setIndicator(null, getResources().getDrawable(R.drawable.profile));
             Intent profileIntent = new Intent(this, ProfileActivity.class);
             profileSpec.setContent(profileIntent);
             
@@ -212,6 +219,8 @@ public class MainActivity extends TabActivity {
       Utils.setCurrentLocale(this);
       TabHost tabhost = getTabHost();
       TabWidget widget = tabhost.getTabWidget();
+      
+		
       for(int i=0;i<tabhost.getTabWidget().getChildCount();i++) {
     	  View v = widget.getChildAt(i);
     	  v.setBackgroundResource(R.drawable.custom_tab_selector);
